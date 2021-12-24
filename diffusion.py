@@ -16,7 +16,7 @@ import requests
 import torch
 from torch import nn
 from torch.nn import functional as F
-from BATbot.upscaler import upscale
+from upscaler import upscale
 from torchvision import transforms
 from torchvision.transforms import functional as TF
 from tqdm.notebook import tqdm
@@ -225,7 +225,7 @@ def do_run():
                     num += 1
                     filename = f'progress_{i * batch_size + k:05}.png'
                     TF.to_pil_image(image.add(1).div(2).clamp(0, 1)).save(filename)
-                    TF.to_pil_image(image.add(1).div(2).clamp(0, 1)).save(f'C:\\Users\\noahs\\Desktop\\Bot\\BATbot\\diffusion_steps\\{num}.png')
+                    TF.to_pil_image(image.add(1).div(2).clamp(0, 1)).save(f'C:\\Users\\noahs\\Desktop\\BATbot\\diffusion_steps\\{num}.png')
 
 gc.collect()
 do_run()
@@ -241,10 +241,10 @@ length = 15 #Desired time of the video in seconds
 frames = []
 tqdm.write('Generating video...')
 for i in range(init_frame,last_frame): #
-    frames.append(Image.open("C:\\Users\\noahs\\Desktop\\Bot\\BATbot\\diffusion_steps\\"+ str(i) +'.png'))
+    frames.append(Image.open("C:\\Users\\noahs\\Desktop\\BATbot\\diffusion_steps\\"+ str(i) +'.png'))
     size = (1024,1024)
 
-savepath = 'C:\\Users\\noahs\\Desktop\\Bot\\BATbot\\'
+savepath = 'C:\\Users\\noahs\\Desktop\\BATbot\\'
 imageio.mimsave(os.path.join(savepath,'movie.mp4'), frames)
 end = time.time() - start
 end = end/60
