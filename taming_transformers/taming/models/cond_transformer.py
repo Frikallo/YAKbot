@@ -3,7 +3,7 @@ import torch
 import torch.nn.functional as F
 import pytorch_lightning as pl
 
-sys.path.append('C:\\Users\\noahs\\OneDrive\\Desktop\Bot\\taming_transformers')
+sys.path.append('C:\\Users\\noahs\\Desktop\\BATbot\\taming_transformers')
 
 from main import instantiate_from_config
 from taming.modules.util import SOSProvider
