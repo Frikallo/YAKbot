@@ -45,4 +45,4 @@ For upscaling images, try <https://github.com/xinntao/Real-ESRGAN>
 
 
 ## License
-[MIT](https://choosealicense.com/licenses/mit/)
+[MIT](https://raw.githubusercontent.com/Frikallo/BATbot/main/LICENSE?token=AVGSMFG5E7R6RAWWLLMQBCTBYWYYC)
