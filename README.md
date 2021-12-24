@@ -69,6 +69,11 @@ $ mkdir unigrams
 $ mkdir bigrams
 $ mkdir artstyles
 $ mkdir emotions
+$ unzip ./model.zip -d checkpoints
+$ unzip ./unigrams.zip -d unigrams
+$ unzip ./bigrams.zip -d bigrams
+$ unzip ./artstyles.zip -d artstyles
+$ unzip ./emotions.zip -d emotions
 ```
 * VQGAN+CLIP(z+quantize)
 ```bash
