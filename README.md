@@ -65,7 +65,7 @@ pip install -r requirements.txt
 ```
 Before running BATbot make sure you have your bot token set.
 ```python
-The bottom of bot.py should look something like this.
+#The end of your bot.py file should look something like this.
 bot.run('qTIzNTA4NjMhUJI3NzgzJAAy.YcOCbw.GMYbjBWdiIWBPFrm_IMlUTlMGjM') #Your Token Here
 ```
 
