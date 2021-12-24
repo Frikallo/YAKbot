@@ -388,6 +388,7 @@ async def imagine(ctx):
       author = ctx.message.author.id
       input = ctx.message.content
       prompt = input[9:len(input)]
+      await bot.change_presence(activity=discord.Game(name=f"Imagining {prompt}"))
       
       if os.environ['seed'] != '42':
        seed = os.environ['seed']
@@ -525,6 +526,7 @@ async def imagine(ctx):
         os.remove(os.path.join(my_dir, fname))
        if fname.endswith(".mp4"):
         os.remove(os.path.join(my_dir, fname))
+      await bot.change_presence(activity=discord.Game(name=f"{randomstatus} sucks"))
 
 @bot.command()
 async def diffusion(ctx):
@@ -539,6 +541,7 @@ async def diffusion(ctx):
       author = ctx.message.author.id
       input = ctx.message.content
       prompt = input[11:len(input)]
+      await bot.change_presence(activity=discord.Game(name=f"Diffusing {prompt}"))
       
       if os.environ['seed'] != '42':
        seed = os.environ['seed']
@@ -676,9 +679,11 @@ async def diffusion(ctx):
         os.remove(os.path.join(my_dir, fname))
        if fname.endswith(".mp4"):
         os.remove(os.path.join(my_dir, fname))
+      await bot.change_presence(activity=discord.Game(name=f"{randomstatus} sucks"))
 
 @bot.command()
 async def faces(ctx):
+ await bot.change_presence(activity=discord.Game(name=f"Finding Faces"))
  if ctx.message.attachments:
   if ctx.channel.id != channel_id:
     return
@@ -733,6 +738,7 @@ async def faces(ctx):
       os.remove(os.path.join(my_dir, fname))
     if fname.endswith(".jpg"):
       os.remove(os.path.join(my_dir, fname))
+   await bot.change_presence(activity=discord.Game(name=f"{randomstatus} sucks"))
 
 @bot.command()
 async def facehq(ctx):
@@ -784,6 +790,7 @@ async def d1024(ctx):
 
 @bot.command()
 async def esrgan(ctx):
+ await bot.change_presence(activity=discord.Game(name=f"Enlarging Images"))
  torch.cuda.empty_cache()
  if ctx.message.attachments:
   if ctx.channel.id != channel_id:
@@ -802,9 +809,11 @@ async def esrgan(ctx):
     print(error)
     await ctx.channel.send("`Error: Image to large to be upscaled. Please try a smaller image.`")
    torch.cuda.empty_cache()
+   await bot.change_presence(activity=discord.Game(name=f"{randomstatus} sucks"))
 
 @bot.command()
 async def rembg(ctx):
+ await bot.change_presence(activity=discord.Game(name=f"Removing Background"))
  if ctx.message.attachments:
   if ctx.channel.id != channel_id:
     return
@@ -830,9 +839,11 @@ async def rembg(ctx):
     if fname.endswith(".png"):
       os.remove(os.path.join(my_dir, fname))
    torch.cuda.empty_cache()
+   await bot.change_presence(activity=discord.Game(name=f"{randomstatus} sucks"))
 
 @bot.command()
 async def help(ctx):
+   await bot.change_presence(activity=discord.Game(name=f"Helping"))
    if ctx.channel.id != channel_id:
      return
    print('Command Loaded')
@@ -840,6 +851,7 @@ async def help(ctx):
      embed = discord.Embed(title="BATbot Help", description=f'`.rembg [Attached Image]`\n**removes background from attatched image**\n\n`.esrgan [Attatchment]`\n**BATbot will use a pretrained ESRGAN upscaler to upscale you images resolution by up to 4 times**\n\n`.status`\n**sends embed message with all relevent device stats for BATbot**\n\n`.imagine [Prompt]`\n**uses CLIP+VQGAN open generation to create an original image from your prompt**\n\n`.diffusion [Prompt]`\n**BATbot uses a CLIP+Diffusion model to generate images to match your prompt**\n\n`.facehq, .wikiart, .default, .d1024`\n**Changes BATbots VQGAN+CLIP model to one trained solely on faces, art or default configuration**\n\n`.square, .landscape, .portrait`\n**BATbot will update his size configurations for generations to your specified orientation**\n\n`.seed [Desired Seed]`\n**Changes BATbots seed for all open generation (if 0 will set to random)**\n\n`.gptj [Prompt]`\n**BATbot will use his trained GPT-J model to finish your prompt with natural language generation**\n\n`.sop [Attatchment]`\n**BATbot will turn your attatched image into a sequence of note lines ledgible by a computer, this allows BATbot to create a sound corolating to the "sounds of proccessing"**\n\n`.faces [Attatchment]`\n**BATbot will look through your photo and try to find any recognizable faces**\n\n__Any Attatchments Sent In This Channel Will Be Identified And Captioned By BATbot (To Prevent Captioning Include --nc In Your Message)__', color=0x7289da)
      await ctx.channel.send(embed=embed)
    torch.cuda.empty_cache()
+   await bot.change_presence(activity=discord.Game(name=f"{randomstatus} sucks"))
 
 @bot.command()
 async def status(ctx):
