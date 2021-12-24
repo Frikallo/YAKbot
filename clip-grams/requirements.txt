@@ -1,0 +1,8 @@
+scipy
+matplotlib
+ftfy
+torch
+torchvision
+autofaiss
+nltk
+webdataset

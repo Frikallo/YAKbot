@@ -1,0 +1,20 @@
+{
+  "clip_model": "ViT-B/16",
+  "device": "cuda:0",
+  "chunk_size": 500000,
+  "batch_size": 256,
+  "num_prepro_workers": 8,
+  "prefix": "",
+  "save_entries": true,
+  "lower": true,
+  "use_line": false,
+  "use_unigrams": true,
+  "use_bigrams": false,
+  "use_trigrams": false,
+  "topk_ngrams": 25000,
+  "filter": 3,
+  "metric_type": "ip",
+  "max_index_memory_usage": "32GB",
+  "current_memory_available": "32GB",
+  "max_index_query_time_ms": 10
+}

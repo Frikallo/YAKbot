@@ -1,0 +1,9 @@
+*.ckpt
+*.yaml
+*.index
+*.png
+*.pt
+.env
+*.mp4
+*.jpg
+*.jpeg
