@@ -6,9 +6,9 @@
 <h4 align="center">A complex, multipurpose AI Discord bot.</h4>
 
 <h1 align="center">
-  <img src="https://img.shields.io/badge/discord.py-2.0-blue?style=flat" />
+  <img src="https://img.shields.io/badge/discord.py-2.0-blue?style=flat&logo=discord" />
   <img src="https://img.shields.io/badge/Python-3.9-green?style=flat&logo=python" />
-  <img src="https://img.shields.io/badge/branch-development-red.svg" />
+  <img src="https://img.shields.io/badge/stage-development-red.svg" />
   <img src="https://img.shields.io/badge/build-passing-green.svg">
 </h1>
 
@@ -18,7 +18,7 @@ BATbot is a collection of AI models based on image generation, analysis, and pro
 
 A full list of BATbots commands and uses can be found either in discord with the ```.help``` command, or right here:
 
-|Command Syntax|Help|Example|
+|Command Syntax|Help|Examples|
 |---|---|---
 |`.rembg [Attatchment]`|**removes background from attached image**|[Example](https://github.com/Frikallo/BATbot/tree/main/Examples/.rembg)
 |`.esrgan [Attatchment]`|**BATbot will use a pre-trained ESRGAN upscaler to upscale the resolution of your image up to 4 times**|[Example](https://github.com/Frikallo/BATbot/tree/main/Examples/.esrgan)
