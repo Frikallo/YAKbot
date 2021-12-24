@@ -503,6 +503,7 @@ async def imagine(ctx):
       final.write_videofile(out_loc)
       await ctx.channel.send(file=discord.File(out_loc))
       await ctx.channel.send(f'```Elapsed: {elapsed} | Generated at: {it}it/s```')
+      await bot.change_presence(activity=discord.Game(name=f"{randomstatus} sucks"))
 
       with open("averages.txt", "a+") as file_object:
         file_object.seek(0)
@@ -526,7 +527,6 @@ async def imagine(ctx):
         os.remove(os.path.join(my_dir, fname))
        if fname.endswith(".mp4"):
         os.remove(os.path.join(my_dir, fname))
-      await bot.change_presence(activity=discord.Game(name=f"{randomstatus} sucks"))
 
 @bot.command()
 async def diffusion(ctx):
