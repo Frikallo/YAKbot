@@ -684,7 +684,7 @@ async def faces(ctx):
     return
   async with ctx.channel.typing():
    link = ctx.message.attachments[0].url
-   filename = link.split('/')[-1]
+   filename = 'urmom.png'
    r = requests.get(link, allow_redirects=True)
    open(filename, 'wb').write(r.content)
    print(filename)
@@ -696,11 +696,11 @@ async def faces(ctx):
 
       face_image = image[top:bottom, left:right]
       pil_image = Image.fromarray(face_image)
-      pil_image.save('face.jpg')
-      image = Image.open('face.jpg')
+      pil_image.save('face.png')
+      image = Image.open('face.png')
       new_image = image.resize((256, 256))
-      new_image.save('face.jpg')
-   test_image = face_recognition.load_image_file('face.jpg')
+      new_image.save('face.png')
+   test_image = face_recognition.load_image_file('face.png')
    face_locations = face_recognition.face_locations(test_image)
    face_encodings = face_recognition.face_encodings(test_image, face_locations)
 
@@ -723,8 +723,8 @@ async def faces(ctx):
 
    del draw
 
-   pil_image.save('identify.jpg')
-   await ctx.reply(file=discord.File('identify.jpg'), mention_author=False)
+   pil_image.save('identify.png')
+   await ctx.reply(file=discord.File('identify.png'), mention_author=False)
    #delete output
    directory = os.getcwd()
    my_dir = directory
