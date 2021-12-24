@@ -15,7 +15,6 @@ faiss
 requests
 rembg
 ftfy
-regex
 tqdm
 lpips
 transformers
