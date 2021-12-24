@@ -127,8 +127,8 @@ normalize = transforms.Normalize(mean=[0.48145466, 0.4578275, 0.40821073],
                                  std=[0.26862954, 0.26130258, 0.27577711])
 lpips_model = lpips.LPIPS(net='vgg').to(device)
 
-#prompt = os.environ["prompt"]
-prompts = [f'An alien landscape']
+prompt = os.environ["prompt"]
+prompts = [f'{prompt}']
 image_prompts = []
 batch_size = 1
 clip_guidance_scale = 1000  # Controls how much the image should look like the prompt.

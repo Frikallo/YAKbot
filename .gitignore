@@ -6,8 +6,6 @@
 .env
 *.mp4
 *.jpg
-*.jpeg
-*.wav
 __pycache__
 .vscode
 *.pyc

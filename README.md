@@ -18,21 +18,33 @@ BATbot is a collection of AI models based on image generation, analysis, and pro
 
 A full list of BATbots commands and uses can be found either in discord with the ```.help``` command, or right here:
 
-|Command Syntax|Help|
-|---|---
-|`.rembg [Attatchment]`|**removes background from attached image**
-|`.esrgan [Attatchment]`|**BATbot will use a pre-trained ESRGAN upscaler to upscale the resolution of your image up to 4 times**
-|`.status`|**sends embed message with all relevant device stats for BATbot**
-|`.imagine [Prompt]`|**uses CLIP+VQGAN open generation to create an original image from your prompt**
-|`.diffusion [Prompt]`|**BATbot uses a CLIP+Diffusion model to generate images to match your prompt**
-|`.facehq, .wikiart, .default, .d1024`|**Changes BATbots VQGAN+CLIP model to one trained solely on faces, art or default configuration**
-|`.square, .landscape, .portrait`|**BATbot will update his size configurations for generations to your specified orientation**
-|`.seed [Desired Seed]`|**Changes BATbots seed for all open generation (if 0 will set to random)**
-|`.gptj [Prompt]`|**BATbot will use his trained GPT-J model to finish your prompt with natural language generation**
-|`.sop [Attatchment]`|**BATbot will turn your attached image into a sequence of wave forms legible by a computer, this allows BATbot to create a sound correlating to the "sounds of processing"**
-|`.faces [Attatchment]`|**BATbot will look through your photo and try to find any recognizable faces**
+|Command Syntax|Help|Example|
+|---|---|---
+|`.rembg [Attatchment]`|**removes background from attached image**|[Example]()
+|`.esrgan [Attatchment]`|**BATbot will use a pre-trained ESRGAN upscaler to upscale the resolution of your image up to 4 times**|[Example]()
+|`.status`|**sends embed message with all relevant device stats for BATbot**|[Example]()
+|`.imagine [Prompt]`|**uses CLIP+VQGAN open generation to create an original image from your prompt**|[Example]()
+|`.diffusion [Prompt]`|**BATbot uses a CLIP+Diffusion model to generate images to match your prompt**|[Example]()
+|`.facehq, .wikiart, .default, .d1024`|**Changes BATbots VQGAN+CLIP model to one trained solely on faces, art or default configuration**|[Example]()
+|`.square, .landscape, .portrait`|**BATbot will update his size configurations for generations to your specified orientation**|[Example]()
+|`.seed [Desired Seed]`|**Changes BATbots seed for all open generation (if 0 will set to random)**|[Example]()
+|`.gptj [Prompt]`|**BATbot will use his trained GPT-J model to finish your prompt with natural language generation**|[Example]()
+|`.sop [Attatchment]`|**BATbot will turn your attached image into a sequence of wave forms legible by a computer, this allows BATbot to create a sound correlating to the "sounds of processing"**|[Example]()
+|`.faces [Attatchment]`|**BATbot will look through your photo and try to find any recognizable faces**|[Example]()
+To see examples of all the different commands click here: [Examples]()
+## Environment
+* Windows 11 (10.0.22)
+* Anaconda
+* Nvidia RTX 2070 Super (8GB)
 
-## Installation and Usage
+Typical VRAM requirements:
+
+* VQGAN(256,256-512,512) **~** `5-10GB`
+* Diffusion 256 **~** `6-7GB`
+* Diffusion 512 **~** `10-12GB`
+* Image classification & captioning **~** `4GB`
+
+## Setup and Installation
 
 First, install PyTorch 1.9.0 and torchvision, as well as small additional dependencies, and then install this repo as a Python package. On a CUDA GPU machine, the following will do the trick:
 ```bash
@@ -133,11 +145,26 @@ For upscaling images, try <https://github.com/xinntao/Real-ESRGAN>
     date      = {2021}
 }
 ```
-* Guided Diffusion - <https://github.com/openai/guided-diffusion> or [256x256](https://colab.research.google.com/drive/12a_Wrfi2_gwwAuN3VvMTwVMz9TfqctNj) By Katherine Crowson
-* Katherine Crowson - <https://github.com/crowsonkb>
-* captions with personality - [colab notebook](https://colab.research.google.com/drive/171GirNbCVc-ScyBynI3Uy2fgYcmW3BB) from [dzyrk](https://github.com/dzryk)
-* z+quantize notebook - [colab notebook](https://colab.research.google.com/drive/1ZAus_gn2RhTZWzOWUpPERNC0Q8OhZRTZ) from [crimeacs](https://github.com/crimeacs)
+* Guided Diffusion - <https://github.com/openai/guided-diffusion>
 
 
+* Original 256x256 notebook: [![Open In Colab][colab-badge]][colab-notebook1] from [Katherine Crowson](https://github.com/crowsonkb)
+
+[colab-notebook1]: <https://colab.research.google.com/drive/12a_Wrfi2_gwwAuN3VvMTwVMz9TfqctNj#scrollTo=X5gODNAMEUCR>
+[colab-badge]: <https://colab.research.google.com/assets/colab-badge.svg>
+* Original 512x512 notebook: [![Open In Colab][colab-badge]][colab-notebook2] from [Katherine Crowson](https://github.com/crowsonkb)
+
+[colab-notebook2]: <https://colab.research.google.com/drive/1QBsaDAZv8np29FPbvjffbE1eytoJcsgA#scrollTo=VnQjGugaDZPJ>
+[colab-badge]: <https://colab.research.google.com/assets/colab-badge.svg>
+
+* Original Caption notebook: [![Open In Colab][colab-badge]][colab-notebook3] from [dzyrk](https://github.com/dzryk)
+
+[colab-notebook3]: <https://colab.research.google.com/drive/171GirNbCVc-ScyBynI3Uy2fgYcmW3BB>
+[colab-badge]: <https://colab.research.google.com/assets/colab-badge.svg>
+
+* Original z+quantize notebook: [![Open In Colab][colab-badge]][colab-notebook3] from [crimeacs](https://github.com/crimeacs)
+
+[colab-notebook3]: <https://colab.research.google.com/drive/1ZAus_gn2RhTZWzOWUpPERNC0Q8OhZRTZ>
+[colab-badge]: <https://colab.research.google.com/assets/colab-badge.svg>
 ## License
 [MIT](https://github.com/Frikallo/BATbot/blob/main/LICENSE)
