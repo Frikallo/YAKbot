@@ -70,8 +70,8 @@ load_categories = "emojis"
 load(load_categories)
 
 # filepaths
-fp_in = "C:\\Users\\noahs\\OneDrive\\Desktop\\Bot\\*.png"
-fp_out = "C:\\Users\\noahs\\OneDrive\\Desktop\\Bot\\movie.mp4"
+fp_in = "C:\\Users\\noahs\\Desktop\\Bot\\BATbot\\*.png"
+fp_out = "C:\\Users\\noahs\\Desktop\\Bot\\BATbot\\movie.mp4"
 
 #face recognition settings
 #Noah
@@ -201,7 +201,7 @@ class dotdict(dict):
     __delattr__ = dict.__delitem__
 
 async def play_source(voice_client):
-    source = FFmpegPCMAudio("C:\\Users\\noahs\\OneDrive\\Desktop\\Bot\\audio\\krusty_krab_theme.mp3")
+    source = FFmpegPCMAudio("C:\\Users\\noahs\\Desktop\\Bot\\BATbot\\audio\\krusty_krab_theme.mp3")
     voice_client.play(source, after=lambda e: print('Player error: %s' % e) if e else bot.loop.create_task(play_source(voice_client)))
 
 # Settings
@@ -455,8 +455,8 @@ async def imagine(ctx):
       subprocess.call(f'python3 VQGAN_CLIP.py')
       print('Generation Complete')
       
-      new_prompt = 'C:\\Users\\noahs\\OneDrive\\Desktop\\Bot\\progress.png'
-      upscale(new_prompt, 'C:\\Users\\noahs\\OneDrive\\Desktop\\Bot\\progress.png')
+      new_prompt = 'C:\\Users\\noahs\\Desktop\\Bot\\BATbot\\progress.png'
+      upscale(new_prompt, 'C:\\Users\\noahs\\Desktop\\Bot\\BATbot\\progress.png')
       await ctx.channel.send(f'<@{author}>'+'```Your Generation Is Done```')
       await ctx.channel.send(file=discord.File(new_prompt))
       ittime = time.time() - genTime
@@ -606,8 +606,8 @@ async def diffusion(ctx):
       subprocess.call(f'python3 diffusion.py')
       print('Generation Complete')
       
-      new_prompt = 'C:\\Users\\noahs\\OneDrive\\Desktop\\Bot\\progress_00000.png'
-      upscale(new_prompt, 'C:\\Users\\noahs\\OneDrive\\Desktop\\Bot\\progress.png')
+      new_prompt = 'C:\\Users\\noahs\\Desktop\\Bot\\BATbot\\progress_00000.png'
+      upscale(new_prompt, 'C:\\Users\\noahs\\Desktop\\Bot\\BATbot\\progress.png')
       await ctx.channel.send(f'<@{author}>'+'```Your Generation Is Done```')
       await ctx.channel.send(file=discord.File(new_prompt))
       ittime = time.time() - genTime
@@ -791,16 +791,16 @@ async def esrgan(ctx):
   async with ctx.channel.typing():
    link = ctx.message.attachments[0].url
    filename = "input"
-   save_path = 'C:\\Users\\noahs\\OneDrive\\Desktop\\Bot\\Real-ESRGAN\\inputs\\'
+   save_path = 'C:\\Users\\noahs\\Desktop\\Bot\\BATbot\\Real-ESRGAN\\inputs\\'
    filename = save_path + filename
    r = requests.get(link, allow_redirects=True)
    open(filename, 'wb').write(r.content)
    print(filename)
-   os.chdir("C:\\Users\\noahs\\OneDrive\\Desktop\\Bot\\Real-ESRGAN")
+   os.chdir("C:\\Users\\noahs\\Desktop\\Bot\\BATbot\\Real-ESRGAN")
    os.system(f"python inference_realesrgan.py -n RealESRGAN_x4plus -i inputs")
-   os.chdir("C:\\Users\\noahs\\OneDrive\\Desktop\\Bot")
+   os.chdir("C:\\Users\\noahs\\Desktop\\Bot\\BATbot")
    try:
-    output_path = "C:\\Users\\noahs\\OneDrive\\Desktop\\Bot\\Real-ESRGAN\\results\\progress_out.png"
+    output_path = "C:\\Users\\noahs\\Desktop\\Bot\\BATbot\\Real-ESRGAN\\results\\progress_out.png"
     await ctx.reply(file=discord.File(output_path), mention_author=False)
    except FileNotFoundError as error:
     print(error)
@@ -819,7 +819,7 @@ async def rembg(ctx):
    open(filename, 'wb').write(r.content)
    print(filename)
    input_path = filename
-   output_path = 'C:\\Users\\noahs\\OneDrive\\Desktop\\Bot\\out.png'
+   output_path = 'C:\\Users\\noahs\\Desktop\\Bot\\BATbot\\out.png'
 
    f = np.fromfile(input_path)
    result = remove(f)
@@ -927,8 +927,8 @@ async def sop(ctx):
     input = filename
     os.environ['infile'] = input
     subprocess.call('python3 img_plt.py')
-    output = 'C:\\Users\\noahs\\OneDrive\\Desktop\\Bot\\out.wav'
-    output2 = 'C:\\Users\\noahs\\OneDrive\\Desktop\\Bot\\saved_figure.png'
+    output = 'C:\\Users\\noahs\\Desktop\\Bot\\BATbot\\out.wav'
+    output2 = 'C:\\Users\\noahs\\Desktop\\Bot\\BATbot\\saved_figure.png'
 
     await ctx.reply(file=discord.File(output), mention_author=False)
     await ctx.channel.send(file=discord.File(output2), mention_author=False)
