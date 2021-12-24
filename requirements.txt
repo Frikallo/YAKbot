@@ -6,11 +6,10 @@ urllib
 moviepy
 discord.py
 face_recognition
-PIL
-statcord
+pillow
+statcord.py
 subprocess
 matplotlib
-random
 asyncio
 io
 pandas
