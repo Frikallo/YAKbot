@@ -10,7 +10,6 @@ matplotlib
 asyncio
 pandas
 psutil
-glob
 numpy
 faiss
 requests
