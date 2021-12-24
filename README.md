@@ -1,26 +1,72 @@
 # BATbot
-# Foobar
 
 Foobar is a Python library for dealing with word pluralization.
 
-## Requirements
+## Installation and Usage
 
-Foobar is a Python library for dealing with word pluralization.
-
-## Installation
-
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install the required packages.
-
+First, install PyTorch 1.9.0 and torchvision, as well as small additional dependencies, and then install this repo as a Python package. On a CUDA GPU machine, the following will do the trick:
 ```bash
+$ pip install torch==1.9.0+cu111 torchvision==0.10.0+cu111 torchaudio==0.9.0 -f https://download.pytorch.org/whl/torch_stable.html
+$ pip install ftfy regex tqdm
+$ pip install git+https://github.com/openai/CLIP.git
+```
+Replace cu111 above with the appropriate CUDA version on your machine or cpuonly when installing on a machine without a GPU. Next, we install the dependant packages:
+* Guided Diffusion Setup
+```bash
+$ git clone https://github.com/crowsonkb/guided-diffusion
+$ pip install -e ./guided-diffusion
+$ pip install lpips
+$ curl -OL 'https://openaipublic.blob.core.windows.net/diffusion/jul-2021/256x256_diffusion_uncond.pt'
+```
+* Personality-CLIP Setup
+```bash
+$ git clone https://github.com/dzryk/cliptalk.git
+$ cd cliptalk/
+$ git clone https://github.com/dzryk/clip-grams.git
+$ git clone https://github.com/openai/CLIP
+$ pip install ftfy
+$ pip install transformers
+$ pip install autofaiss
+$ pip install wandb
+$ pip install webdataset
+$ pip install git+https://github.com/PyTorchLightning/pytorch-lightning
+$ curl -OL 'https://drive.google.com/uc?id=1fhWspkaOJ31JS91sJ-85y1P597dIfavJ'
+$ curl -OL 'https://drive.google.com/uc?id=1PJcBni9lCRroFqnQBfOJOg9gVC5urq2H'
+$ curl -OL 'https://drive.google.com/uc?id=13Xtf7SYplE4n5Q-aGlf954m6dN-qsgjW'
+$ curl -OL 'https://drive.google.com/uc?id=1xyjhZMbzyI-qVz-plsxDOXdqWyrKbmyS'
+$ curl -OL 'https://drive.google.com/uc?id=1peB-l-CWtwx0NKAIeAcwsnisjocc--66'
+$ mkdir checkpoints
+$ mkdir unigrams
+$ mkdir bigrams
+$ mkdir artstyles
+$ mkdir emotions
+```
+* VQGAN+CLIP(z+quantize) Setup
+```bash
+$ git clone https://github.com/openai/CLIP
+$ git clone https://github.com/CompVis/taming-transformers.git
+$ pip install ftfy regex tqdm omegaconf pytorch-lightning
+$ pip install kornia
+$ pip install imageio-ffmpeg   
+$ pip install einops          
+$ mkdir steps
+$ curl -L -o vqgan_imagenet_f16_1024.yaml -C - 'http://mirror.io.community/blob/vqgan/vqgan_imagenet_f16_1024.yaml' #ImageNet 1024
+$ curl -L -o vqgan_imagenet_f16_1024.ckpt -C - 'http://mirror.io.community/blob/vqgan/vqgan_imagenet_f16_1024.ckpt'  #ImageNet 1024
+$ curl -L -o vqgan_imagenet_f16_16384.yaml -C - 'https://heibox.uni-heidelberg.de/d/a7530b09fed84f80a887/files/?p=%2Fconfigs%2Fmodel.yaml&dl=1' #ImageNet 16384
+$ curl -L -o vqgan_imagenet_f16_16384.ckpt -C - 'https://heibox.uni-heidelberg.de/d/a7530b09fed84f80a887/files/?p=%2Fckpts%2Flast.ckpt&dl=1' #ImageNet 16384
+$ curl -L -o faceshq.yaml -C - 'https://drive.google.com/uc?export=download&id=1fHwGx_hnBtC8nsq7hesJvs-Klv-P0gzT' #FacesHQ
+$ curl -L -o faceshq.ckpt -C - 'https://app.koofr.net/content/links/a04deec9-0c59-4673-8b37-3d696fe63a5d/files/get/last.ckpt?path=%2F2020-11-13T21-41-45_faceshq_transformer%2Fcheckpoints%2Flast.ckpt' #FacesHQ
+$ curl -L -o wikiart_16384.yaml -C - 'http://mirror.io.community/blob/vqgan/wikiart_16384.yaml' #WikiArt 16384
+$ curl -L -o wikiart_16384.ckpt -C - 'http://mirror.io.community/blob/vqgan/wikiart_16384.ckpt' #WikiArt 16384
+```
+Once installed just run:
+```
 pip install -r requirements.txt
 ```
-
-
-## Usage
-
+Before running BATbot make sure you have your bot token set.
 ```python
-#Make sure your token is set. 
-bot.run('YOUR_TOKEN_HERE')
+The bottom of bot.py should look something like this.
+bot.run('qTIzNTA4NjMhUJI3NzgzJAAy.YcOCbw.GMYbjBWdiIWBPFrm_IMlUTlMGjM') #Your Token Here
 ```
 
 ## Other repos
@@ -45,4 +91,4 @@ For upscaling images, try <https://github.com/xinntao/Real-ESRGAN>
 
 
 ## License
-[MIT](https://raw.githubusercontent.com/Frikallo/BATbot/main/LICENSE?token=AVGSMFG5E7R6RAWWLLMQBCTBYWYYC)
+[MIT](https://choosealicense.com/licenses/mit/)
