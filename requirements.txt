@@ -14,3 +14,14 @@ numpy
 faiss
 requests
 rembg
+ftfy
+regex
+tqdm
+lpips
+transformers
+autofaiss
+wandb
+webdataset
+kornia
+imageio-ffmpeg
+einops
