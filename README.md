@@ -9,6 +9,7 @@
   <img src="https://img.shields.io/badge/discord.py-2.0-blue?style=flat" />
   <img src="https://img.shields.io/badge/Python-3.9-green?style=flat&logo=python" />
   <img src="https://img.shields.io/badge/branch-development-red.svg" />
+  <img src="https://img.shields.io/badge/build-passing-green.svg">
 </h1>
 
 ## Info
@@ -123,6 +124,13 @@ For upscaling images, try <https://github.com/xinntao/Real-ESRGAN>
     title  = {CLIP: Connecting Text and Images},
     author = {Alec Radford, Ilya Sutskever, Jong Wook Kim, Gretchen Krueger, Sandhini Agarwal},
     year   = {2021}
+}
+
+@InProceedings{wang2021realesrgan,
+    author    = {Xintao Wang and Liangbin Xie and Chao Dong and Ying Shan},
+    title     = {Real-ESRGAN: Training Real-World Blind Super-Resolution with Pure Synthetic Data},
+    booktitle = {International Conference on Computer Vision Workshops (ICCVW)},
+    date      = {2021}
 }
 ```
 * Guided Diffusion - <https://github.com/openai/guided-diffusion> or [256x256](https://colab.research.google.com/drive/12a_Wrfi2_gwwAuN3VvMTwVMz9TfqctNj) By Katherine Crowson
