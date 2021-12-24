@@ -983,4 +983,4 @@ async def landscape(ctx):
 async def on_command(ctx):
     api.command_run(ctx)
 
-bot.run('OTIzNTA4NjMxNTU3NzgzNjAy.YcRCbw.GMYbjBW1iIWB3Grm_IMlUTlMGjM')
+bot.run(os.environ['bot_tokens'])

@@ -8,3 +8,6 @@
 *.jpg
 *.jpeg
 *.wav
+__pycache__
+.vscode
+*.pyc
