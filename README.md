@@ -15,7 +15,7 @@
 
 BATbot is a collection of AI models based on image generation, analysis, and processing; all wrapped into one Discord Bot. BATbot's out-of-the-box commands range from image generation with VQGAN+CLIP or guided diffusion to image analysis and captioning with personality.
 
-A full list of BATbots commands and uses can be found either in discord with the ```.help``` command, or can be found right here:
+A full list of BATbots commands and uses can be found either in discord with the ```.help``` command, or right here:
 
 |Command Syntax|Help|
 |---|---
