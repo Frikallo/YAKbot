@@ -1,5 +1,15 @@
-# BATbot
-![Name](https://img.shields.io/badge/discord.py-2.0-blue?style=flat4) ![Python](https://img.shields.io/badge/Python-3.9-green?style=flat&logo=python) [![Version Branch](https://img.shields.io/badge/branch-development-red.svg)](https://github.com/GilbertGobbels/GAwesomeBot)
+<h2 align="center">
+  <img src="https://cdn.discordapp.com/attachments/882342184924348478/923980750615904296/image-modified.png" height='200px' width='200px'>
+</h2>
+
+<h1 align="center">BATbot🦇</h1>
+<h4 align="center">A complex, multipurpose AI Discord bot.</h4>
+
+<h1 align="center">
+  <img src="https://img.shields.io/badge/discord.py-2.0-blue?style=flat" />
+  <img src="https://img.shields.io/badge/Python-3.9-green?style=flat&logo=python" />
+  <img src="https://img.shields.io/badge/branch-development-red.svg" />
+</h1>
 ## Info
 
 BATbot is a collection of AI models based on image generation, analysis, and processing; all wrapped into one Discord Bot. BATbot's out-of-the-box commands range from image generation with VQGAN+CLIP or guided diffusion to image analysis and captioning with personality.
