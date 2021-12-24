@@ -1,6 +1,13 @@
 # BATbot
 
-Foobar is a Python library for dealing with word pluralization.
+BATbot is a collection of AI models based on image generation, analysis, and processing; all wrapped into one Discord Bot. BATbot's out-of-the-box commands range from image generation with VQGAN+CLIP or guided diffusion to image analysis and captioning with personality.
+
+A full list of BATbots commands and uses can be found either in discord with the ```.help``` command, or can be found right here:
+
+|Command Syntax|Help|
+|---|---
+|.rembg [Attached Image]|**removes background from attached image**
+|.esrgan [Attatchment]|**BATbot will use a pretrained ESRGAN upscaler to upscale you images resolution by up to 4 times**
 
 ## Installation and Usage
 
@@ -11,14 +18,14 @@ $ pip install ftfy regex tqdm
 $ pip install git+https://github.com/openai/CLIP.git
 ```
 Replace cu111 above with the appropriate CUDA version on your machine or cpuonly when installing on a machine without a GPU. Next, we install the dependant packages:
-* Guided Diffusion Setup
+* Guided Diffusion
 ```bash
 $ git clone https://github.com/crowsonkb/guided-diffusion
 $ pip install -e ./guided-diffusion
 $ pip install lpips
 $ curl -OL 'https://openaipublic.blob.core.windows.net/diffusion/jul-2021/256x256_diffusion_uncond.pt'
 ```
-* Personality-CLIP Setup
+* Personality-CLIP
 ```bash
 $ git clone https://github.com/dzryk/cliptalk.git
 $ cd cliptalk/
@@ -41,7 +48,7 @@ $ mkdir bigrams
 $ mkdir artstyles
 $ mkdir emotions
 ```
-* VQGAN+CLIP(z+quantize) Setup
+* VQGAN+CLIP(z+quantize)
 ```bash
 $ git clone https://github.com/openai/CLIP
 $ git clone https://github.com/CompVis/taming-transformers.git
@@ -68,6 +75,13 @@ Before running BATbot make sure you have your bot token set.
 #The end of your bot.py file should look something like this.
 bot.run('qTIzNTA4NjMhUJI3NzgzJAAy.YcOCbw.GMYbjBWdiIWBPFrm_IMlUTlMGjM') #Your Token Here
 ```
+Now finally run the bot:
+```python
+python3 bot.py
+```
+* Enjoy!
+
+**Note: We do not provide support for self-hosting. If you are unable to self-host BATbot by yourself, just join [my discord server](https://discord.gg/KyU9tFN7gy) where BATbot runs 24/7.**
 
 ## Other repos
 
@@ -91,4 +105,4 @@ For upscaling images, try <https://github.com/xinntao/Real-ESRGAN>
 
 
 ## License
-[MIT](https://choosealicense.com/licenses/mit/)
+[MIT](https://github.com/Frikallo/BATbot/blob/main/LICENSE)
