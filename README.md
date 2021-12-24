@@ -6,8 +6,17 @@ A full list of BATbots commands and uses can be found either in discord with the
 
 |Command Syntax|Help|
 |---|---
-|.rembg [Attached Image]|**removes background from attached image**
-|.esrgan [Attatchment]|**BATbot will use a pretrained ESRGAN upscaler to upscale you images resolution by up to 4 times**
+|`.rembg [Attatchment]`|**removes background from attached image**
+|`.esrgan [Attatchment]`|**BATbot will use a pre-trained ESRGAN upscaler to upscale the resolution of your image up to 4 times**
+|`.status`|**sends embed message with all relevant device stats for BATbot**
+|`.imagine [Prompt]`|**uses CLIP+VQGAN open generation to create an original image from your prompt**
+|`.diffusion [Prompt]`|**BATbot uses a CLIP+Diffusion model to generate images to match your prompt**
+|`.facehq, .wikiart, .default, .d1024`|**Changes BATbots VQGAN+CLIP model to one trained solely on faces, art or default configuration**
+|`.square, .landscape, .portrait`|**BATbot will update his size configurations for generations to your specified orientation**
+|`.seed [Desired Seed]`|**Changes BATbots seed for all open generation (if 0 will set to random)**
+|`.gptj [Prompt]`|**BATbot will use his trained GPT-J model to finish your prompt with natural language generation**
+|`.sop [Attatchment]`|**BATbot will turn your attached image into a sequence of wave forms legible by a computer, this allows BATbot to create a sound correlating to the "sounds of processing"**
+|`.faces [Attatchment]`|**BATbot will look through your photo and try to find any recognizable faces**
 
 ## Installation and Usage
 
