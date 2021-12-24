@@ -790,17 +790,13 @@ async def esrgan(ctx):
     return
   async with ctx.channel.typing():
    link = ctx.message.attachments[0].url
-   filename = "input"
-   save_path = 'C:\\Users\\noahs\\Desktop\\BATbot\\Real-ESRGAN\\inputs\\'
-   filename = save_path + filename
+   filename = "input.png"
    r = requests.get(link, allow_redirects=True)
    open(filename, 'wb').write(r.content)
    print(filename)
-   os.chdir("C:\\Users\\noahs\\Desktop\\BATbot\\Real-ESRGAN")
-   os.system(f"python inference_realesrgan.py -n RealESRGAN_x4plus -i inputs")
-   os.chdir("C:\\Users\\noahs\\Desktop\\BATbot")
+   upscale(filename, 'progress_out.png')
    try:
-    output_path = "C:\\Users\\noahs\\Desktop\\BATbot\\Real-ESRGAN\\results\\progress_out.png"
+    output_path = "progress_out.png"
     await ctx.reply(file=discord.File(output_path), mention_author=False)
    except FileNotFoundError as error:
     print(error)
