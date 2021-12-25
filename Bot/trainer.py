@@ -12,7 +12,7 @@ from argparse import ArgumentParser
 from pytorch_lightning.callbacks import ModelCheckpoint
 from pytorch_lightning.loggers import WandbLogger
 
-import model as model
+import model
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 

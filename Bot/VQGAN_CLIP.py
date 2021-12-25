@@ -423,10 +423,10 @@ length = 15 #Desired time of the video in seconds
 frames = []
 tqdm.write('Generating video...')
 for i in range(init_frame,last_frame): #
-    frames.append(Image.open("C:\\Users\\noahs\\Desktop\\BATbot\\steps\\"+ str(i) +'.png'))
+    frames.append(Image.open("C:\\Users\\noahs\\Desktop\\BATbot\\Bot\\steps\\"+ str(i) +'.png'))
     size = (width,height)
 
-savepath = 'C:\\Users\\noahs\\Desktop\\BATbot\\'
+savepath = 'C:\\Users\\noahs\\Desktop\\BATbot\\Bot\\'
 imageio.mimsave(os.path.join(savepath,'movie.mp4'), frames)
 end = time.time() - start
 end = end/60
