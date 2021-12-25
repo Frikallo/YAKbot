@@ -27,6 +27,8 @@ import torchvision.transforms.functional as F
 import discord
 from classify import load, classify, encode
 import os
+os.chdir('C:\\Users\\noahs\\Desktop\\BATbot\\Bot')
+print(os.getcwd())
 import random 
 import asyncio
 from io import BytesIO
@@ -60,8 +62,6 @@ import numpy as np
 import io
 from PIL import ImageFile
 ImageFile.LOAD_TRUNCATED_IMAGES = True
-import sys
-sys.path.append("C:\\Users\\noahs\\Desktop\\BATbot\\Bot\\")
 
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 model2, preprocess2 = clip.load("ViT-B/32", device=device)
@@ -281,10 +281,7 @@ async def image(ctx):
  if ctx.attachments and ctx.content != '.rembg' and ctx.content != '.sop' and ctx.content != '.faces' and ctx.content != '.esrgan':
     if ctx.channel.id != channel_id:
       return
-    if ctx.content == '.rembg':
-      return
-    if ctx.content == '.sop':
-      return
+    gc.collect()
     torch.cuda.empty_cache()
     async with ctx.channel.typing():
      await asyncio.sleep(0.1)

@@ -37,7 +37,7 @@ def load(categorylist):
             if i not in categories:
                 categories.append(i)
     elif(load_categories=="emojis"):
-        categories = open("categories/emojis.txt", encoding="utf8").readlines()
+        categories = open("C:\\Users\\noahs\\Desktop\\BATbot\\Bot\\categories\\emojis.txt", encoding="utf8").readlines()
     c_encs = [perceptor.encode_text(clip.tokenize(category).cuda()).detach().clone() for category in categories]
 
 import PIL
