@@ -13,6 +13,8 @@ from pytorch_lightning.callbacks import ModelCheckpoint
 from pytorch_lightning.loggers import WandbLogger
 
 import model
+import sys
+sys.path.append("C:\\Users\\noahs\\Desktop\\BATbot\\Bot\\")
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 

@@ -9,6 +9,8 @@ import scipy.io.wavfile
 
 import scipy.ndimage
 import IPython.display 
+import sys
+sys.path.append("C:\\Users\\noahs\\Desktop\\BATbot\\Bot\\")
 
 def plotSpectrogram(file="sound.wav"):
     sample_rate, X = scipy.io.wavfile.read(file)

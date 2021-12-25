@@ -11,6 +11,7 @@ import glob
 import clip
 perceptor, preprocess = clip.load('ViT-B/32', jit=False)
 import sys
+sys.path.append("C:\\Users\\noahs\\Desktop\\BATbot\\Bot\\")
 c_encs=[]
 categories = []
 def load(categorylist):

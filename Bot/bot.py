@@ -60,6 +60,8 @@ import numpy as np
 import io
 from PIL import ImageFile
 ImageFile.LOAD_TRUNCATED_IMAGES = True
+import sys
+sys.path.append("C:\\Users\\noahs\\Desktop\\BATbot\\Bot\\")
 
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 model2, preprocess2 = clip.load("ViT-B/32", device=device)

@@ -4,6 +4,8 @@ import wandb
 from argparse import ArgumentParser
 
 import model
+import sys
+sys.path.append("C:\\Users\\noahs\\Desktop\\BATbot\\Bot\\")
 
 
 class dotdict(dict):

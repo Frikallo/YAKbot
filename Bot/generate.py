@@ -16,6 +16,8 @@ from torchvision import transforms as T
 
 import model
 import retrofit
+import sys
+sys.path.append("C:\\Users\\noahs\\Desktop\\BATbot\\Bot\\")
 
 
 class dotdict(dict):

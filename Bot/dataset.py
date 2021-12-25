@@ -12,7 +12,8 @@ from random import randint, choice
 from torch.utils.data import DataLoader
 
 import utils
-
+import sys
+sys.path.append("C:\\Users\\noahs\\Desktop\\BATbot\\Bot\\")
 
 def dl_collate_fn(batch):
     return torch.stack([row[0] for row in batch]), [row[1] for row in batch]

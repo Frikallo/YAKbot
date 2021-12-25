@@ -6,6 +6,8 @@ import numpy as np
 import clip
 from torch import nn
 from transformers import GPT2Tokenizer, AutoModelForCausalLM
+import sys
+sys.path.append("C:\\Users\\noahs\\Desktop\\BATbot\\Bot\\")
 
 
 def build_inputs_with_special_tokens(self, token_ids_0, token_ids_1=None):

@@ -23,6 +23,7 @@ from tqdm.notebook import tqdm
 
 sys.path.append('./CLIP')
 sys.path.append('./guided-diffusion')
+sys.path.append("C:\\Users\\noahs\\Desktop\\BATbot\\Bot\\")
 
 import clip
 from guided_diffusion.script_util import create_model_and_diffusion, model_and_diffusion_defaults
