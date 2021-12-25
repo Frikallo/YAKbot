@@ -13,7 +13,7 @@
 </h1>
 
 ## Info
-[[Info]](https://github.com/Frikallo/BATbot#info) [[Environment]](https://github.com/Frikallo/BATbot#environment) [[Setup & Install]](https://github.com/Frikallo/BATbot#environment) [[Citations]](https://github.com/Frikallo/BATbot#other-repos) [[Architecture]](https://github.com/Frikallo/BATbot#other-repos)
+[[Info]](https://github.com/Frikallo/BATbot#info) [[Environment]](https://github.com/Frikallo/BATbot#environment) [[Setup & Install]](https://github.com/Frikallo/BATbot#setup-and-installation) [[Citations]](https://github.com/Frikallo/BATbot#other-repos)
 
 BATbot is a collection of AI models based on image generation, analysis, and processing; all wrapped into one Discord Bot. BATbot's out-of-the-box commands range from image generation with VQGAN+CLIP or guided diffusion to image analysis and captioning with personality.
 
@@ -58,14 +58,24 @@ $ pip install ftfy regex tqdm
 $ pip install git+https://github.com/openai/CLIP.git
 ```
 Replace cu111 above with the appropriate CUDA version on your machine or cpuonly when installing on a machine without a GPU. Next, we install the dependant packages:
-* Guided Diffusion
+
+<details>
+  <summary>Install Instructions</summary>
+  <!-- have to be followed by an empty line! -->
+
 ```bash
 $ git clone https://github.com/crowsonkb/guided-diffusion
 $ pip install -e ./guided-diffusion
 $ pip install lpips
 $ curl -OL 'https://openaipublic.blob.core.windows.net/diffusion/jul-2021/256x256_diffusion_uncond.pt'
 ```
-* Personality-CLIP
+</details>
+
+* Guided Diffusion
+<details>
+  <summary>Install Instructions</summary>
+  <!-- have to be followed by an empty line! -->
+
 ```bash
 $ git clone https://github.com/dzryk/cliptalk.git
 $ cd cliptalk/
@@ -93,7 +103,13 @@ $ unzip ./bigrams.zip -d bigrams #make sure the unzipped "bigrams" Folder goes i
 $ unzip ./artstyles.zip -d artstyles #make sure the unzipped "artstyles" Folder goes in ./BATbot/Bot/artstyles 
 $ unzip ./emotions.zip -d emotions #make sure the unzipped "emotions" Folder goes in ./BATbot/Bot/emotions 
 ```
-* VQGAN+CLIP(z+quantize)
+</details>
+
+* Personality-CLIP
+<details>
+  <summary>Install Instructions</summary>
+  <!-- have to be followed by an empty line! -->
+
 ```bash
 $ git clone https://github.com/openai/CLIP
 $ git clone https://github.com/CompVis/taming-transformers.git
@@ -112,7 +128,11 @@ $ curl -L -o faceshq.ckpt -C - 'https://app.koofr.net/content/links/a04deec9-0c5
 $ curl -L -o wikiart_16384.yaml -C - 'http://mirror.io.community/blob/vqgan/wikiart_16384.yaml' #WikiArt 16384
 $ curl -L -o wikiart_16384.ckpt -C - 'http://mirror.io.community/blob/vqgan/wikiart_16384.ckpt' #WikiArt 16384
 ```
-Once installed just run:
+</details>
+
+* VQGAN+CLIP(z+quantize)
+
+Once all are installed just run:
 ```
 $ git clone https://github.com/Frikallo/BATbot.git
 $ cd BATbot 
@@ -176,13 +196,26 @@ For upscaling images, try <https://github.com/xinntao/Real-ESRGAN>
 [colab-notebook3]: <https://colab.research.google.com/drive/1ZAus_gn2RhTZWzOWUpPERNC0Q8OhZRTZ>
 [colab-badge]: <https://colab.research.google.com/assets/colab-badge.svg>
 ## License
-[MIT](https://github.com/Frikallo/BATbot/blob/main/LICENSE)
+```md
+MIT License
 
-## Architecture
-<details><summary markdown="span">Let's see some code!</summary>
-```python
-print('Hello World!')
+Copyright (c) 2021 Frikallo
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 ```
-Of course, it has to be Hello World, right?
-</details>
-<br/>
