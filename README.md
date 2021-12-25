@@ -43,9 +43,9 @@ To see examples of all the different commands click here: [Examples](https://git
 
 Typical VRAM requirements:
 
-* VQGAN(256,256-512,512) **~** `5-10GB`
-* Diffusion 256 **~** `6-7GB`
-* Diffusion 512 **~** `10-12GB`
+* VQGAN(256x256 - 512x512) **~** `5-10GB`
+* Diffusion 256x256 **~** `6-7GB`
+* Diffusion 512x256 **~** `10-12GB`
 * Image classification & captioning **~** `4GB`
 
 ## Setup and Installation
