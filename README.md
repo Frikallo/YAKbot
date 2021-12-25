@@ -6,7 +6,7 @@
 <h4 align="center">A complex, multipurpose AI Discord bot.</h4>
 
 <h1 align="center">
-  <img src="https://img.shields.io/badge/discord.py-2.0-blue?style=flat&logo=discord" />
+  <img src="https://img.shields.io/badge/discord.py-2.0-blue?style=flat" />
   <img src="https://img.shields.io/badge/Python-3.9-green?style=flat&logo=python" />
   <img src="https://img.shields.io/badge/stage-development-red.svg" />
   <img src="https://img.shields.io/badge/build-passing-green.svg">
@@ -20,20 +20,20 @@ A full list of BATbots commands and uses can be found either in discord with the
 
 |Command Syntax|Help|Examples|
 |---|---|---
-|`.rembg [Attatchment]`|**removes background from attached image**|[Example](https://github.com/Frikallo/BATbot/tree/main/Examples/.rembg)
-|`.esrgan [Attatchment]`|**BATbot will use a pre-trained ESRGAN upscaler to upscale the resolution of your image up to 4 times**|[Example](https://github.com/Frikallo/BATbot/tree/main/Examples/.esrgan)
-|`.status`|**sends embed message with all relevant device stats for BATbot**|[Example](https://github.com/Frikallo/BATbot/tree/main/Examples/.status)
-|`.imagine [Prompt]`|**uses CLIP+VQGAN open generation to create an original image from your prompt**|[Example](https://github.com/Frikallo/BATbot/tree/main/Examples/.imagine)
-|`.diffusion [Prompt]`|**BATbot uses a CLIP+Diffusion model to generate images to match your prompt**|[Example](https://github.com/Frikallo/BATbot/tree/main/Examples/.diffusion)
-|`.facehq, .wikiart, .default, .d1024`|**Changes BATbots VQGAN+CLIP model to one trained solely on faces, art or default configuration**|[Example](https://github.com/Frikallo/BATbot/tree/main/Examples/.facehq%2C%20.wikiart%2C%20.default%2C%20.d1024)
-|`.square, .landscape, .portrait`|**BATbot will update his size configurations for generations to your specified orientation**|[Example](https://github.com/Frikallo/BATbot/tree/main/Examples/.square%2C%20.landscape%2C%20.portrait)
-|`.seed [Desired Seed]`|**Changes BATbots seed for all open generation (if 0 will set to random)**|[Example](https://github.com/Frikallo/BATbot/tree/main/Examples/.seed)
-|`.gptj [Prompt]`|**BATbot will use his trained GPT-J model to finish your prompt with natural language generation**|[Example](https://github.com/Frikallo/BATbot/tree/main/Examples/.gptj)
-|`.sop [Attatchment]`|**BATbot will turn your attached image into a sequence of wave forms legible by a computer, this allows BATbot to create a sound correlating to the "sounds of processing"**|[Example](https://github.com/Frikallo/BATbot/tree/main/Examples/.sop)
-|`.faces [Attatchment]`|**BATbot will look through your photo and try to find any recognizable faces**|[Example](https://github.com/Frikallo/BATbot/tree/main/Examples/.faces)
+|`.rembg [Attatchment]`|**removes background from attached image**|[Example](https://github.com/Frikallo/BATbot/tree/main/Bot/Examples/.rembg)
+|`.esrgan [Attatchment]`|**BATbot will use a pre-trained ESRGAN upscaler to upscale the resolution of your image up to 4 times**|[Example](https://github.com/Frikallo/BATbot/tree/main/Bot/Examples/.esrgan)
+|`.status`|**sends embed message with all relevant device stats for BATbot**|[Example](https://github.com/Frikallo/BATbot/tree/main/Bot/Examples/.status)
+|`.imagine [Prompt]`|**uses CLIP+VQGAN open generation to create an original image from your prompt**|[Example](https://github.com/Frikallo/BATbot/tree/main/Bot/Examples/.imagine)
+|`.diffusion [Prompt]`|**BATbot uses a CLIP+Diffusion model to generate images to match your prompt**|[Example](https://github.com/Frikallo/BATbot/tree/main/Bot/Examples/.diffusion)
+|`.facehq, .wikiart, .default, .d1024`|**Changes BATbots VQGAN+CLIP model to one trained solely on faces, art or default configuration**|[Example](https://github.com/Frikallo/BATbot/tree/main/Bot/Examples/.facehq%2C%20.wikiart%2C%20.default%2C%20.d1024)
+|`.square, .landscape, .portrait`|**BATbot will update his size configurations for generations to your specified orientation**|[Example](https://github.com/Frikallo/BATbot/tree/main/Bot/Examples/.square%2C%20.landscape%2C%20.portrait)
+|`.seed [Desired Seed]`|**Changes BATbots seed for all open generation (if 0 will set to random)**|[Example](https://github.com/Frikallo/BATbot/tree/main/Bot/Examples/.seed)
+|`.gptj [Prompt]`|**BATbot will use his trained GPT-J model to finish your prompt with natural language generation**|[Example](https://github.com/Frikallo/BATbot/tree/main/Bot/Examples/.gptj)
+|`.sop [Attatchment]`|**BATbot will turn your attached image into a sequence of wave forms legible by a computer, this allows BATbot to create a sound correlating to the "sounds of processing"**|[Example](https://github.com/Frikallo/BATbot/tree/main/Bot/Examples/.sop)
+|`.faces [Attatchment]`|**BATbot will look through your photo and try to find any recognizable faces**|[Example](https://github.com/Frikallo/BATbot/tree/main/Bot/Examples/.faces)
 
 
-To see examples of all the different commands click here: [Examples](https://github.com/Frikallo/BATbot/tree/main/Examples)
+To see examples of all the different commands click here: [Examples](https://github.com/Frikallo/BATbot/tree/main/Bot/Examples)
 
 
 ## Environment
