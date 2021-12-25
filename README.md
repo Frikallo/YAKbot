@@ -196,7 +196,7 @@ For upscaling images, try <https://github.com/xinntao/Real-ESRGAN>
 [colab-notebook3]: <https://colab.research.google.com/drive/1ZAus_gn2RhTZWzOWUpPERNC0Q8OhZRTZ>
 [colab-badge]: <https://colab.research.google.com/assets/colab-badge.svg>
 ## License
-```md
+```
 MIT License
 
 Copyright (c) 2021 Frikallo
