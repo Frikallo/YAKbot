@@ -60,7 +60,7 @@ $ pip install git+https://github.com/openai/CLIP.git
 Replace cu111 above with the appropriate CUDA version on your machine or cpuonly when installing on a machine without a GPU. Next, we install the dependant packages:
 
 <details>
-  <summary>Install Instructions</summary>
+  <summary>Install Instructions (Click me)</summary>
   <!-- have to be followed by an empty line! -->
 
 ```bash
@@ -71,9 +71,9 @@ $ curl -OL 'https://openaipublic.blob.core.windows.net/diffusion/jul-2021/256x25
 ```
 </details>
 
-* Guided Diffusion
+* **Guided Diffusion**
 <details>
-  <summary>Install Instructions</summary>
+  <summary>Install Instructions (Click me)</summary>
   <!-- have to be followed by an empty line! -->
 
 ```bash
@@ -105,9 +105,9 @@ $ unzip ./emotions.zip -d emotions #make sure the unzipped "emotions" Folder goe
 ```
 </details>
 
-* Personality-CLIP
+* **Personality-CLIP**
 <details>
-  <summary>Install Instructions</summary>
+  <summary>Install Instructions (Click me)</summary>
   <!-- have to be followed by an empty line! -->
 
 ```bash
@@ -130,7 +130,7 @@ $ curl -L -o wikiart_16384.ckpt -C - 'http://mirror.io.community/blob/vqgan/wiki
 ```
 </details>
 
-* VQGAN+CLIP(z+quantize)
+* **VQGAN+CLIP(z+quantize)**
 
 Once all are installed just run:
 ```
