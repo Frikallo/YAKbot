@@ -13,7 +13,7 @@
 </h1>
 
 ## Info
-[[Blog]]() [[Paper]]() [[Model Card]]() [[Colab]]()
+[[Info]](https://github.com/Frikallo/BATbot#info) [[Environment]](https://github.com/Frikallo/BATbot#environment) [[Setup & Install]](https://github.com/Frikallo/BATbot#environment) [[Citations]](https://github.com/Frikallo/BATbot#other-repos) [[Architecture]](https://github.com/Frikallo/BATbot#other-repos)
 
 BATbot is a collection of AI models based on image generation, analysis, and processing; all wrapped into one Discord Bot. BATbot's out-of-the-box commands range from image generation with VQGAN+CLIP or guided diffusion to image analysis and captioning with personality.
 
@@ -177,3 +177,12 @@ For upscaling images, try <https://github.com/xinntao/Real-ESRGAN>
 [colab-badge]: <https://colab.research.google.com/assets/colab-badge.svg>
 ## License
 [MIT](https://github.com/Frikallo/BATbot/blob/main/LICENSE)
+
+## Architecture
+<details><summary markdown="span">Let's see some code!</summary>
+```python
+print('Hello World!')
+```
+Of course, it has to be Hello World, right?
+</details>
+<br/>
