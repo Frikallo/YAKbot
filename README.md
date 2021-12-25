@@ -86,11 +86,11 @@ $ mkdir unigrams
 $ mkdir bigrams
 $ mkdir artstyles
 $ mkdir emotions
-$ unzip ./model.zip -d checkpoints
-$ unzip ./unigrams.zip -d unigrams
-$ unzip ./bigrams.zip -d bigrams
-$ unzip ./artstyles.zip -d artstyles
-$ unzip ./emotions.zip -d emotions
+$ unzip ./model.zip -d checkpoints #make sure the unzipped "model" Folder goes in ./BATbot/Bot/checkpoints 
+$ unzip ./unigrams.zip -d unigrams #make sure the unzipped "unigrams" Folder goes in ./BATbot/Bot/unigrams 
+$ unzip ./bigrams.zip -d bigrams #make sure the unzipped "bigrams" Folder goes in ./BATbot/Bot/bigrams 
+$ unzip ./artstyles.zip -d artstyles #make sure the unzipped "artstyles" Folder goes in ./BATbot/Bot/artstyles 
+$ unzip ./emotions.zip -d emotions #make sure the unzipped "emotions" Folder goes in ./BATbot/Bot/emotions 
 ```
 * VQGAN+CLIP(z+quantize)
 ```bash
@@ -101,6 +101,7 @@ $ pip install kornia
 $ pip install imageio-ffmpeg   
 $ pip install einops          
 $ mkdir steps
+#place all of the following model files in ./BATbot/Bot
 $ curl -L -o vqgan_imagenet_f16_1024.yaml -C - 'http://mirror.io.community/blob/vqgan/vqgan_imagenet_f16_1024.yaml' #ImageNet 1024
 $ curl -L -o vqgan_imagenet_f16_1024.ckpt -C - 'http://mirror.io.community/blob/vqgan/vqgan_imagenet_f16_1024.ckpt'  #ImageNet 1024
 $ curl -L -o vqgan_imagenet_f16_16384.yaml -C - 'https://heibox.uni-heidelberg.de/d/a7530b09fed84f80a887/files/?p=%2Fconfigs%2Fmodel.yaml&dl=1' #ImageNet 16384
@@ -112,20 +113,23 @@ $ curl -L -o wikiart_16384.ckpt -C - 'http://mirror.io.community/blob/vqgan/wiki
 ```
 Once installed just run:
 ```
-pip install -r requirements.txt
+$ git clone https://github.com/Frikallo/BATbot.git
+$ cd BATbot 
+$ pip install -r requirements.txt
 ```
-Before running BATbot make sure you have your bot token set.
+Before BATbot can start make sure you have your bot token set.
 ```python
 #The end of your bot.py file should look something like this.
 bot.run('qTIzNTA4NjMhUJI3NzgzJAAy.YcOCbw.GMYbjBWdiIWBPFrm_IMlUTlMGjM') #Your Token Here
 ```
 Now finally run the bot:
-```python
-python3 bot.py
+```
+$ cd Bot
+$ python3 bot.py
 ```
 * Enjoy!
 
-**Note: We do not provide support for self-hosting. If you are unable to self-host BATbot by yourself, just join [my discord server](https://discord.gg/KyU9tFN7gy) where BATbot runs 24/7.**
+**Note: I will not provide support for self-hosting. If you are unable to self-host BATbot by yourself, just join [my discord server](https://discord.gg/KyU9tFN7gy) where BATbot runs 24/7.**
 
 ## Other repos
 
