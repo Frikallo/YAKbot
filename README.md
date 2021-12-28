@@ -13,7 +13,7 @@
 </h1>
 
 ## Info
-[[Info]](https://github.com/Frikallo/BATbot#info) [[Environment]](https://github.com/Frikallo/BATbot#environment) [[Setup & Install]](https://github.com/Frikallo/BATbot#setup-and-installation) [[Citations]](https://github.com/Frikallo/BATbot#other-repos)
+[[Info]](https://github.com/Frikallo/BATbot#info) [[Environment]](https://github.com/Frikallo/BATbot#environment) [[Setup & Install]](https://github.com/Frikallo/BATbot#setup-and-installation) [[Citations]](https://github.com/Frikallo/BATbot#other-repos) [[Roadmap]](https://app.gitkraken.com/glo/board/YcpqYAxppwCthBQK)
 
 BATbot is a collection of AI models based on image generation, analysis, and processing; all wrapped into one Discord Bot. BATbot's out-of-the-box commands range from image generation with VQGAN+CLIP or guided diffusion to image analysis and captioning with personality.
 
