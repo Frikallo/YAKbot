@@ -280,12 +280,12 @@ public_channel_id = 920889454443524116
 async def on_ready():
     await bot.change_presence(activity=discord.Game(name=f"{randomstatus} sucks"))
     print('We have logged in as {0.user}'.format(bot))
-    BATbot = ("""██████╗░░█████╗░████████╗██████╗░░█████╗░████████╗
-██╔══██╗██╔══██╗╚══██╔══╝██╔══██╗██╔══██╗╚══██╔══╝
-██████╦╝███████║░░░██║░░░██████╦╝██║░░██║░░░██║░░░
-██╔══██╗██╔══██║░░░██║░░░██╔══██╗██║░░██║░░░██║░░░
-██████╦╝██║░░██║░░░██║░░░██████╦╝╚█████╔╝░░░██║░░░
-╚═════╝░╚═╝░░╚═╝░░░╚═╝░░░╚═════╝░░╚════╝░░░░╚═╝░░░""")
+    BATbot = (""" ██████╗░░█████╗░████████╗██████╗░░█████╗░████████╗
+  ██╔══██╗██╔══██╗╚══██╔══╝██╔══██╗██╔══██╗╚══██╔══╝
+  ██████╦╝███████║░░░██║░░░██████╦╝██║░░██║░░░██║░░░
+  ██╔══██╗██╔══██║░░░██║░░░██╔══██╗██║░░██║░░░██║░░░
+  ██████╦╝██║░░██║░░░██║░░░██████╦╝╚█████╔╝░░░██║░░░
+  ╚═════╝░╚═╝░░╚═╝░░░╚═╝░░░╚═════╝░░╚════╝░░░░╚═╝░░░""")
     print(BATbot)
     print(f"Logged in as {bot.user}")
     print(f"Connected to: {len(bot.guilds)} guilds")
@@ -295,7 +295,7 @@ async def on_ready():
     print(f"Connected to: {len(bot.emojis)} emojis")
     print(f"Connected to: {len(bot.voice_clients)} voice clients")
     print(f"Connected to: {len(bot.private_channels)} private_channels")
-    print(f'Loaded cogs: {bot.cogs}')
+    #print(f'Loaded cogs: {bot.cogs}')
     print('Elapsed Startup Time: ', time.time() - startTime)
 
 @bot.listen('on_message')
