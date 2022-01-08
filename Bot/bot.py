@@ -7,12 +7,15 @@ import sys
 from upscaler import upscale
 from GPTJ.Basic_api import SimpleCompletion
 import urllib.request
+import datetime
+import traceback
 from moviepy.editor import VideoFileClip
 from music21 import instrument, note, chord, stream
 import moviepy.video.fx.all as vfx
 from discord.ext import commands
 import face_recognition
 from PIL import Image, ImageDraw
+from discord import Embed
 import statcord
 from discord import FFmpegPCMAudio
 import subprocess
@@ -74,6 +77,7 @@ load(load_categories)
 
 lowerBoundNote = 21
 resolution = 0.25
+MAIN_COLOR = 0x459fff  # light blue kinda
 
 # filepaths
 fp_in = "C:\\Users\\noahs\\Desktop\\BATbot\\Bot\\*.png"
@@ -200,6 +204,13 @@ def caption_image(path, args, net, preprocess, context):
     display_grid([img])
     return captions
 
+def success_embed(title, description):
+    return Embed(
+        title=title,
+        description=description,
+        color=MAIN_COLOR
+    )
+
 class dotdict(dict):
     """ dot.notation access to dictionary attributes """
     __getattr__ = dict.get
@@ -276,6 +287,15 @@ async def on_ready():
 ██████╦╝██║░░██║░░░██║░░░██████╦╝╚█████╔╝░░░██║░░░
 ╚═════╝░╚═╝░░╚═╝░░░╚═╝░░░╚═════╝░░╚════╝░░░░╚═╝░░░""")
     print(BATbot)
+    print(f"Logged in as {bot.user}")
+    print(f"Connected to: {len(bot.guilds)} guilds")
+    print(f"Connected to: {len(bot.users)} users")
+    print(f"Connected to: {len(bot.cogs)} cogs")
+    print(f"Connected to: {len(bot.commands)} commands")
+    print(f"Connected to: {len(bot.emojis)} emojis")
+    print(f"Connected to: {len(bot.voice_clients)} voice clients")
+    print(f"Connected to: {len(bot.private_channels)} private_channels")
+    print(f'Loaded cogs: {bot.cogs}')
     print('Elapsed Startup Time: ', time.time() - startTime)
 
 @bot.listen('on_message')
@@ -692,7 +712,7 @@ async def faces(ctx):
     return
   async with ctx.channel.typing():
    link = ctx.message.attachments[0].url
-   filename = 'urmom.png'
+   filename = 'C:\\Users\\noahs\\Desktop\\BATbot\\Bot\\urmom.png'
    r = requests.get(link, allow_redirects=True)
    open(filename, 'wb').write(r.content)
    print(filename)
@@ -994,35 +1014,123 @@ async def landscape(ctx):
       os.environ['height'] = '288'
       os.environ['width'] = '512'
 
-@bot.command()
-async def img2sound(ctx):
- if ctx.channel.id != channel_id:
-    return
- async with ctx.channel.typing():
-  link = ctx.message.attachments[0].url
-  filename = link.split('/')[-1]
-  r = requests.get(link, allow_redirects=True)
-  open(filename, 'wb').write(r.content)
-  print(filename)
-  image_path = filename
-  image = Image.open(image_path)
-  image.thumbnail((106, 100), Image.ANTIALIAS)
-  image.save(image_path, 'PNG', quality=88)
-  os.environ['input_image'] = image_path
-  os.system('python3 img2sound.py')
-  os.system('fluidsynth -ni C:\\Users\\noahs\\Desktop\\BATbot\\Bot\\soundfont\\default_sf.sf2 C:\\Users\\noahs\\Desktop\\BATbot\\Bot\\input.mid -F C:\\Users\\noahs\\Desktop\\BATbot\\Bot\\output.wav -r 44100')
-  from pydub import AudioSegment
-  AudioSegment.from_wav("C:\\Users\\noahs\\Desktop\\BATbot\\Bot\\output.wav").export("C:\\Users\\noahs\\Desktop\\BATbot\\Bot\\output.mp3", format="mp3")
-  output = 'C:\\Users\\noahs\\Desktop\\BATbot\\Bot\\output.mp3'
-  await ctx.reply(file=discord.File(output), mention_author=False)
-  await ctx.channel.send(file=discord.File(image_path), mention_author=False)
-  os.remove('Bot/input.mid')
-  os.remove('Bot/output.mp3')
-  os.remove('Bot/output.wav')
-  os.remove(image_path)
+@bot.event
+async def on_command_error(ctx, error):
+    # if command has local error handler, return
+    if hasattr(ctx.command, 'on_error'):
+        return
+
+    # get the original exception
+    error = getattr(error, 'original', error)
+
+    if isinstance(error, commands.CommandNotFound):
+        return
+
+    if isinstance(error, commands.BotMissingPermissions):
+        missing = [perm.replace('_', ' ').replace('guild', 'server').title() for perm in error.missing_perms]
+        if len(missing) > 2:
+            fmt = '{}, and {}'.format("**, **".join(missing[:-1]), missing[-1])
+        else:
+            fmt = ' and '.join(missing)
+        _message = 'I need the **{}** permission(s) to run this command.'.format(fmt)
+        embed = discord.Embed(title=f"{ctx.command} error",
+                              description='I need the **{}** permission(s) to run this command.'.format(fmt),
+                              color=discord.Color.red())
+        embed.set_footer(text=f"{error}")
+        await ctx.send(embed=embed)
+        return
+
+    if isinstance(error, commands.DisabledCommand):
+        embed = discord.Embed(title=f"{ctx.command} error",
+                              description="This command has been disabled",
+                              color=discord.Color.red())
+        await ctx.send(embed=embed)
+        return
+
+    if isinstance(error, commands.CommandOnCooldown):
+        remaining = "{}".format(str(datetime.timedelta(seconds=error.retry_after)))
+        embed = discord.Embed(description=f"This command is on cooldown, please try again in "
+                                          f"{remaining[0:1]} hours, "
+                                          f"{remaining[3:4]} minutes, "
+                                          f"{remaining[6:7]} seconds!\n"
+                                          f"To avoid getting these cooldowns please vote by clicking above! This will "
+                                          f"kick in within 1 minute and 30 seconds!",
+                              color=discord.Color.red())
+        await ctx.send(embed=embed)
+        return
+
+    if isinstance(error, discord.HTTPException):
+        embed = discord.Embed(title=f"{ctx.command} error",
+                              description=f"{error.text}",
+                              color=discord.Color.red())
+        await ctx.send(embed=embed)
+        return
+
+    if isinstance(error, commands.MissingPermissions):
+        missing = [perm.replace('_', ' ').replace('guild', 'server').title() for perm in error.missing_perms]
+        if len(missing) > 2:
+            fmt = '{}, and {}'.format("**, **".join(missing[:-1]), missing[-1])
+        else:
+            fmt = ' and '.join(missing)
+        _message = 'You need the **{}** permission(s) to use this command.'.format(fmt)
+        embed = discord.Embed(title=f"{ctx.command} error",
+                              description=f"{_message}",
+                              color=discord.Color.red())
+        await ctx.send(embed=embed)
+        return
+
+    # This error is the most common and will need tweaking to how you setup your help command.
+    if isinstance(error, commands.UserInputError):
+        embed = discord.Embed(title=f"{ctx.command} error",
+                              description=f"Invalid user input. "
+                                          f"Please use `{bot.command_prefix}help {ctx.command.cog_name}` "
+                                          f"and locate the `{ctx.command}` command. Check what arguments are "
+                                          f"needed underneath it and retry this command!",
+                              color=discord.Color.red())
+        await ctx.send(embed=embed)
+        return
+
+    if isinstance(error, commands.NoPrivateMessage):
+        try:
+            embed = discord.Embed(title=f"{ctx.command} error",
+                                  description="This command cannot be sued in direct messages",
+                                  color=discord.Color.red())
+            await ctx.author.send(embed=embed)
+        except discord.Forbidden:
+            pass
+        return
+
+    if isinstance(error, commands.CheckFailure):
+        embed = discord.Embed(title=f"{ctx.command} error",
+                              description=f"You do not have permission to use this command",
+                              color=discord.Color.red())
+        await ctx.send(embed=embed)
+        return
+
+    # ignore all other exception types, but print them to stderr
+    print('Ignoring exception in command {}:'.format(ctx.command), file=sys.stderr)
+
+    traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
 
 @bot.event
 async def on_command(ctx):
     api.command_run(ctx)
+
+
+from cogs.error_handling import ErrorHandling
+from cogs.help import Help
+from cogs.image_commands import ImageCommands
+from cogs.natural_language_commands import NaturalLanguageCommands
+from cogs.sound_commands import SoundCommands
+from cogs.utils import UtilCommands
+
+def load_cogs():
+    bot.add_cog(ErrorHandling(bot))
+    bot.add_cog(Help(bot))
+    bot.add_cog(ImageCommands(bot))
+    bot.add_cog(NaturalLanguageCommands(bot))
+    bot.add_cog(SoundCommands(bot))
+    bot.add_cog(UtilCommands(bot))
+load_cogs()
 
 bot.run(os.environ['bot_token'])
