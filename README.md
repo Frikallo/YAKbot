@@ -12,6 +12,7 @@
   <img src="https://img.shields.io/badge/build-passing-green.svg">
   <img src="https://img.shields.io/tokei/lines/github/Frikallo/BATbot?logo=github&style=badge">
   <img src="https://img.shields.io/github/languages/code-size/Frikallo/BATbot?logo=github&style=badge">
+  <img src="https://img.shields.io/lgtm/alerts/g/Frikallo/BATbot.svg?logo=lgtm&logoWidth=18)"
 </h1>
 
 ## Info
