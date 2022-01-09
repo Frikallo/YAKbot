@@ -43,19 +43,15 @@ import psutil
 
 import clip
 import glob
-from PIL import Image
 from pytorch_lightning.callbacks import ModelCheckpoint
-from torchvision.utils import make_grid
 
 import model
 import utils
 
-import numpy as np
 import faiss
 import requests
 import torchvision.transforms.functional as F
 
-from PIL import Image
 from torchvision.utils import make_grid
 
 import model
