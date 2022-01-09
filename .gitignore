@@ -13,3 +13,4 @@ averages_diffusion.txt
 averages.txt
 *.mid
 *.wav
+*.log

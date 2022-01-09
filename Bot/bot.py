@@ -68,12 +68,19 @@ from PIL import ImageFile
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
-model2, preprocess2 = clip.load("ViT-B/32", device=device)
-text2 = clip.tokenize(["negative", "neutral", "positive"]).to(device)
-print('Using device:', device)
-print("loading models")
-load_categories = "emojis"
-load(load_categories)
+
+answer = (input("Load Clip Models?: (y/n) "))
+if answer == 'y':
+  print('Loading Models...')
+  model2, preprocess2 = clip.load("ViT-B/32", device=device)
+  text2 = clip.tokenize(["negative", "neutral", "positive"]).to(device)
+  print('Using device:', device)
+  print("loading models")
+  load_categories = "emojis"
+  load(load_categories)
+  print("Clip loaded.")
+else:
+  print("Suppressing Clip Models")
 
 lowerBoundNote = 21
 resolution = 0.25
@@ -238,35 +245,39 @@ args = argparse.Namespace(
 )
 
 # Load indices
-indices = []
-indices_data = []
-index_dirs = args.index_dirs.split(',')
-index_dirs = list(filter(lambda t: len(t) > 0, index_dirs))
-for index_dir in index_dirs:
-    fname = os.path.join(index_dir, 'args.txt')
-    with open(fname, 'r') as f:
-        index_args = dotdict(json.load(f))
+answer = (input('Load Indices? (y/n) '))
 
-    entries = []
-    fname = os.path.join(index_dir, 'entries.txt')
-    with open(fname, 'r') as f:
-        entries.extend([line.strip() for line in f])
+if answer == 'y':
+  print('Loading indices...')
+  indices = []
+  indices_data = []
+  index_dirs = args.index_dirs.split(',')
+  index_dirs = list(filter(lambda t: len(t) > 0, index_dirs))
+  for index_dir in index_dirs:
+      fname = os.path.join(index_dir, 'args.txt')
+      with open(fname, 'r') as f:
+          index_args = dotdict(json.load(f))
 
-    indices_data.append(entries)
-    indices.append(faiss.read_index(glob.glob(f"{index_dir}/*.index")[0]))
-preprocess = clip.load(args.clip_model, jit=False)[1]
+      entries = []
+      fname = os.path.join(index_dir, 'entries.txt')
+      with open(fname, 'r') as f:
+          entries.extend([line.strip() for line in f])
 
-# Load model
-config = dotdict(torch.load(args.config))
-config.task = 'txt2txt'
-config.adapter = './checkpoints/12xdqrwd.ckpt'
-net = retrofit.load_params(config).to(device)
-net.indices = indices
-net.indices_data = indices_data
-print('loaded')
+      indices_data.append(entries)
+      indices.append(faiss.read_index(glob.glob(f"{index_dir}/*.index")[0]))
+  preprocess = clip.load(args.clip_model, jit=False)[1]
 
-name = ["dodo82", "erintotoro", "jack-cheng", "alekk-stroms", "kabomton", "ari", "dentist sam", "sam"]
-randomstatus = random.choice(name)
+  # Load model
+  config = dotdict(torch.load(args.config))
+  config.task = 'txt2txt'
+  config.adapter = './checkpoints/12xdqrwd.ckpt'
+  net = retrofit.load_params(config).to(device)
+  net.indices = indices
+  net.indices_data = indices_data
+  print('Loaded indices.')
+else:
+  print('Not loading indices')
+
 #Bot
 bot = commands.Bot(command_prefix='.', help_command=None)
 
@@ -278,23 +289,18 @@ public_channel_id = 920889454443524116
 
 @bot.event
 async def on_ready():
-    await bot.change_presence(activity=discord.Game(name=f"{randomstatus} sucks"))
+    await bot.change_presence(activity=discord.Game(name=f"in a trash bin"))
     print('We have logged in as {0.user}'.format(bot))
-    BATbot = (""" ██████╗░░█████╗░████████╗██████╗░░█████╗░████████╗
-  ██╔══██╗██╔══██╗╚══██╔══╝██╔══██╗██╔══██╗╚══██╔══╝
-  ██████╦╝███████║░░░██║░░░██████╦╝██║░░██║░░░██║░░░
-  ██╔══██╗██╔══██║░░░██║░░░██╔══██╗██║░░██║░░░██║░░░
-  ██████╦╝██║░░██║░░░██║░░░██████╦╝╚█████╔╝░░░██║░░░
-  ╚═════╝░╚═╝░░╚═╝░░░╚═╝░░░╚═════╝░░╚════╝░░░░╚═╝░░░""")
-    print(BATbot)
-    print(f"Logged in as {bot.user}")
     print(f"Connected to: {len(bot.guilds)} guilds")
-    print(f"Connected to: {len(bot.users)} users")
     print(f"Connected to: {len(bot.cogs)} cogs")
     print(f"Connected to: {len(bot.commands)} commands")
-    print(f"Connected to: {len(bot.emojis)} emojis")
-    print(f"Connected to: {len(bot.voice_clients)} voice clients")
-    print(f"Connected to: {len(bot.private_channels)} private_channels")
+    BATbot = ("""██████╗░░█████╗░████████╗██████╗░░█████╗░████████╗
+██╔══██╗██╔══██╗╚══██╔══╝██╔══██╗██╔══██╗╚══██╔══╝
+██████╦╝███████║░░░██║░░░██████╦╝██║░░██║░░░██║░░░
+██╔══██╗██╔══██║░░░██║░░░██╔══██╗██║░░██║░░░██║░░░
+██████╦╝██║░░██║░░░██║░░░██████╦╝╚█████╔╝░░░██║░░░
+╚═════╝░╚═╝░░╚═╝░░░╚═╝░░░╚═════╝░░╚════╝░░░░╚═╝░░░""")
+    print(BATbot)
     #print(f'Loaded cogs: {bot.cogs}')
     print('Elapsed Startup Time: ', time.time() - startTime)
 
@@ -526,7 +532,7 @@ async def imagine(ctx):
       final.write_videofile(out_loc)
       await ctx.channel.send(file=discord.File(out_loc))
       await ctx.channel.send(f'```Elapsed: {elapsed} | Generated at: {it}it/s```')
-      await bot.change_presence(activity=discord.Game(name=f"{randomstatus} sucks"))
+      await bot.change_presence(activity=discord.Game(name=f"in a trash bin"))
 
       with open("averages.txt", "a+") as file_object:
         file_object.seek(0)
@@ -702,7 +708,7 @@ async def diffusion(ctx):
         os.remove(os.path.join(my_dir, fname))
        if fname.endswith(".mp4"):
         os.remove(os.path.join(my_dir, fname))
-      await bot.change_presence(activity=discord.Game(name=f"{randomstatus} sucks"))
+      await bot.change_presence(activity=discord.Game(name=f"in a trash bin"))
 
 @bot.command()
 async def faces(ctx):
@@ -761,7 +767,7 @@ async def faces(ctx):
       os.remove(os.path.join(my_dir, fname))
     if fname.endswith(".jpg"):
       os.remove(os.path.join(my_dir, fname))
-   await bot.change_presence(activity=discord.Game(name=f"{randomstatus} sucks"))
+   await bot.change_presence(activity=discord.Game(name=f"in a trash bin"))
 
 @bot.command()
 async def facehq(ctx):
@@ -832,7 +838,7 @@ async def esrgan(ctx):
     print(error)
     await ctx.channel.send("`Error: Image to large to be upscaled. Please try a smaller image.`")
    torch.cuda.empty_cache()
-   await bot.change_presence(activity=discord.Game(name=f"{randomstatus} sucks"))
+   await bot.change_presence(activity=discord.Game(name=f"in a trash bin"))
 
 @bot.command()
 async def rembg(ctx):
@@ -862,7 +868,7 @@ async def rembg(ctx):
     if fname.endswith(".png"):
       os.remove(os.path.join(my_dir, fname))
    torch.cuda.empty_cache()
-   await bot.change_presence(activity=discord.Game(name=f"{randomstatus} sucks"))
+   await bot.change_presence(activity=discord.Game(name=f"in a trash bin"))
 
 @bot.command()
 async def help(ctx):
@@ -874,7 +880,7 @@ async def help(ctx):
      embed = discord.Embed(title="BATbot Help", description=f'`.rembg [Attached Image]`\n**removes background from attatched image**\n\n`.esrgan [Attatchment]`\n**BATbot will use a pretrained ESRGAN upscaler to upscale you images resolution by up to 4 times**\n\n`.status`\n**sends embed message with all relevent device stats for BATbot**\n\n`.imagine [Prompt]`\n**uses CLIP+VQGAN open generation to create an original image from your prompt**\n\n`.diffusion [Prompt]`\n**BATbot uses a CLIP+Diffusion model to generate images to match your prompt**\n\n`.facehq, .wikiart, .default, .d1024`\n**Changes BATbots VQGAN+CLIP model to one trained solely on faces, art or default configuration**\n\n`.square, .landscape, .portrait`\n**BATbot will update his size configurations for generations to your specified orientation**\n\n`.seed [Desired Seed]`\n**Changes BATbots seed for all open generation (if 0 will set to random)**\n\n`.gptj [Prompt]`\n**BATbot will use his trained GPT-J model to finish your prompt with natural language generation**\n\n`.sop [Attatchment]`\n**BATbot will turn your attatched image into a sequence of note lines ledgible by a computer, this allows BATbot to create a sound corolating to the "sounds of proccessing"**\n\n`.faces [Attatchment]`\n**BATbot will look through your photo and try to find any recognizable faces**\n\n__Any Attatchments Sent In This Channel Will Be Identified And Captioned By BATbot (To Prevent Captioning Include --nc In Your Message)__', color=0x7289da)
      await ctx.channel.send(embed=embed)
    torch.cuda.empty_cache()
-   await bot.change_presence(activity=discord.Game(name=f"{randomstatus} sucks"))
+   await bot.change_presence(activity=discord.Game(name=f"in a trash bin"))
 
 @bot.command()
 async def status(ctx):
