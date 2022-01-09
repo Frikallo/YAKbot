@@ -837,6 +837,14 @@ async def esrgan(ctx):
    except FileNotFoundError as error:
     print(error)
     await ctx.channel.send("`Error: Image to large to be upscaled. Please try a smaller image.`")
+   #delete output
+   directory = os.getcwd()
+   my_dir = directory
+   for fname in os.listdir(my_dir):
+    if fname.endswith(".png"):
+      os.remove(os.path.join(my_dir, fname))
+    if fname.endswith(".jpg"):
+      os.remove(os.path.join(my_dir, fname))
    torch.cuda.empty_cache()
    await bot.change_presence(activity=discord.Game(name=f"in a trash bin"))
 
