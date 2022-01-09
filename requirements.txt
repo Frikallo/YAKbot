@@ -24,3 +24,4 @@ webdataset
 kornia
 imageio-ffmpeg
 einops
+numpy
