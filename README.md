@@ -9,10 +9,10 @@
   <img src="https://img.shields.io/badge/discord.py-2.0-blue?style=flat" />
   <img src="https://img.shields.io/badge/Python-3.9-green?style=flat&logo=python" />
   <img src="https://img.shields.io/badge/stage-development-red.svg" />
-  <img src="https://img.shields.io/badge/build-passing-green.svg">
-  <img src="https://img.shields.io/tokei/lines/github/Frikallo/BATbot?logo=github&style=badge">
-  <img src="https://img.shields.io/github/languages/code-size/Frikallo/BATbot?logo=github&style=badge">
-  <img src="https://img.shields.io/lgtm/alerts/g/Frikallo/BATbot.svg?logo=lgtm&logoWidth=18)"
+  <img src="https://img.shields.io/lgtm/alerts/g/Frikallo/BATbot.svg?logo=lgtm&logoWidth=18)">
+  <img src="https://api.codeclimate.com/v1/badges/2c80cd445078a94ed330/maintainability">
+  <img src="https://api.codeclimate.com/v1/badges/2c80cd445078a94ed330/test_coverage">
+
 </h1>
 
 ## Info
