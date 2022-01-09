@@ -8,8 +8,8 @@
 <h1 align="center">
   <img src="https://img.shields.io/badge/stage-development-yellow.svg" />
   <img src="https://img.shields.io/lgtm/alerts/g/Frikallo/BATbot.svg?logo=lgtm&logoWidth=18)">
-  <img src="https://img.shields.io/codeclimate/maintainability-percentage/Frikallo/BATbot">
-  <img src="https://img.shields.io/codeclimate/maintainability/Frikallo/BATbot?label=code%20quality">
+  <img src="https://img.shields.io/codeclimate/maintainability-percentage/Frikallo/BATbot?logo=codeclimate&color=pine">
+  <img src="https://img.shields.io/codeclimate/maintainability/Frikallo/BATbot?label=code%20quality&logo=codeclimate&color=pine">
   <img src="https://github.com/frikallo/batbot/actions/workflows/main.yml/badge.svg">
 </h1>
 
