@@ -742,7 +742,10 @@ async def faces(ctx):
     face_locations = face_recognition.face_locations(test_image)
     face_encodings = face_recognition.face_encodings(test_image, face_locations)
    except FileNotFoundError as e:
-     await ctx.channel.send("`Error: Face Not Found`")
+        embed = discord.Embed(title=f"{ctx.command} error",
+                              description=f"Error: Face Not Found",
+                              color=discord.Color.red())
+        await ctx.send(embed=embed)
 
    pil_image = Image.fromarray(test_image)
    draw = ImageDraw.Draw(pil_image)
