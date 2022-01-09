@@ -10,6 +10,8 @@
   <img src="https://img.shields.io/badge/Python-3.9-green?style=flat&logo=python" />
   <img src="https://img.shields.io/badge/stage-development-red.svg" />
   <img src="https://img.shields.io/badge/build-passing-green.svg">
+  <img src="https://img.shields.io/tokei/lines/github/Frikallo/BATbot?logo=github&style=badge">
+  <img src="https://img.shields.io/github/languages/code-size/Frikallo/BATbot?logo=github&style=badge">
 </h1>
 
 ## Info
