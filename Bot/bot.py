@@ -288,7 +288,6 @@ async def on_ready():
     await bot.change_presence(activity=discord.Game(name=f"in a trash bin"))
     print('We have logged in as {0.user}'.format(bot))
     print(f"Connected to: {len(bot.guilds)} guilds")
-    print(f"Connected to: {len(bot.cogs)} cogs")
     print(f"Connected to: {len(bot.commands)} commands")
     BATbot = ("""██████╗░░█████╗░████████╗██████╗░░█████╗░████████╗
 ██╔══██╗██╔══██╗╚══██╔══╝██╔══██╗██╔══██╗╚══██╔══╝
@@ -298,8 +297,16 @@ async def on_ready():
 ╚═════╝░╚═╝░░╚═╝░░░╚═╝░░░╚═════╝░░╚════╝░░░░╚═╝░░░""")
     print(BATbot)
     #print(f'Loaded cogs: {bot.cogs}')
-    print('Elapsed Startup Time: ', time.time() - startTime)
-
+    end = time.time() - startTime
+    end = int(end)
+    secs = 0
+    if end > 60:
+      end = 1
+      secs = end - 60
+    if end < 60:
+      secs = end
+      end = 0
+    print(f'Elapsed Startup Time: {end}m{secs}s') 
 @bot.listen('on_message')
 async def image(ctx):
  if ctx.author.bot:
@@ -730,9 +737,12 @@ async def faces(ctx):
       image = Image.open('face.png')
       new_image = image.resize((256, 256))
       new_image.save('face.png')
-   test_image = face_recognition.load_image_file('face.png')
-   face_locations = face_recognition.face_locations(test_image)
-   face_encodings = face_recognition.face_encodings(test_image, face_locations)
+   try:
+    test_image = face_recognition.load_image_file('face.png')
+    face_locations = face_recognition.face_locations(test_image)
+    face_encodings = face_recognition.face_encodings(test_image, face_locations)
+   except FileNotFoundError as e:
+     await ctx.channel.send("`Error: Face Not Found`")
 
    pil_image = Image.fromarray(test_image)
    draw = ImageDraw.Draw(pil_image)
@@ -1125,22 +1135,5 @@ async def on_command_error(ctx, error):
 @bot.event
 async def on_command(ctx):
     api.command_run(ctx)
-
-
-from cogs.error_handling import ErrorHandling
-from cogs.help import Help
-from cogs.image_commands import ImageCommands
-from cogs.natural_language_commands import NaturalLanguageCommands
-from cogs.sound_commands import SoundCommands
-from cogs.utils import UtilCommands
-
-def load_cogs():
-    bot.add_cog(ErrorHandling(bot))
-    bot.add_cog(Help(bot))
-    bot.add_cog(ImageCommands(bot))
-    bot.add_cog(NaturalLanguageCommands(bot))
-    bot.add_cog(SoundCommands(bot))
-    bot.add_cog(UtilCommands(bot))
-load_cogs()
 
 bot.run(os.environ['bot_token'])
