@@ -71,7 +71,6 @@ if answer == 'y':
   model2, preprocess2 = clip.load("ViT-B/32", device=device)
   text2 = clip.tokenize(["negative", "neutral", "positive"]).to(device)
   print('Using device:', device)
-  print("loading models")
   load_categories = "emojis"
   load(load_categories)
   print("Clip loaded.")
@@ -397,7 +396,8 @@ async def image(ctx):
         caption_person = random.choice(Pos_Captions)
         simple_person = random.choice(simple_Captions3)
 
-     context = simple_person
+     context_simple = simple_person
+     context = caption_person
      captions = caption_image(img, args, net, preprocess, context=context)
      for c in captions[:args.display]:
       sendable = f'`{context}` {c}'
