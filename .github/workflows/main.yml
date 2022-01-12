@@ -40,4 +40,4 @@ jobs:
       continue-on-error: true
     - name: Black
       run: |
-        black ../Bot/*.py --diff --check --exit-zero
+        black ../Bot/*.py --diff --check
