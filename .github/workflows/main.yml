@@ -32,9 +32,6 @@ jobs:
         python -m pip install --upgrade pip
         pip install pylint~=2.9.3
         pip install black==21.6b0
-        pip install bandit~=1.7.0
-    - name: Bandit syntax check
-      run: bandit -r . -b .bandit_baseline.json --exit-zero
     - name: Pylint
       run: pylint ./Bot/*.py --exit-zero -r y
       continue-on-error: true
