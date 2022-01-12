@@ -2,6 +2,7 @@ import time
 from clip.clip import available_models
 from flask import Flask, render_template, request
 from multiprocessing import Process
+
 app = Flask(__name__)
 
 startTime = time.time()
@@ -1687,11 +1688,12 @@ async def on_command_error(ctx, error):
 async def on_command(ctx):
     api.command_run(ctx)
 
-p1 = bot.run(os.environ["bot_token"])
-#p2 = app.run()
 
-if __name__=='__main__':
-    p11 = Process(target = p1)
+p1 = bot.run(os.environ["bot_token"])
+# p2 = app.run()
+
+if __name__ == "__main__":
+    p11 = Process(target=p1)
     p11.start()
-    #p22 = Process(target = p2)
-    #p22.start()
+    # p22 = Process(target = p2)
+    # p22.start()
