@@ -279,8 +279,10 @@ bot = commands.Bot(command_prefix='.', help_command=None)
 key = "statcord.com-pYzEX1uxAJv7PAT4ZaAx"
 api = statcord.Client(bot,key)
 api.start_loop()
-channel_id = 882342184924348478
-public_channel_id = 920889454443524116
+
+dev_id = 882342184924348478
+public_id = 920889454443524116
+channel_id = public_id
 
 @bot.event
 async def on_ready():
@@ -305,7 +307,7 @@ async def on_ready():
     if end < 60:
       secs = end
       end = 0
-    print(f'Elapsed Startup Time: {end}m{secs}s') 
+    print(f'Elapsed Startup Time: {end}m{secs}s')
 @bot.listen('on_message')
 async def image(ctx):
  if ctx.author.bot:
