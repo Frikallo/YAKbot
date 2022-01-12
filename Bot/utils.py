@@ -6,6 +6,7 @@ import torch.nn.functional as F
 import clip
 from torch.utils.data import DataLoader
 import sys
+
 sys.path.append("C:\\Users\\noahs\\Desktop\\BATbot\\Bot\\")
 import model
 
@@ -17,13 +18,9 @@ def load_ckpt(args):
     return net
 
 
-def build_table(x,
-                perceiver,
-                cache,
-                cache_emb,
-                topk,
-                return_images=False,
-                index_dir=None):
+def build_table(
+    x, perceiver, cache, cache_emb, topk, return_images=False, index_dir=None
+):
     """
     Maps each image to a linearized row in a table. Each entry in a row
     is delimited by "|". Each entry comes from the topk results in the cache
@@ -35,18 +32,18 @@ def build_table(x,
     if index_dir:
         indices = cache_emb.search(x.cpu().numpy(), topk)[1]
         for idx in range(len(x)):
-            row = ''
+            row = ""
             results = [cache[i] for i in indices[idx]]
             for r in results:
-                row += r + ' | '
+                row += r + " | "
             table.append(row)
     else:
         similarity = (100.0 * x @ cache_emb.T).softmax(dim=-1)
         for idx in range(len(x)):
-            row = ''
+            row = ""
             values, indices = similarity[idx].topk(topk)
             for _, index in zip(values, indices):
-                row += cache[index] + ' | '
+                row += cache[index] + " | "
             table.append(row)
     if return_images:
         return table, x
@@ -59,7 +56,8 @@ def clip_rescoring(args, net, candidates, x):
     score determined by cosine similarity is returned.
     """
     textemb = net.perceiver.encode_text(
-        clip.tokenize(candidates).to(args.device)).float()
+        clip.tokenize(candidates).to(args.device)
+    ).float()
     textemb /= textemb.norm(dim=-1, keepdim=True)
     similarity = (100.0 * x @ textemb.T).softmax(dim=-1)
     _, indices = similarity[0].topk(1)
@@ -74,28 +72,32 @@ def generate(args, net, loader):
     3. Rescore each candidate using CLIP.
     Generated captions as well as references are stored for external scoring.
     """
-    pred, ref = [],[]
+    pred, ref = [], []
     for batch in loader:
         src, tgt = batch
-        src, imgs = build_table(src.to(args.device), 
-                                perceiver=net.perceiver,
-                                cache=net.cache,
-                                cache_emb=net.cache_emb,
-                                topk=args.topk,
-                                return_images=True,
-                                index_dir=args.index_dir)
+        src, imgs = build_table(
+            src.to(args.device),
+            perceiver=net.perceiver,
+            cache=net.cache,
+            cache_emb=net.cache_emb,
+            topk=args.topk,
+            return_images=True,
+            index_dir=args.index_dir,
+        )
         for idx, x in enumerate(src):
-            inputs = net.tokenizer.encode(x, return_tensors='pt').to(args.device)
-            out = net.model.generate(inputs,
-                                     do_sample=args.do_sample,
-                                     num_beams=args.num_beams,
-                                     temperature=args.temperature,
-                                     top_p=args.top_p,
-                                     num_return_sequences=args.num_return_sequences)
+            inputs = net.tokenizer.encode(x, return_tensors="pt").to(args.device)
+            out = net.model.generate(
+                inputs,
+                do_sample=args.do_sample,
+                num_beams=args.num_beams,
+                temperature=args.temperature,
+                top_p=args.top_p,
+                num_return_sequences=args.num_return_sequences,
+            )
             candidates = []
             for seq in out:
                 candidates.append(net.tokenizer.decode(seq, skip_special_tokens=True))
-            out = clip_rescoring(args, net, candidates, imgs[idx][None,:])
+            out = clip_rescoring(args, net, candidates, imgs[idx][None, :])
             print(out)
             pred.append(out)
             ref.append(tgt[idx])
