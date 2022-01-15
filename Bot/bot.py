@@ -8,6 +8,9 @@ app = Flask(__name__)
 startTime = time.time()
 import argparse
 import presets
+import argparse
+import matplotlib.pyplot as plt
+from colorizers import *
 import sys
 from upscaler import upscale
 from GPTJ.Basic_api import SimpleCompletion
@@ -88,6 +91,9 @@ else:
 lowerBoundNote = 21
 resolution = 0.25
 MAIN_COLOR = 0x459FFF  # light blue kinda
+
+use_gpu = True
+save_prefix = "saved"
 
 # filepaths
 fp_in = "C:\\Users\\noahs\\Desktop\\BATbot\\Bot\\*.png"
@@ -267,6 +273,13 @@ args = argparse.Namespace(
     device=device,
 )
 
+# load colorizers
+colorizer_eccv16 = eccv16(pretrained=True).eval()
+colorizer_siggraph17 = siggraph17(pretrained=True).eval()
+if use_gpu:
+    colorizer_eccv16.cuda()
+    colorizer_siggraph17.cuda()
+
 # Load indices
 answer = input("Load Indices? (y/n) ")
 
@@ -354,6 +367,7 @@ async def image(ctx):
         and ctx.content != ".faces"
         and ctx.content != ".esrgan"
         and ctx.content != ".img2sound"
+        and ctx.content != ".colorize"
     ):
         if ctx.channel.id != channel_id:
             return
@@ -1559,6 +1573,71 @@ async def landscape(ctx):
         await ctx.channel.send("Updated! BATbot Size Config: `landscape`")
         os.environ["height"] = "288"
         os.environ["width"] = "512"
+
+
+@bot.command()
+async def colorize(ctx):
+    await bot.change_presence(activity=discord.Game(name=f"Colorizing..."))
+    if ctx.message.attachments:
+        if ctx.channel.id != channel_id:
+            return
+        async with ctx.channel.typing():
+            link = ctx.message.attachments[0].url
+            filename = "teaser.jpg"
+            r = requests.get(link, allow_redirects=True)
+            open(filename, "wb").write(r.content)
+            print(filename)
+            img_path = filename
+            # default size to process images is 256x256
+            # grab L channel in both original ("orig") and resized ("rs") resolutions
+            img = load_img(img_path)
+            (tens_l_orig, tens_l_rs) = preprocess_img(img, HW=(256, 256))
+            if use_gpu:
+                tens_l_rs = tens_l_rs.cuda()
+
+            img_bw = postprocess_tens(
+                tens_l_orig, torch.cat((0 * tens_l_orig, 0 * tens_l_orig), dim=1)
+            )
+            out_img_eccv16 = postprocess_tens(
+                tens_l_orig, colorizer_eccv16(tens_l_rs).cpu()
+            )
+            out_img_siggraph17 = postprocess_tens(
+                tens_l_orig, colorizer_siggraph17(tens_l_rs).cpu()
+            )
+
+            plt.imsave("%s_eccv16.png" % save_prefix, out_img_eccv16)
+            plt.imsave("%s_siggraph17.png" % save_prefix, out_img_siggraph17)
+
+            plt.figure(figsize=(12, 8))
+            plt.subplot(2, 2, 1)
+            plt.imshow(img)
+            plt.title("Original")
+            plt.axis("off")
+
+            plt.subplot(2, 2, 2)
+            plt.imshow(img_bw)
+            plt.title("Input")
+            plt.axis("off")
+
+            plt.subplot(2, 2, 3)
+            plt.imshow(out_img_eccv16)
+            plt.title("Output (ECCV 16)")
+            plt.axis("off")
+
+            plt.subplot(2, 2, 4)
+            plt.imshow(out_img_siggraph17)
+            plt.title("Output (SIGGRAPH 17)")
+            plt.axis("off")
+            plt.savefig("out.png")
+            await ctx.reply(file=discord.File("out.png"))
+            # delete output
+            directory = os.getcwd()
+            my_dir = directory
+            for fname in os.listdir(my_dir):
+                if fname.endswith(".png"):
+                    os.remove(os.path.join(my_dir, fname))
+            torch.cuda.empty_cache()
+            await bot.change_presence(activity=discord.Game(name=f"in a trash bin"))
 
 
 @bot.event

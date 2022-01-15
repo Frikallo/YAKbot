@@ -153,6 +153,17 @@ $ python3 bot.py
 
 **Note: I will not provide support for self-hosting. If you are unable to self-host BATbot by yourself, just join [my discord server](https://discord.gg/KyU9tFN7gy) where BATbot runs 24/7.**
 
+A successful startup will look like this:
+<details>
+  <summary>(Click me)</summary>
+  <!-- have to be followed by an empty line! -->
+
+  <h1 align="center">
+  <img src="https://cdn.discordapp.com/attachments/924037023315165254/930992116056858704/Screenshot_2022-01-12_170940.png">
+  </h1>
+</details>
+
+
 ## Other repos
 
 You may also be interested in <https://github.com/afiaka87/clip-guided-diffusion>
