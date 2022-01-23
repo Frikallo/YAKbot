@@ -13,10 +13,6 @@ import clip
 
 perceptor, preprocess = clip.load("ViT-B/32", jit=False)
 import sys
-
-import os
-
-os.chdir("./Bot")
 c_encs = []
 categories = []
 

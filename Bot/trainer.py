@@ -14,9 +14,6 @@ from pytorch_lightning.loggers import WandbLogger
 
 import model
 import sys
-import os
-
-os.chdir("./Bot")
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 

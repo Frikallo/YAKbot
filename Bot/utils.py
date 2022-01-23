@@ -6,9 +6,6 @@ import torch.nn.functional as F
 import clip
 from torch.utils.data import DataLoader
 import sys
-import os
-
-os.chdir("./Bot")
 import model
 
 

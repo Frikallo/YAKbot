@@ -18,10 +18,6 @@ import model
 import retrofit
 import sys
 
-import os
-
-os.chdir("./Bot")
-
 
 class dotdict(dict):
     """dot.notation access to dictionary attributes"""

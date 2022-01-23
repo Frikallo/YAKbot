@@ -24,9 +24,6 @@ from tqdm.notebook import tqdm
 
 sys.path.append("./CLIP")
 sys.path.append("./guided-diffusion")
-import os
-
-os.chdir("./Bot")
 
 import clip
 from guided_diffusion.script_util import (

@@ -13,9 +13,6 @@ from torch.utils.data import DataLoader
 
 import utils
 import sys
-import os
-
-os.chdir("./Bot")
 
 
 def dl_collate_fn(batch):

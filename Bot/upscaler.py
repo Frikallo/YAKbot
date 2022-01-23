@@ -1,7 +1,5 @@
-import os
-os.chdir("./Bot")
 import PIL.Image
-
+import os
 
 def upscale(image_path: str, output_path: str) -> str:
     os.system(

@@ -7,9 +7,6 @@ import clip
 from torch import nn
 from transformers import GPT2Tokenizer, AutoModelForCausalLM
 import sys
-import os
-
-os.chdir("./Bot")
 
 
 def build_inputs_with_special_tokens(self, token_ids_0, token_ids_1=None):

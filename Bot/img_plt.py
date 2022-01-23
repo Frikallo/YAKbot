@@ -10,9 +10,6 @@ import scipy.io.wavfile
 import scipy.ndimage
 import IPython.display
 import sys
-import os
-
-os.chdir("./Bot")
 
 
 def plotSpectrogram(file="sound.wav"):

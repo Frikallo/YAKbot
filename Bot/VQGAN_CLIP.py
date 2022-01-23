@@ -27,9 +27,6 @@ import numpy as np
 import imageio
 from PIL import ImageFile, Image
 import sys
-import os
-
-os.chdir("./Bot")
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 start = time.time()
 

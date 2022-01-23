@@ -5,9 +5,6 @@ from argparse import ArgumentParser
 
 import model
 import sys
-import os
-
-os.chdir("./Bot")
 
 
 class dotdict(dict):
