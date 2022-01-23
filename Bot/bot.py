@@ -3,10 +3,14 @@ from clip.clip import available_models
 from flask import Flask, render_template, request
 from multiprocessing import Process
 
+from sqlalchemy import true
+
 app = Flask(__name__)
 
 startTime = time.time()
+import threading
 import argparse
+import PySimpleGUI as sg
 import presets
 import argparse
 import matplotlib.pyplot as plt
@@ -73,11 +77,14 @@ import io
 from PIL import ImageFile
 
 ImageFile.LOAD_TRUNCATED_IMAGES = True
+CB1 = os.environ.get("CB1")
+CB2 = os.environ.get("CB2")
+CB3 = os.environ.get("CB3")
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
-answer = input("Load Clip Models?: (y/n) ")
-if answer == "y":
+answer = CB1
+if answer == 'True':
     print("Loading Models...")
     model2, preprocess2 = clip.load("ViT-B/32", device=device)
     text2 = clip.tokenize(["negative", "neutral", "positive"]).to(device)
@@ -92,7 +99,7 @@ lowerBoundNote = 21
 resolution = 0.25
 MAIN_COLOR = 0x459FFF  # light blue kinda
 
-use_gpu = True
+use_gpu = False
 save_prefix = "saved"
 
 # filepaths
@@ -256,7 +263,6 @@ async def play_source(voice_client):
         else bot.loop.create_task(play_source(voice_client)),
     )
 
-
 # Settings
 args = argparse.Namespace(
     config="./checkpoints/12xdqrwd-config",
@@ -281,9 +287,9 @@ if use_gpu:
     colorizer_siggraph17.cuda()
 
 # Load indices
-answer = input("Load Indices? (y/n) ")
+answer = CB2
 
-if answer == "y":
+if answer == 'True':
     print("Loading indices...")
     indices = []
     indices_data = []
@@ -323,8 +329,8 @@ api.start_loop()
 
 dev_id = 882342184924348478
 public_id = 920889454443524116
-answer = input("Use dev? (y/n) ")
-if answer == "y":
+answer = CB3
+if answer == 'True':
     channel_id = dev_id
 else:
     channel_id = public_id
@@ -1629,7 +1635,7 @@ async def colorize(ctx):
             plt.title("Output (SIGGRAPH 17)")
             plt.axis("off")
             plt.savefig("out.png")
-            await ctx.reply(file=discord.File("out.png"))
+            await ctx.reply(file=discord.File("out.png"), mention_author=False)
             # delete output
             directory = os.getcwd()
             my_dir = directory
@@ -1767,12 +1773,4 @@ async def on_command_error(ctx, error):
 async def on_command(ctx):
     api.command_run(ctx)
 
-
-p1 = bot.run(os.environ["bot_token"])
-# p2 = app.run()
-
-if __name__ == "__main__":
-    p11 = Process(target=p1)
-    p11.start()
-    # p22 = Process(target = p2)
-    # p22.start()
+bot.run(os.environ["bot_token"])
