@@ -274,7 +274,6 @@ def resource_path(relative_path):
 
     return os.path.join(base_path, relative_path)
 
-
 # Settings
 args = argparse.Namespace(
     config="./checkpoints/12xdqrwd-config",
