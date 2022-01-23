@@ -6,8 +6,9 @@ import torch.nn.functional as F
 import clip
 from torch.utils.data import DataLoader
 import sys
+import os
 
-sys.path.append("C:\\Users\\noahs\\Desktop\\BATbot\\Bot\\")
+os.chdir("./Bot")
 import model
 
 

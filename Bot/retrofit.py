@@ -5,8 +5,9 @@ from argparse import ArgumentParser
 
 import model
 import sys
+import os
 
-sys.path.append("C:\\Users\\noahs\\Desktop\\BATbot\\Bot\\")
+os.chdir("./Bot")
 
 
 class dotdict(dict):

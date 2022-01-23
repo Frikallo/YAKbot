@@ -14,7 +14,9 @@ import clip
 perceptor, preprocess = clip.load("ViT-B/32", jit=False)
 import sys
 
-sys.path.append("C:\\Users\\noahs\\Desktop\\BATbot\\Bot\\")
+import os
+
+os.chdir("./Bot")
 c_encs = []
 categories = []
 
@@ -52,7 +54,7 @@ def load(categorylist):
                 categories.append(i)
     elif load_categories == "emojis":
         categories = open(
-            "C:\\Users\\noahs\\Desktop\\BATbot\\Bot\\categories\\emojis.txt",
+            "./categories/emojis.txt",
             encoding="utf8",
         ).readlines()
     c_encs = [

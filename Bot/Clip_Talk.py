@@ -19,7 +19,9 @@ import model
 import retrofit
 import sys
 
-sys.path.append("C:\\Users\\noahs\\Desktop\\BATbot\\Bot\\")
+import os
+
+os.chdir("./Bot")
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 print("Using device:", device)

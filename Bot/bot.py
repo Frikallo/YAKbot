@@ -45,7 +45,7 @@ import discord
 from classify import load, classify, encode
 import os
 
-os.chdir("C:\\Users\\noahs\\Desktop\\BATbot\\Bot")
+os.chdir("./Bot")
 print(os.getcwd())
 import random
 import asyncio
@@ -83,8 +83,8 @@ CB3 = os.environ.get("CB3")
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
-answer = CB1
-if answer == "True":
+answer = input("Load CLIP? (y/n) ")
+if answer == "y":
     print("Loading Models...")
     model2, preprocess2 = clip.load("ViT-B/32", device=device)
     text2 = clip.tokenize(["negative", "neutral", "positive"]).to(device)
@@ -103,8 +103,8 @@ use_gpu = False
 save_prefix = "saved"
 
 # filepaths
-fp_in = "C:\\Users\\noahs\\Desktop\\BATbot\\Bot\\*.png"
-fp_out = "C:\\Users\\noahs\\Desktop\\BATbot\\Bot\\movie.mp4"
+fp_in = ".\*.png"
+fp_out = "movie.mp4"
 
 # face recognition settings
 # Noah
@@ -254,7 +254,7 @@ class dotdict(dict):
 
 async def play_source(voice_client):
     source = FFmpegPCMAudio(
-        "C:\\Users\\noahs\\Desktop\\BATbot\\Bot\\audio\\krusty_krab_theme.mp3"
+        "krusty_krab_theme.mp3"
     )
     voice_client.play(
         source,
@@ -298,9 +298,9 @@ if use_gpu:
     colorizer_siggraph17.cuda()
 
 # Load indices
-answer = CB2
+answer = input("Load indices? (y/n) ")
 
-if answer == "True":
+if answer == "y":
     print("Loading indices...")
     indices = []
     indices_data = []
@@ -340,8 +340,8 @@ api.start_loop()
 
 dev_id = 882342184924348478
 public_id = 920889454443524116
-answer = CB3
-if answer == "True":
+answer = input("Use dev channel? (y/n) ")
+if answer == "y":
     channel_id = dev_id
 else:
     channel_id = public_id
@@ -985,8 +985,8 @@ async def imagine(ctx):
         subprocess.call(f"python3 VQGAN_CLIP.py")
         print("Generation Complete")
 
-        new_prompt = "C:\\Users\\noahs\\Desktop\\BATbot\\Bot\\progress.png"
-        upscale(new_prompt, "C:\\Users\\noahs\\Desktop\\BATbot\\Bot\\progress.png")
+        new_prompt = "progress.png"
+        upscale(new_prompt, "progress.png")
         await ctx.channel.send(f"<@{author}>" + "```Your Generation Is Done```")
         await ctx.channel.send(file=discord.File(new_prompt))
         ittime = time.time() - genTime
@@ -1143,8 +1143,8 @@ async def diffusion(ctx):
         subprocess.call(f"python3 diffusion.py")
         print("Generation Complete")
 
-        new_prompt = "C:\\Users\\noahs\\Desktop\\BATbot\\Bot\\progress_00000.png"
-        upscale(new_prompt, "C:\\Users\\noahs\\Desktop\\BATbot\\Bot\\progress.png")
+        new_prompt = "progress_00000.png"
+        upscale(new_prompt, "progress.png")
         await ctx.channel.send(f"<@{author}>" + "```Your Generation Is Done```")
         await ctx.channel.send(file=discord.File(new_prompt))
         ittime = time.time() - genTime
@@ -1224,7 +1224,7 @@ async def faces(ctx):
             return
         async with ctx.channel.typing():
             link = ctx.message.attachments[0].url
-            filename = "C:\\Users\\noahs\\Desktop\\BATbot\\Bot\\urmom.png"
+            filename = "urmom.png"
             r = requests.get(link, allow_redirects=True)
             open(filename, "wb").write(r.content)
             print(filename)
@@ -1395,7 +1395,7 @@ async def rembg(ctx):
             open(filename, "wb").write(r.content)
             print(filename)
             input_path = filename
-            output_path = "C:\\Users\\noahs\\Desktop\\BATbot\\Bot\\out.png"
+            output_path = "out.png"
 
             f = np.fromfile(input_path)
             result = remove(f)
@@ -1530,8 +1530,8 @@ async def sop(ctx):
             input = filename
             os.environ["infile"] = input
             subprocess.call("python3 img_plt.py")
-            output = "C:\\Users\\noahs\\Desktop\\BATbot\\Bot\\out.wav"
-            output2 = "C:\\Users\\noahs\\Desktop\\BATbot\\Bot\\saved_figure.png"
+            output = "out.wav"
+            output2 = "saved_figure.png"
 
             await ctx.reply(file=discord.File(output), mention_author=False)
             await ctx.channel.send(file=discord.File(output2), mention_author=False)

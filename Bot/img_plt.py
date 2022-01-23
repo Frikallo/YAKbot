@@ -10,8 +10,9 @@ import scipy.io.wavfile
 import scipy.ndimage
 import IPython.display
 import sys
+import os
 
-sys.path.append("C:\\Users\\noahs\\Desktop\\BATbot\\Bot\\")
+os.chdir("./Bot")
 
 
 def plotSpectrogram(file="sound.wav"):

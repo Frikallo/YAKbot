@@ -14,8 +14,9 @@ from pytorch_lightning.loggers import WandbLogger
 
 import model
 import sys
+import os
 
-sys.path.append("C:\\Users\\noahs\\Desktop\\BATbot\\Bot\\")
+os.chdir("./Bot")
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 

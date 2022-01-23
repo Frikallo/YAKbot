@@ -13,8 +13,9 @@ from torch.utils.data import DataLoader
 
 import utils
 import sys
+import os
 
-sys.path.append("C:\\Users\\noahs\\Desktop\\BATbot\\Bot\\")
+os.chdir("./Bot")
 
 
 def dl_collate_fn(batch):

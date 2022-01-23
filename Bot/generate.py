@@ -18,7 +18,9 @@ import model
 import retrofit
 import sys
 
-sys.path.append("C:\\Users\\noahs\\Desktop\\BATbot\\Bot\\")
+import os
+
+os.chdir("./Bot")
 
 
 class dotdict(dict):

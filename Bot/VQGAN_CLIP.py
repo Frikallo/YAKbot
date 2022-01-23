@@ -27,8 +27,9 @@ import numpy as np
 import imageio
 from PIL import ImageFile, Image
 import sys
+import os
 
-sys.path.append("C:\\Users\\noahs\\Desktop\\BATbot\\Bot\\")
+os.chdir("./Bot")
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 start = time.time()
 
@@ -467,11 +468,11 @@ frames = []
 tqdm.write("Generating video...")
 for i in range(init_frame, last_frame):  #
     frames.append(
-        Image.open("C:\\Users\\noahs\\Desktop\\BATbot\\Bot\\steps\\" + str(i) + ".png")
+        Image.open("./steps/" + str(i) + ".png")
     )
     size = (width, height)
 
-savepath = "C:\\Users\\noahs\\Desktop\\BATbot\\Bot\\"
+savepath = "./"
 imageio.mimsave(os.path.join(savepath, "movie.mp4"), frames)
 end = time.time() - start
 end = end / 60

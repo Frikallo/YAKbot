@@ -24,7 +24,9 @@ from tqdm.notebook import tqdm
 
 sys.path.append("./CLIP")
 sys.path.append("./guided-diffusion")
-sys.path.append("C:\\Users\\noahs\\Desktop\\BATbot\\Bot\\")
+import os
+
+os.chdir("./Bot")
 
 import clip
 from guided_diffusion.script_util import (
@@ -253,7 +255,7 @@ def do_run():
                     filename = f"progress_{i * batch_size + k:05}.png"
                     TF.to_pil_image(image.add(1).div(2).clamp(0, 1)).save(filename)
                     TF.to_pil_image(image.add(1).div(2).clamp(0, 1)).save(
-                        f"C:\\Users\\noahs\\Desktop\\BATbot\\Bot\\diffusion_steps\\{num}.png"
+                        f"./diffusion_steps/{num}.png"
                     )
 
 
@@ -273,14 +275,14 @@ tqdm.write("Generating video...")
 for i in range(init_frame, last_frame):  #
     frames.append(
         Image.open(
-            "C:\\Users\\noahs\\Desktop\\BATbot\\Bot\\diffusion_steps\\"
+            "./diffusion_steps/"
             + str(i)
             + ".png"
         )
     )
     size = (1024, 1024)
 
-savepath = "C:\\Users\\noahs\\Desktop\\BATbot\\Bot\\"
+savepath = "."
 imageio.mimsave(os.path.join(savepath, "movie.mp4"), frames)
 end = time.time() - start
 end = end / 60
