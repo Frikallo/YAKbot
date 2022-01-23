@@ -9,7 +9,10 @@ import numpy as np
 import torch
 from taming.data.helper_types import Annotation
 from torch._six import string_classes
-from torch.utils.data._utils.collate import np_str_obj_array_pattern, default_collate_err_msg_format
+from torch.utils.data._utils.collate import (
+    np_str_obj_array_pattern,
+    default_collate_err_msg_format,
+)
 from tqdm import tqdm
 
 
@@ -135,9 +138,12 @@ def custom_collate(batch):
             storage = elem.storage()._new_shared(numel)
             out = elem.new(storage)
         return torch.stack(batch, 0, out=out)
-    elif elem_type.__module__ == 'numpy' and elem_type.__name__ != 'str_' \
-            and elem_type.__name__ != 'string_':
-        if elem_type.__name__ == 'ndarray' or elem_type.__name__ == 'memmap':
+    elif (
+        elem_type.__module__ == "numpy"
+        and elem_type.__name__ != "str_"
+        and elem_type.__name__ != "string_"
+    ):
+        if elem_type.__name__ == "ndarray" or elem_type.__name__ == "memmap":
             # array of string classes and object
             if np_str_obj_array_pattern.search(elem.dtype.str) is not None:
                 raise TypeError(default_collate_err_msg_format.format(elem.dtype))
@@ -153,16 +159,18 @@ def custom_collate(batch):
         return batch
     elif isinstance(elem, collections.abc.Mapping):
         return {key: custom_collate([d[key] for d in batch]) for key in elem}
-    elif isinstance(elem, tuple) and hasattr(elem, '_fields'):  # namedtuple
+    elif isinstance(elem, tuple) and hasattr(elem, "_fields"):  # namedtuple
         return elem_type(*(custom_collate(samples) for samples in zip(*batch)))
-    if isinstance(elem, collections.abc.Sequence) and isinstance(elem[0], Annotation):  # added
+    if isinstance(elem, collections.abc.Sequence) and isinstance(
+        elem[0], Annotation
+    ):  # added
         return batch  # added
     elif isinstance(elem, collections.abc.Sequence):
         # check to make sure that the elements in batch have consistent size
         it = iter(batch)
         elem_size = len(next(it))
         if not all(len(elem) == elem_size for elem in it):
-            raise RuntimeError('each element in list of batch should be of equal size')
+            raise RuntimeError("each element in list of batch should be of equal size")
         transposed = zip(*batch)
         return [custom_collate(samples) for samples in transposed]
 

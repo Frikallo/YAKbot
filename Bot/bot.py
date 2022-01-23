@@ -84,7 +84,7 @@ CB3 = os.environ.get("CB3")
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 answer = CB1
-if answer == 'True':
+if answer == "True":
     print("Loading Models...")
     model2, preprocess2 = clip.load("ViT-B/32", device=device)
     text2 = clip.tokenize(["negative", "neutral", "positive"]).to(device)
@@ -263,6 +263,7 @@ async def play_source(voice_client):
         else bot.loop.create_task(play_source(voice_client)),
     )
 
+
 # Settings
 args = argparse.Namespace(
     config="./checkpoints/12xdqrwd-config",
@@ -289,7 +290,7 @@ if use_gpu:
 # Load indices
 answer = CB2
 
-if answer == 'True':
+if answer == "True":
     print("Loading indices...")
     indices = []
     indices_data = []
@@ -330,7 +331,7 @@ api.start_loop()
 dev_id = 882342184924348478
 public_id = 920889454443524116
 answer = CB3
-if answer == 'True':
+if answer == "True":
     channel_id = dev_id
 else:
     channel_id = public_id
@@ -1772,5 +1773,6 @@ async def on_command_error(ctx, error):
 @bot.event
 async def on_command(ctx):
     api.command_run(ctx)
+
 
 bot.run(os.environ["bot_token"])

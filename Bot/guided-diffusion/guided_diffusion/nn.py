@@ -151,7 +151,11 @@ class CheckpointFunction(th.autograd.Function):
 
     @staticmethod
     def backward(ctx, *output_grads):
-        input_indices = [(i, x) for (i, x) in enumerate(ctx.input_tensors + ctx.input_params) if x.requires_grad]
+        input_indices = [
+            (i, x)
+            for (i, x) in enumerate(ctx.input_tensors + ctx.input_params)
+            if x.requires_grad
+        ]
         if not input_indices:
             input_grads = tuple(None for _ in ctx.input_tensors + ctx.input_params)
             del ctx.input_tensors
@@ -167,7 +171,9 @@ class CheckpointFunction(th.autograd.Function):
         if isinstance(output_tensors, th.Tensor):
             output_tensors = [output_tensors]
 
-        out_and_grads = [(o, g) for (o, g) in zip(output_tensors, output_grads) if o.requires_grad]
+        out_and_grads = [
+            (o, g) for (o, g) in zip(output_tensors, output_grads) if o.requires_grad
+        ]
         if not out_and_grads:
             input_grads = tuple(None for _ in ctx.input_tensors + ctx.input_params)
             del ctx.input_tensors
@@ -177,7 +183,7 @@ class CheckpointFunction(th.autograd.Function):
         computed_grads = th.autograd.grad(
             [o for (o, g) in out_and_grads],
             [x for (i, x) in input_indices],
-            [g for (o, g) in out_and_grads]
+            [g for (o, g) in out_and_grads],
         )
 
         input_grads = [None for _ in ctx.input_tensors + ctx.input_params]

@@ -11,7 +11,11 @@ if __name__ == "__main__":
     print("Extracting {} from {} to {}.".format(submodel, inpath, outpath))
 
     sd = torch.load(inpath, map_location="cpu")
-    new_sd = {"state_dict": dict((k.split(".", 1)[-1],v)
-                                 for k,v in sd["state_dict"].items()
-                                 if k.startswith("cond_stage_model"))}
+    new_sd = {
+        "state_dict": dict(
+            (k.split(".", 1)[-1], v)
+            for k, v in sd["state_dict"].items()
+            if k.startswith("cond_stage_model")
+        )
+    }
     torch.save(new_sd, outpath)

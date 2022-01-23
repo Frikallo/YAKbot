@@ -78,10 +78,11 @@ class FacesHQTrain(Dataset):
         self.data = ConcatDatasetWithIndex([d1, d2])
         self.coord = coord
         if crop_size is not None:
-            self.cropper = albumentations.RandomCrop(height=crop_size,width=crop_size)
+            self.cropper = albumentations.RandomCrop(height=crop_size, width=crop_size)
             if self.coord:
-                self.cropper = albumentations.Compose([self.cropper],
-                                                      additional_targets={"coord": "image"})
+                self.cropper = albumentations.Compose(
+                    [self.cropper], additional_targets={"coord": "image"}
+                )
 
     def __len__(self):
         return len(self.data)
@@ -93,8 +94,8 @@ class FacesHQTrain(Dataset):
                 out = self.cropper(image=ex["image"])
                 ex["image"] = out["image"]
             else:
-                h,w,_ = ex["image"].shape
-                coord = np.arange(h*w).reshape(h,w,1)/(h*w)
+                h, w, _ = ex["image"].shape
+                coord = np.arange(h * w).reshape(h, w, 1) / (h * w)
                 out = self.cropper(image=ex["image"], coord=coord)
                 ex["image"] = out["image"]
                 ex["coord"] = out["coord"]
@@ -110,10 +111,11 @@ class FacesHQValidation(Dataset):
         self.data = ConcatDatasetWithIndex([d1, d2])
         self.coord = coord
         if crop_size is not None:
-            self.cropper = albumentations.CenterCrop(height=crop_size,width=crop_size)
+            self.cropper = albumentations.CenterCrop(height=crop_size, width=crop_size)
             if self.coord:
-                self.cropper = albumentations.Compose([self.cropper],
-                                                      additional_targets={"coord": "image"})
+                self.cropper = albumentations.Compose(
+                    [self.cropper], additional_targets={"coord": "image"}
+                )
 
     def __len__(self):
         return len(self.data)
@@ -125,8 +127,8 @@ class FacesHQValidation(Dataset):
                 out = self.cropper(image=ex["image"])
                 ex["image"] = out["image"]
             else:
-                h,w,_ = ex["image"].shape
-                coord = np.arange(h*w).reshape(h,w,1)/(h*w)
+                h, w, _ = ex["image"].shape
+                coord = np.arange(h * w).reshape(h, w, 1) / (h * w)
                 out = self.cropper(image=ex["image"], coord=coord)
                 ex["image"] = out["image"]
                 ex["coord"] = out["coord"]

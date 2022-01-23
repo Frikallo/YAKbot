@@ -420,9 +420,7 @@ class GaussianDiffusion:
         alpha_bar = _extract_into_tensor(self.alphas_cumprod, t, x.shape)
 
         eps = self._predict_eps_from_xstart(x, t, p_mean_var["pred_xstart"])
-        eps = eps - (1 - alpha_bar).sqrt() * cond_fn(
-            x, t, p_mean_var, **model_kwargs
-        )
+        eps = eps - (1 - alpha_bar).sqrt() * cond_fn(x, t, p_mean_var, **model_kwargs)
 
         out = p_mean_var.copy()
         out["pred_xstart"] = self._predict_xstart_from_eps(x, t, eps)
@@ -628,12 +626,17 @@ class GaussianDiffusion:
 
         for i in indices:
             t = th.tensor([i] * shape[0], device=device)
-            if randomize_class and 'y' in model_kwargs:
-                model_kwargs['y'] = th.randint(low=0, high=model.num_classes,
-                                               size=model_kwargs['y'].shape,
-                                               device=model_kwargs['y'].device)
+            if randomize_class and "y" in model_kwargs:
+                model_kwargs["y"] = th.randint(
+                    low=0,
+                    high=model.num_classes,
+                    size=model_kwargs["y"].shape,
+                    device=model_kwargs["y"].device,
+                )
             with th.no_grad():
-                sample_fn = self.p_sample_with_grad if cond_fn_with_grad else self.p_sample
+                sample_fn = (
+                    self.p_sample_with_grad if cond_fn_with_grad else self.p_sample
+                )
                 out = sample_fn(
                     model,
                     img,
@@ -671,7 +674,9 @@ class GaussianDiffusion:
             model_kwargs=model_kwargs,
         )
         if cond_fn is not None:
-            out = self.condition_score(cond_fn, out_orig, x, t, model_kwargs=model_kwargs)
+            out = self.condition_score(
+                cond_fn, out_orig, x, t, model_kwargs=model_kwargs
+            )
         else:
             out = out_orig
 
@@ -725,8 +730,9 @@ class GaussianDiffusion:
                 model_kwargs=model_kwargs,
             )
             if cond_fn is not None:
-                out = self.condition_score_with_grad(cond_fn, out_orig, x, t,
-                                                     model_kwargs=model_kwargs)
+                out = self.condition_score_with_grad(
+                    cond_fn, out_orig, x, t, model_kwargs=model_kwargs
+                )
             else:
                 out = out_orig
 
@@ -883,12 +889,19 @@ class GaussianDiffusion:
 
         for i in indices:
             t = th.tensor([i] * shape[0], device=device)
-            if randomize_class and 'y' in model_kwargs:
-                model_kwargs['y'] = th.randint(low=0, high=model.num_classes,
-                                               size=model_kwargs['y'].shape,
-                                               device=model_kwargs['y'].device)
+            if randomize_class and "y" in model_kwargs:
+                model_kwargs["y"] = th.randint(
+                    low=0,
+                    high=model.num_classes,
+                    size=model_kwargs["y"].shape,
+                    device=model_kwargs["y"].device,
+                )
             with th.no_grad():
-                sample_fn = self.ddim_sample_with_grad if cond_fn_with_grad else self.ddim_sample
+                sample_fn = (
+                    self.ddim_sample_with_grad
+                    if cond_fn_with_grad
+                    else self.ddim_sample
+                )
                 out = sample_fn(
                     model,
                     img,
