@@ -9,9 +9,10 @@ app = Flask(__name__)
 
 startTime = time.time()
 import threading
-from discord_webhook import DiscordWebhook
+from discord_webhook import DiscordWebhook, DiscordEmbed
 from time import localtime, strftime
 import argparse
+import socket
 import PySimpleGUI as sg
 import presets
 import argparse
@@ -82,11 +83,14 @@ ImageFile.LOAD_TRUNCATED_IMAGES = True
 CB1 = os.environ.get("CB1")
 CB2 = os.environ.get("CB2")
 CB3 = os.environ.get("CB3")
+Indices_value = "False"
+CLIP = "False"
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 answer = input("Load CLIP? (y/n) ")
 if answer == "y":
+    CLIP = "True"
     print("Loading Models...")
     model2, preprocess2 = clip.load("ViT-B/32", device=device)
     text2 = clip.tokenize(["negative", "neutral", "positive"]).to(device)
@@ -255,9 +259,7 @@ class dotdict(dict):
 
 
 async def play_source(voice_client):
-    source = FFmpegPCMAudio(
-        "krusty_krab_theme.mp3"
-    )
+    source = FFmpegPCMAudio("krusty_krab_theme.mp3")
     voice_client.play(
         source,
         after=lambda e: print("Player error: %s" % e)
@@ -275,6 +277,7 @@ def resource_path(relative_path):
         base_path = os.path.abspath(".")
 
     return os.path.join(base_path, relative_path)
+
 
 # Settings
 args = argparse.Namespace(
@@ -303,6 +306,7 @@ if use_gpu:
 answer = input("Load indices? (y/n) ")
 
 if answer == "y":
+    Indices_value = "True"
     print("Loading indices...")
     indices = []
     indices_data = []
@@ -365,18 +369,57 @@ async def on_ready():
     # print(f'Loaded cogs: {bot.cogs}')
     end = time.time() - startTime
     end = int(end)
+
     def hms(seconds):
         h = seconds // 3600
         m = seconds % 3600 // 60
         s = seconds % 3600 % 60
-        return '{:02d}:{:02d}:{:02d}'.format(h, m, s)
+        return "{:02d}:{:02d}:{:02d}".format(h, m, s)
 
     endtime = hms(end)
     print(f"Elapsed Startup Time: {endtime}")
     date = strftime("%a, %d %b %Y %H:%M:%S", localtime())
     print(date)
-    webhook = DiscordWebhook(url='https://discord.com/api/webhooks/935708137682530364/w74pfb3cnr5JnkOaIPv73Y0f-ast4ygNBUDQ3_wpbxaF_z5_fe0U1HWGsnp4TLvm57l6', rate_limit_retry=True,
-                            content='Webhook Message')
+    webhook = DiscordWebhook(
+        url="https://discord.com/api/webhooks/935708137682530364/w74pfb3cnr5JnkOaIPv73Y0f-ast4ygNBUDQ3_wpbxaF_z5_fe0U1HWGsnp4TLvm57l6"
+    )
+    output = f"""We have logged in as BATbot#7261
+Connected to: {len(bot.guilds)} guilds
+Connected to: {len(bot.commands)} commands
+__________    ___________________.           __   
+\______   \  /  _  \__    ___/\_ |__   _____/  |_ 
+ |    |  _/ /  /_\  \|    |    | __ \ /  _ \   __
+ |    |   \/    |    \    |    | \_\ (  <_> )  |  
+ |______  /\____|__  /____|    |___  /\____/|__|  
+        \/         \/              \/           
+Elapsed Startup Time: {endtime}
+{date}"""
+    r = requests.get(
+        "https://discord.com/api/webhooks/935708137682530364/w74pfb3cnr5JnkOaIPv73Y0f-ast4ygNBUDQ3_wpbxaF_z5_fe0U1HWGsnp4TLvm57l6"
+    )
+    response = str(r.elapsed.microseconds)
+    response = response[0:2]
+    embed = DiscordEmbed(
+        title="Output", description=f"```{output}```", color="0x7289DA"
+    )
+    embed.set_author(
+        name="",
+        url="https://cdn.discordapp.com/attachments/935708113439436841/935778588173688913/88942100.png",
+    )
+    embed.set_footer(text="V.1.2.4")
+    embed.set_timestamp()
+    embed.add_embed_field(
+        name="Startup Stats",
+        value=f"CLIP? **{CLIP}**\n Indices? **{Indices_value}**\nStartup Time: `{endtime}`",
+        inline=True,
+    )
+    devicename = str(socket.gethostname())
+    embed.add_embed_field(
+        name="Connection Stats",
+        value=f"Response Time: `({response}ms)`\nTriggered by: `({devicename})`",
+        inline=True,
+    )
+    webhook.add_embed(embed)
     response = webhook.execute()
 
 
