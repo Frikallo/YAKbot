@@ -9,6 +9,8 @@ app = Flask(__name__)
 
 startTime = time.time()
 import threading
+from discord_webhook import DiscordWebhook
+from time import localtime, strftime
 import argparse
 import PySimpleGUI as sg
 import presets
@@ -363,14 +365,19 @@ async def on_ready():
     # print(f'Loaded cogs: {bot.cogs}')
     end = time.time() - startTime
     end = int(end)
-    secs = 0
-    if end < 60:
-        secs = end
-        end = 0
-    if end > 60:
-        end = 1
-        secs = end - 60
-    print(f"Elapsed Startup Time: {end}m{secs}s")
+    def hms(seconds):
+        h = seconds // 3600
+        m = seconds % 3600 // 60
+        s = seconds % 3600 % 60
+        return '{:02d}:{:02d}:{:02d}'.format(h, m, s)
+
+    endtime = hms(end)
+    print(f"Elapsed Startup Time: {endtime}")
+    date = strftime("%a, %d %b %Y %H:%M:%S", localtime())
+    print(date)
+    webhook = DiscordWebhook(url='https://discord.com/api/webhooks/935708137682530364/w74pfb3cnr5JnkOaIPv73Y0f-ast4ygNBUDQ3_wpbxaF_z5_fe0U1HWGsnp4TLvm57l6', rate_limit_retry=True,
+                            content='Webhook Message')
+    response = webhook.execute()
 
 
 @bot.listen("on_message")
