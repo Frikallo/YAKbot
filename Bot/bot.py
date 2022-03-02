@@ -380,18 +380,17 @@ async def on_ready():
     print(f"Elapsed Startup Time: {endtime}")
     date = strftime("%a, %d %b %Y %H:%M:%S", localtime())
     print(date)
-    webhook = DiscordWebhook(
-        url="https://discord.com/api/webhooks/935708137682530364/w74pfb3cnr5JnkOaIPv73Y0f-ast4ygNBUDQ3_wpbxaF_z5_fe0U1HWGsnp4TLvm57l6"
-    )
+    webhook = DiscordWebhook(url=os.environ["webhook"],)
     output = f"""We have logged in as BATbot#7261
 Connected to: {len(bot.guilds)} guilds
 Connected to: {len(bot.commands)} commands
-__________    ___________________.           __   
-\______   \  /  _  \__    ___/\_ |__   _____/  |_ 
- |    |  _/ /  /_\  \|    |    | __ \ /  _ \   __
- |    |   \/    |    \    |    | \_\ (  <_> )  |  
- |______  /\____|__  /____|    |___  /\____/|__|  
-        \/         \/              \/           
+
+____________________________       _____ 
+___  __ )__    |__  __/__  /_________  /_
+__  __  |_  /| |_  /  __  __ \  __ \  __/
+_  /_/ /_  ___ |  /   _  /_/ / /_/ / /_  
+/_____/ /_/  |_/_/    /_.___/\____/\__/  
+                                         
 Elapsed Startup Time: {endtime}
 {date}"""
     r = requests.get(
@@ -1032,7 +1031,7 @@ async def imagine(ctx):
         os.environ["prompt"] = prompt
         print(os.environ["prompt"])  # outputs 'newvalue'
 
-        subprocess.call(f"python3 VQGAN_CLIP.py")
+        os.system("python3 VQGAN_CLIP.py")
         print("Generation Complete")
 
         new_prompt = "progress.png"

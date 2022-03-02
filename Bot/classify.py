@@ -13,6 +13,7 @@ import clip
 
 perceptor, preprocess = clip.load("ViT-B/32", jit=False)
 import sys
+
 c_encs = []
 categories = []
 
@@ -49,10 +50,7 @@ def load(categorylist):
             if i not in categories:
                 categories.append(i)
     elif load_categories == "emojis":
-        categories = open(
-            "./categories/emojis.txt",
-            encoding="utf8",
-        ).readlines()
+        categories = open("./categories/emojis.txt", encoding="utf8",).readlines()
     c_encs = [
         perceptor.encode_text(clip.tokenize(category).cuda()).detach().clone()
         for category in categories

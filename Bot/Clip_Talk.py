@@ -18,6 +18,7 @@ from torchvision.utils import make_grid
 import model
 import retrofit
 import sys
+
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 print("Using device:", device)
 

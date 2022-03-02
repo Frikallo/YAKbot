@@ -270,13 +270,7 @@ length = 15  # Desired time of the video in seconds
 frames = []
 tqdm.write("Generating video...")
 for i in range(init_frame, last_frame):  #
-    frames.append(
-        Image.open(
-            "./diffusion_steps/"
-            + str(i)
-            + ".png"
-        )
-    )
+    frames.append(Image.open("./diffusion_steps/" + str(i) + ".png"))
     size = (1024, 1024)
 
 savepath = "."

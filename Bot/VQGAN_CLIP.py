@@ -27,6 +27,7 @@ import numpy as np
 import imageio
 from PIL import ImageFile, Image
 import sys
+
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 start = time.time()
 
@@ -464,9 +465,7 @@ length = 15  # Desired time of the video in seconds
 frames = []
 tqdm.write("Generating video...")
 for i in range(init_frame, last_frame):  #
-    frames.append(
-        Image.open("./steps/" + str(i) + ".png")
-    )
+    frames.append(Image.open("./steps/" + str(i) + ".png"))
     size = (width, height)
 
 savepath = "./"

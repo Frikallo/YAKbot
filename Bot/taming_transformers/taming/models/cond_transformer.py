@@ -6,7 +6,7 @@ import pytorch_lightning as pl
 sys.path.append("C:\\Users\\noahs\\Desktop\\BATbot\\Bot\\taming_transformers")
 
 from main import instantiate_from_config
-from taming.modules.util import SOSProvider
+from taming_transformers.taming.modules.util import SOSProvider
 
 
 def disabled_train(self, mode=True):

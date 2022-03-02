@@ -10,8 +10,7 @@ from pytorch_lightning import seed_everything
 from pytorch_lightning.trainer import Trainer
 from pytorch_lightning.callbacks import ModelCheckpoint, Callback, LearningRateMonitor
 from pytorch_lightning.utilities.distributed import rank_zero_only
-
-from taming.data.utils import custom_collate
+from taming_transformers.taming.data.utils import custom_collate
 
 
 def get_obj_from_str(string, reload=False):
