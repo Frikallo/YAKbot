@@ -33,6 +33,7 @@ A full list of BATbots commands and uses can be found either in discord with the
 |`.gptj [Prompt]`|**BATbot will use his trained GPT-J model to finish your prompt with natural language generation**|[Example](https://github.com/Frikallo/BATbot/tree/main/Bot/Examples/.gptj)
 |`.sop [Attatchment]`|**BATbot will turn your attached image into a sequence of wave forms legible by a computer, this allows BATbot to create a sound correlating to the "sounds of processing"**|[Example](https://github.com/Frikallo/BATbot/tree/main/Bot/Examples/.sop)
 |`.faces [Attatchment]`|**BATbot will look through your photo and try to find any recognizable faces**|[Example](https://github.com/Frikallo/BATbot/tree/main/Bot/Examples/.faces)
+|`.colorize [Attatchment]`|**BATbot will turn your black and white attatchment into a colorized version**|[Example](https://github.com/Frikallo/BATbot/tree/main/Bot/Examples/.colorize)
 
 
 To see examples of all the different commands click here: [Examples](https://github.com/Frikallo/BATbot/tree/main/Bot/Examples)
