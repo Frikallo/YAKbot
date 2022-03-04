@@ -58,6 +58,10 @@ $ pip install git+https://github.com/openai/CLIP.git
 ```
 Replace cu111 above with the appropriate CUDA version on your machine or cpuonly when installing on a machine without a GPU. Next, we install the dependant packages:
 
+<details>
+  <summary>Install Instructions (Click me)</summary>
+  <!-- have to be followed by an empty line! -->
+  
 ```bash
 $ git clone https://github.com/dzryk/cliptalk.git
 $ cd cliptalk/
