@@ -79,6 +79,9 @@ import numpy as np
 import io
 from PIL import ImageFile
 
+import vclip
+from vclip import vclip as vc
+
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 CB1 = os.environ.get("CB1")
 CB2 = os.environ.get("CB2")
@@ -405,7 +408,7 @@ Elapsed Startup Time: {endtime}
         name="",
         url="https://cdn.discordapp.com/attachments/935708113439436841/935778588173688913/88942100.png",
     )
-    embed.set_footer(text="V.1.2.4")
+    embed.set_footer(text="V.1.2.5")
     embed.set_timestamp()
     embed.add_embed_field(
         name="Startup Stats",
@@ -429,10 +432,8 @@ async def image(ctx):
     if (
         ctx.attachments
         and ctx.content != ".rembg"
-        and ctx.content != ".sop"
         and ctx.content != ".faces"
         and ctx.content != ".esrgan"
-        and ctx.content != ".img2sound"
         and ctx.content != ".colorize"
     ):
         if ctx.channel.id != channel_id:
@@ -452,7 +453,17 @@ async def image(ctx):
             file_ = filename
             print("classifying")
             image2 = preprocess2(Image.open(file_)).unsqueeze(0).to(device)
-            reaction = classify(file_)
+            try:
+                reaction = classify(file_)
+            except Exception as e:
+                print(e)
+                print("error")
+                embed = discord.Embed(
+                    title=f"Caption error",
+                    description=f"{e}",
+                    color=discord.Color.red(),
+                )
+                await ctx.send(embed=embed)
             reaction = str(reaction)
             print(reaction)
             emoji = f"{reaction}"
@@ -939,7 +950,17 @@ async def image(ctx):
 
             context_simple = simple_person
             context = caption_person
-            captions = caption_image(img, args, net, preprocess, context=context)
+            try:
+                captions = caption_image(img, args, net, preprocess, context=context)
+            except Exception as e:
+                print(e)
+                print("Error with captioning")
+                embed2 = discord.Embed(
+                title=f"Caption error",
+                description=f"{e}",
+                color=discord.Color.red(),
+                )
+                await ctx.send(embed=embed2)
             for c in captions[: args.display]:
                 sendable = f"`{context}` {c}"
                 await ctx.reply(sendable, mention_author=False)
@@ -1031,7 +1052,18 @@ async def imagine(ctx):
         os.environ["prompt"] = prompt
         print(os.environ["prompt"])  # outputs 'newvalue'
 
-        os.system("python3 VQGAN_CLIP.py")
+        try:
+            os.system("python3 VQGAN_CLIP.py")
+            #vc()
+        except Exception as e:
+            print(e)
+            print("Error")
+            embed = discord.Embed(
+                title=f"Generation error",
+                description=f"{e}",
+                color=discord.Color.red(),
+            )
+            await ctx.send(embed=embed)
         print("Generation Complete")
 
         new_prompt = "progress.png"
@@ -1105,164 +1137,6 @@ async def imagine(ctx):
                 os.remove(os.path.join(my_dir, fname))
             if fname.endswith(".mp4"):
                 os.remove(os.path.join(my_dir, fname))
-
-
-@bot.command()
-async def diffusion(ctx):
-    if ctx.channel.id != channel_id:
-        return
-    gc.collect()
-    torch.cuda.empty_cache()
-    print("Command Loaded")
-    print("Cache Prepared")
-    async with ctx.channel.typing():
-        # definitions
-        author = ctx.message.author.id
-        input = ctx.message.content
-        prompt = input[11 : len(input)]
-        await bot.change_presence(activity=discord.Game(name=f"Diffusing {prompt}"))
-
-        if os.environ["seed"] != "42":
-            seed = os.environ["seed"]
-        if os.environ["seed"] == "0" or 0:
-            seed = np.random.seed(0)
-            seed = torch.seed()
-            torch.manual_seed(seed)
-        else:
-            seed = np.random.seed(0)
-            seed = torch.seed()
-            torch.manual_seed(seed)
-        print(seed)
-        os.environ["seed"] = str(seed)
-        print(seed)
-
-        with open("averages_diffusion.txt", "r") as f:
-            orders = [name.rstrip() for name in f]
-            orders = [float(item) for item in orders]
-            print(orders)
-
-        average = sum(orders) / len(orders)
-        average = str(round(average, 2))
-        average = float(average)
-
-        iterations = os.environ["diffusion_iterations"]
-        iterations = int(iterations)
-        it_s = average
-        epochs = 1
-
-        num = iterations / it_s
-        num = num * epochs
-        num_elapsed = iterations / it_s
-
-        secs = 1
-        if num > 420:
-            num = 7
-            secs = num_elapsed - 420
-        if num > 360:
-            num = 6
-            secs = num_elapsed - 360
-        if num > 300:
-            num = 5
-            secs = num_elapsed - 300
-        if num > 240:
-            num = 4
-            secs = num_elapsed - 240
-        if num > 180:
-            num = 3
-            secs = num_elapsed - 180
-        if num > 120:
-            num = 2
-            secs = num_elapsed - 120
-        if num > 60:
-            num = 1
-            secs = num_elapsed - 60
-        secs = int(secs)
-        time.sleep(3)
-        await ctx.channel.send(
-            "```Diffusing... ```"
-            + f"**_{prompt}_**"
-            + f"```Estimated: {num}m{secs}s Generation Time\nUsing seed: {seed}```"
-        )
-        genTime = time.time()
-
-        print(os.environ["prompt"])  # outputs 'value'
-        os.environ["prompt"] = prompt
-        print(os.environ["prompt"])  # outputs 'newvalue'
-
-        subprocess.call(f"python3 diffusion.py")
-        print("Generation Complete")
-
-        new_prompt = "progress_00000.png"
-        upscale(new_prompt, "progress.png")
-        await ctx.channel.send(f"<@{author}>" + "```Your Generation Is Done```")
-        await ctx.channel.send(file=discord.File(new_prompt))
-        ittime = time.time() - genTime
-        print(f"Generation Time: {ittime}")
-        elapsed = time.time() - genTime
-        math_elapsed = time.time() - genTime
-        secs = 1
-        if elapsed > 420:
-            elapsed = 7
-            secs = math_elapsed - 420
-        if elapsed > 360:
-            elapsed = 6
-            secs = math_elapsed - 360
-        if elapsed > 300:
-            elapsed = 5
-            secs = math_elapsed - 300
-        if elapsed > 240:
-            elapsed = 4
-            secs = math_elapsed - 240
-        if elapsed > 180:
-            elapsed = 3
-            secs = math_elapsed - 180
-        if elapsed > 120:
-            elapsed = 2
-            secs = math_elapsed - 120
-        if elapsed > 60:
-            elapsed = 1
-            secs = math_elapsed - 60
-        print(f"Elapsed Time: {elapsed}")
-        elapsed = str(elapsed)
-        secs = int(secs)
-        elapsed = f"{elapsed}m{secs}s"
-        it = iterations / ittime
-        it = "{:.2f}".format(it)
-        it = str(it)
-        in_loc = "movie.mp4"
-        out_loc = "generated_out.mp4"
-        clip = VideoFileClip(in_loc)
-        print("fps: {}".format(clip.fps))
-        clip = clip.set_fps(clip.fps * 2)
-        final = clip.fx(vfx.speedx, 2)
-        print("fps: {}".format(final.fps))
-        final.write_videofile(out_loc)
-        await ctx.channel.send(file=discord.File(out_loc))
-        await ctx.channel.send(f"```Elapsed: {elapsed} | Generated at: {it}it/s```")
-
-        with open("averages_diffusion.txt", "a+") as file_object:
-            file_object.seek(0)
-            data = file_object.read(100)
-            if len(data) > 0:
-                file_object.write("\n")
-            file_object.write(it)
-
-        with open("averages_diffusion.txt", "r") as f:
-            orders = [name.rstrip() for name in f]
-            orders = [float(item) for item in orders]
-            print(orders)
-
-        torch.cuda.empty_cache()
-
-        # delete output
-        directory = os.getcwd()
-        my_dir = directory
-        for fname in os.listdir(my_dir):
-            if fname.endswith(".png"):
-                os.remove(os.path.join(my_dir, fname))
-            if fname.endswith(".mp4"):
-                os.remove(os.path.join(my_dir, fname))
-        await bot.change_presence(activity=discord.Game(name=f"in a trash bin"))
 
 
 @bot.command()
@@ -1537,75 +1411,6 @@ async def seed(ctx):
         os.environ["seed"] = seed
         await ctx.channel.send(f"```Seed: {seed}```")
     torch.cuda.empty_cache()
-
-
-@bot.command()
-async def gptj(ctx):
-    if ctx.channel.id != channel_id:
-        return
-    print("Command Loaded")
-    async with ctx.channel.typing():
-        input = ctx.message.content
-        prompt = input[5 : len(input)]
-        max_length = 100
-        temperature = 0.8
-        top_probability = 0.9
-        query = SimpleCompletion(
-            prompt, length=max_length, t=temperature, top=top_probability
-        )
-        Query = query.simple_completion()
-        embed = discord.Embed(
-            title=f"**GPT-J-6B** `top_p={top_probability}, temp={temperature}`",
-            description=f"**{prompt}**{Query}",
-            color=0x7289DA,
-        )
-        await ctx.reply(embed=embed, mention_author=False)
-    torch.cuda.empty_cache()
-
-
-@bot.command()
-async def sop(ctx):
-    if ctx.message.attachments:
-        if ctx.channel.id != channel_id:
-            return
-        async with ctx.channel.typing():
-            # Download Image
-            link = ctx.message.attachments[0].url
-            filename = link.split("/")[-1]
-            r = requests.get(link, allow_redirects=True)
-            open(filename, "wb").write(r.content)
-            print(filename)
-
-            input = filename
-            os.environ["infile"] = input
-            subprocess.call("python3 img_plt.py")
-            output = "out.wav"
-            output2 = "saved_figure.png"
-
-            await ctx.reply(file=discord.File(output), mention_author=False)
-            await ctx.channel.send(file=discord.File(output2), mention_author=False)
-
-            # delete output
-            directory = os.getcwd()
-            my_dir = directory
-            for fname in os.listdir(my_dir):
-                if fname.endswith(".png"):
-                    os.remove(os.path.join(my_dir, fname))
-                if fname.endswith(".wav"):
-                    os.remove(os.path.join(my_dir, fname))
-            torch.cuda.empty_cache()
-
-
-@bot.command(pass_context=True)
-async def punish(ctx, member: discord.Member):
-    channel = member.voice.channel
-    voice = await channel.connect()
-    bot.loop.create_task(play_source(voice))
-
-
-@bot.command()
-async def leave(ctx):
-    await ctx.voice_client.disconnect()
 
 
 @bot.command()
