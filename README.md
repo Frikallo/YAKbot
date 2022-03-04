@@ -26,12 +26,9 @@ A full list of BATbots commands and uses can be found either in discord with the
 |`.esrgan [Attatchment]`|**BATbot will use a pre-trained ESRGAN upscaler to upscale the resolution of your image up to 4 times**|[Example](https://github.com/Frikallo/BATbot/tree/main/Bot/Examples/.esrgan)
 |`.status`|**sends embed message with all relevant device stats for BATbot**|[Example](https://github.com/Frikallo/BATbot/tree/main/Bot/Examples/.status)
 |`.imagine [Prompt]`|**uses CLIP+VQGAN open generation to create an original image from your prompt**|[Example](https://github.com/Frikallo/BATbot/tree/main/Bot/Examples/.imagine)
-|`.diffusion [Prompt]`|**BATbot uses a CLIP+Diffusion model to generate images to match your prompt**|[Example](https://github.com/Frikallo/BATbot/tree/main/Bot/Examples/.diffusion)
 |`.facehq, .wikiart, .default, .d1024`|**Changes BATbots VQGAN+CLIP model to one trained solely on faces, art or default configuration**|[Example](https://github.com/Frikallo/BATbot/tree/main/Bot/Examples/.facehq%2C%20.wikiart%2C%20.default%2C%20.d1024)
 |`.square, .landscape, .portrait`|**BATbot will update his size configurations for generations to your specified orientation**|[Example](https://github.com/Frikallo/BATbot/tree/main/Bot/Examples/.square%2C%20.landscape%2C%20.portrait)
 |`.seed [Desired Seed]`|**Changes BATbots seed for all open generation (if 0 will set to random)**|[Example](https://github.com/Frikallo/BATbot/tree/main/Bot/Examples/.seed)
-|`.gptj [Prompt]`|**BATbot will use his trained GPT-J model to finish your prompt with natural language generation**|[Example](https://github.com/Frikallo/BATbot/tree/main/Bot/Examples/.gptj)
-|`.sop [Attatchment]`|**BATbot will turn your attached image into a sequence of wave forms legible by a computer, this allows BATbot to create a sound correlating to the "sounds of processing"**|[Example](https://github.com/Frikallo/BATbot/tree/main/Bot/Examples/.sop)
 |`.faces [Attatchment]`|**BATbot will look through your photo and try to find any recognizable faces**|[Example](https://github.com/Frikallo/BATbot/tree/main/Bot/Examples/.faces)
 |`.colorize [Attatchment]`|**BATbot will turn your black and white attatchment into a colorized version**|[Example](https://github.com/Frikallo/BATbot/tree/main/Bot/Examples/.colorize)
 
@@ -60,23 +57,6 @@ $ pip install ftfy regex tqdm
 $ pip install git+https://github.com/openai/CLIP.git
 ```
 Replace cu111 above with the appropriate CUDA version on your machine or cpuonly when installing on a machine without a GPU. Next, we install the dependant packages:
-
-<details>
-  <summary>Install Instructions (Click me)</summary>
-  <!-- have to be followed by an empty line! -->
-
-```bash
-$ git clone https://github.com/crowsonkb/guided-diffusion
-$ pip install -e ./guided-diffusion
-$ pip install lpips
-$ curl -OL 'https://openaipublic.blob.core.windows.net/diffusion/jul-2021/256x256_diffusion_uncond.pt'
-```
-</details>
-
-* **Guided Diffusion**
-<details>
-  <summary>Install Instructions (Click me)</summary>
-  <!-- have to be followed by an empty line! -->
 
 ```bash
 $ git clone https://github.com/dzryk/cliptalk.git
