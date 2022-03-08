@@ -79,6 +79,7 @@ import numpy as np
 import io
 from PIL import ImageFile
 
+#For Later Tinkering
 import vclip
 from vclip import vclip as vc
 
@@ -1053,6 +1054,7 @@ async def imagine(ctx):
         print(os.environ["prompt"])  # outputs 'newvalue'
 
         try:
+            #import VQGAN_CLIP
             os.system("python3 VQGAN_CLIP.py")
             #vc()
         except Exception as e:
@@ -1113,7 +1115,7 @@ async def imagine(ctx):
         final.write_videofile(out_loc)
         await ctx.channel.send(file=discord.File(out_loc))
         await ctx.channel.send(f"```Elapsed: {elapsed} | Generated at: {it}it/s```")
-        await bot.change_presence(activity=discord.Game(name=f"in a trash bin"))
+        #await bot.change_presence(activity=discord.Game(name=f"in a trash bin"))
 
         with open("averages.txt", "a+") as file_object:
             file_object.seek(0)
@@ -1345,7 +1347,7 @@ async def help(ctx):
     async with ctx.channel.typing():
         embed = discord.Embed(
             title="BATbot Help",
-            description=f'`.rembg [Attached Image]`\n**removes background from attatched image**\n\n`.esrgan [Attatchment]`\n**BATbot will use a pretrained ESRGAN upscaler to upscale you images resolution by up to 4 times**\n\n`.status`\n**sends embed message with all relevent device stats for BATbot**\n\n`.imagine [Prompt]`\n**uses CLIP+VQGAN open generation to create an original image from your prompt**\n\n`.diffusion [Prompt]`\n**BATbot uses a CLIP+Diffusion model to generate images to match your prompt**\n\n`.facehq, .wikiart, .default, .d1024`\n**Changes BATbots VQGAN+CLIP model to one trained solely on faces, art or default configuration**\n\n`.square, .landscape, .portrait`\n**BATbot will update his size configurations for generations to your specified orientation**\n\n`.seed [Desired Seed]`\n**Changes BATbots seed for all open generation (if 0 will set to random)**\n\n`.gptj [Prompt]`\n**BATbot will use his trained GPT-J model to finish your prompt with natural language generation**\n\n`.sop [Attatchment]`\n**BATbot will turn your attatched image into a sequence of note lines ledgible by a computer, this allows BATbot to create a sound corolating to the "sounds of proccessing"**\n\n`.faces [Attatchment]`\n**BATbot will look through your photo and try to find any recognizable faces**\n\n__Any Attatchments Sent In This Channel Will Be Identified And Captioned By BATbot (To Prevent Captioning Include --nc In Your Message)__',
+            description=f'`.rembg [Attached Image]`\n**removes background from attatched image**\n\n`.esrgan [Attatchment]`\n**BATbot will use a pretrained ESRGAN upscaler to upscale you images resolution by up to 4 times**\n\n`.status`\n**sends embed message with all relevent device stats for BATbot**\n\n`.imagine [Prompt]`\n**uses CLIP+VQGAN open generation to create an original image from your prompt**\n\n`.facehq, .wikiart, .default, .d1024`\n**Changes BATbots VQGAN+CLIP model to one trained solely on faces, art or default configuration**\n\n`.square, .landscape, .portrait`\n**BATbot will update his size configurations for generations to your specified orientation**\n\n`.seed [Desired Seed]`\n**Changes BATbots seed for all open generation (if 0 will set to random)**\n\n`.faces [Attatchment]`\n**BATbot will look through your photo and try to find any recognizable faces**\n\n`.colorize [Attatchment]`\n**BATbot will turn your black and white attatchment into a colorized version**__Any Attatchments Sent In This Channel Will Be Identified And Captioned By BATbot (To Prevent Captioning Include --nc In Your Message)__',
             color=0x7289DA,
         )
         await ctx.channel.send(embed=embed)
