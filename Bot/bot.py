@@ -144,7 +144,7 @@ liam_face_encoding = face_recognition.face_encodings(image_of_liam)[0]
 # Alek
 image_of_alek = face_recognition.load_image_file("./img/known/Alek.png")
 alek_face_encoding = face_recognition.face_encodings(image_of_alek)[0]
-#Obama
+# Obama
 image_of_obama = face_recognition.load_image_file("./img/known/Obama.png")
 obama_face_encoding = face_recognition.face_encodings(image_of_obama)[0]
 
@@ -281,7 +281,7 @@ async def play_source(voice_client):
 
 
 def resource_path(relative_path):
-    """ Get absolute path to resource, works for dev and for PyInstaller """
+    """Get absolute path to resource, works for dev and for PyInstaller"""
     try:
         # PyInstaller creates a temp folder and stores path in _MEIPASS
         base_path = sys._MEIPASS
@@ -399,7 +399,9 @@ async def on_ready():
     print(f"Elapsed Startup Time: {endtime}")
     date = strftime("%a, %d %b %Y %H:%M:%S", localtime())
     print(date)
-    webhook = DiscordWebhook(url=os.environ["webhook"],)
+    webhook = DiscordWebhook(
+        url=os.environ["webhook"],
+    )
     output = f"""We have logged in as BATbot#7261
 Connected to: {len(bot.guilds)} guilds
 Connected to: {len(bot.commands)} commands
