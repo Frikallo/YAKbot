@@ -53,7 +53,7 @@ def load(categorylist):
         categories = open(
              "./categories/emojis.txt",
              encoding="utf8",
-         ).readlines()
+        ).readlines()
     c_encs = [
         perceptor.encode_text(clip.tokenize(category).cuda()).detach().clone()
         for category in categories
