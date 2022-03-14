@@ -31,6 +31,7 @@ A full list of BATbots commands and uses can be found either in discord with the
 |`.seed [Desired Seed]`|**Changes BATbots seed for all open generation (if 0 will set to random)**|[Example](https://github.com/Frikallo/BATbot/tree/main/Bot/Examples/.seed)
 |`.faces [Attatchment]`|**BATbot will look through your photo and try to find any recognizable faces**|[Example](https://github.com/Frikallo/BATbot/tree/main/Bot/Examples/.faces)
 |`.colorize [Attatchment]`|**BATbot will turn your black and white attatchment into a colorized version**|[Example](https://github.com/Frikallo/BATbot/tree/main/Bot/Examples/.colorize)
+|`.outline [Prompt]`|**BATbot will contact a local GPT3 model that will synthasize and look for essays on your prompt while outputting an outline/list of ideas/facts about your prompt to help kickstart your projects**|[Example](https://github.com/Frikallo/BATbot/tree/main/Bot/Examples/.outline)
 |`[Attatchment]`|**BATbot will first decide if your attatchment is neutral, negative or positive and then based on that will try to caption your image with both text, and emoji**|[Example](https://github.com/Frikallo/BATbot/tree/main/Bot/Examples/ClIPCaption)
 
 To see examples of all the different commands click here: [Examples](https://github.com/Frikallo/BATbot/tree/main/Bot/Examples)

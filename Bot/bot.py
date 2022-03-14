@@ -144,6 +144,9 @@ liam_face_encoding = face_recognition.face_encodings(image_of_liam)[0]
 # Alek
 image_of_alek = face_recognition.load_image_file("./img/known/Alek.png")
 alek_face_encoding = face_recognition.face_encodings(image_of_alek)[0]
+#Obama
+image_of_obama = face_recognition.load_image_file("./img/known/Obama.png")
+obama_face_encoding = face_recognition.face_encodings(image_of_obama)[0]
 
 #  Create arrays of encodings and names
 known_face_encodings = [
@@ -155,6 +158,7 @@ known_face_encodings = [
     connor_face_encoding,
     liam_face_encoding,
     alek_face_encoding,
+    obama_face_encoding,
 ]
 
 known_face_names = [
@@ -166,6 +170,7 @@ known_face_names = [
     "Connor/Ari",
     "Liam",
     "Alek",
+    "Obama",
 ]
 
 # Helper functions
