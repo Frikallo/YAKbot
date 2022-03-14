@@ -79,9 +79,11 @@ import numpy as np
 import io
 from PIL import ImageFile
 
-#For Later Tinkering
-import vclip
-from vclip import vclip as vc
+import openai
+
+# For Later Tinkering
+# import vclip
+# from vclip import vclip as vc
 
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 CB1 = os.environ.get("CB1")
@@ -89,6 +91,7 @@ CB2 = os.environ.get("CB2")
 CB3 = os.environ.get("CB3")
 Indices_value = "False"
 CLIP = "False"
+openai.api_key = os.environ.get("OPENAI_KEY")
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
@@ -354,12 +357,19 @@ answer = input("Use dev channel? (y/n) ")
 if answer == "y":
     channel_id = dev_id
 else:
+    id = input("Channel ID: ")
+    if id == "n":
+        public_id = 920889454443524116
+    else:
+        public_id = int(id)
     channel_id = public_id
 
 
 @bot.event
 async def on_ready():
-    await bot.change_presence(activity=discord.Game(name=f"in a trash bin"))
+    await bot.change_presence(
+        status=discord.Status.online, activity=discord.Game(name=f"in a trash bin")
+    )
     print("We have logged in as {0.user}".format(bot))
     print(f"Connected to: {len(bot.guilds)} guilds")
     print(f"Connected to: {len(bot.commands)} commands")
@@ -417,9 +427,14 @@ Elapsed Startup Time: {endtime}
         inline=True,
     )
     devicename = str(socket.gethostname())
+    if bot:
+        success = "True"
+    else:
+        success = "False"
+    success = "True"
     embed.add_embed_field(
         name="Connection Stats",
-        value=f"Response Time: `({response}ms)`\nTriggered by: `({devicename})`",
+        value=f"Response Time: `({response}ms)`\nTriggered by: `({devicename})`\nSuccessful startup? `({success})`",
         inline=True,
     )
     webhook.add_embed(embed)
@@ -957,9 +972,9 @@ async def image(ctx):
                 print(e)
                 print("Error with captioning")
                 embed2 = discord.Embed(
-                title=f"Caption error",
-                description=f"{e}",
-                color=discord.Color.red(),
+                    title=f"Caption error",
+                    description=f"{e}",
+                    color=discord.Color.red(),
                 )
                 await ctx.send(embed=embed2)
             for c in captions[: args.display]:
@@ -1054,9 +1069,9 @@ async def imagine(ctx):
         print(os.environ["prompt"])  # outputs 'newvalue'
 
         try:
-            #import VQGAN_CLIP
+            # import VQGAN_CLIP
             os.system("python3 VQGAN_CLIP.py")
-            #vc()
+            # vc()
         except Exception as e:
             print(e)
             print("Error")
@@ -1115,7 +1130,7 @@ async def imagine(ctx):
         final.write_videofile(out_loc)
         await ctx.channel.send(file=discord.File(out_loc))
         await ctx.channel.send(f"```Elapsed: {elapsed} | Generated at: {it}it/s```")
-        #await bot.change_presence(activity=discord.Game(name=f"in a trash bin"))
+        # await bot.change_presence(activity=discord.Game(name=f"in a trash bin"))
 
         with open("averages.txt", "a+") as file_object:
             file_object.seek(0)
@@ -1347,7 +1362,7 @@ async def help(ctx):
     async with ctx.channel.typing():
         embed = discord.Embed(
             title="BATbot Help",
-            description=f'`.rembg [Attached Image]`\n**removes background from attatched image**\n\n`.esrgan [Attatchment]`\n**BATbot will use a pretrained ESRGAN upscaler to upscale you images resolution by up to 4 times**\n\n`.status`\n**sends embed message with all relevent device stats for BATbot**\n\n`.imagine [Prompt]`\n**uses CLIP+VQGAN open generation to create an original image from your prompt**\n\n`.facehq, .wikiart, .default, .d1024`\n**Changes BATbots VQGAN+CLIP model to one trained solely on faces, art or default configuration**\n\n`.square, .landscape, .portrait`\n**BATbot will update his size configurations for generations to your specified orientation**\n\n`.seed [Desired Seed]`\n**Changes BATbots seed for all open generation (if 0 will set to random)**\n\n`.faces [Attatchment]`\n**BATbot will look through your photo and try to find any recognizable faces**\n\n`.colorize [Attatchment]`\n**BATbot will turn your black and white attatchment into a colorized version**__Any Attatchments Sent In This Channel Will Be Identified And Captioned By BATbot (To Prevent Captioning Include --nc In Your Message)__',
+            description=f"`.rembg [Attached Image]`\n**removes background from attatched image**\n\n`.esrgan [Attatchment]`\n**BATbot will use a pretrained ESRGAN upscaler to upscale you images resolution by up to 4 times**\n\n`.status`\n**sends embed message with all relevent device stats for BATbot**\n\n`.imagine [Prompt]`\n**uses CLIP+VQGAN open generation to create an original image from your prompt**\n\n`.facehq, .wikiart, .default, .d1024`\n**Changes BATbots VQGAN+CLIP model to one trained solely on faces, art or default configuration**\n\n`.square, .landscape, .portrait`\n**BATbot will update his size configurations for generations to your specified orientation**\n\n`.seed [Desired Seed]`\n**Changes BATbots seed for all open generation (if 0 will set to random)**\n\n`.faces [Attatchment]`\n**BATbot will look through your photo and try to find any recognizable faces**\n\n`.colorize [Attatchment]`\n**BATbot will turn your black and white attatchment into a colorized version**\n\n`.outline [Prompt]`\n**BATbot will contact a local GPT3 model that will synthasize and look for essays on your prompt while outputting an outline/list of ideas/facts about your prompt to help kickstart your projects**\n\n__Any Attatchments Sent In This Channel Will Be Identified And Captioned By BATbot (To Prevent Captioning Include --nc In Your Message)__",
             color=0x7289DA,
         )
         await ctx.channel.send(embed=embed)
@@ -1511,6 +1526,33 @@ async def colorize(ctx):
                     os.remove(os.path.join(my_dir, fname))
             torch.cuda.empty_cache()
             await bot.change_presence(activity=discord.Game(name=f"in a trash bin"))
+
+
+@bot.command()
+async def outline(ctx):
+    if ctx.channel.id != channel_id:
+        return
+    print("Command Loaded")
+    async with ctx.channel.typing():
+        input = ctx.message.content
+        question = str(input[9 : len(input)])
+
+        response = openai.Completion.create(
+            engine="text-davinci-001",
+            prompt=f"Create an outline for an essay about {question}:",
+            temperature=0,
+            max_tokens=364,
+            top_p=1,
+            frequency_penalty=0,
+            presence_penalty=0,
+        )
+        print(response.choices[0].text)
+        embed = discord.Embed(
+            title=f"Research outline for {question}",
+            description=response.choices[0].text,
+            color=0x7289DA,
+        )
+        await ctx.channel.send(embed=embed)
 
 
 @bot.event
