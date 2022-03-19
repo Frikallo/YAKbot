@@ -398,9 +398,7 @@ async def on_ready():
     print(f"Elapsed Startup Time: {endtime}")
     date = strftime("%a, %d %b %Y %H:%M:%S", localtime())
     print(date)
-    webhook = DiscordWebhook(
-        url=os.environ["webhook"],
-    )
+    webhook = DiscordWebhook(url=os.environ["webhook"],)
     output = f"""We have logged in as BATbot#7261
 Connected to: {len(bot.guilds)} guilds
 Connected to: {len(bot.commands)} commands
@@ -964,7 +962,9 @@ async def image(ctx):
                 context_simple = simple_person
                 context = caption_person
                 try:
-                    captions = caption_image(img, args, net, preprocess, context=context)
+                    captions = caption_image(
+                        img, args, net, preprocess, context=context
+                    )
                 except Exception as e:
                     print(e)
                     print("Error with captioning")
@@ -1069,7 +1069,7 @@ async def imagine(ctx):
 
         try:
             # import VQGAN_CLIP
-            #os.system("python3 VQGAN_CLIP.py")
+            # os.system("python3 VQGAN_CLIP.py")
             os.system("python3 vclip.py --video")
             # vc()
         except Exception as e:
