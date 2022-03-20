@@ -398,7 +398,9 @@ async def on_ready():
     print(f"Elapsed Startup Time: {endtime}")
     date = strftime("%a, %d %b %Y %H:%M:%S", localtime())
     print(date)
-    webhook = DiscordWebhook(url=os.environ["webhook"],)
+    webhook = DiscordWebhook(
+        url=os.environ["webhook"],
+    )
     output = f"""We have logged in as BATbot#7261
 Connected to: {len(bot.guilds)} guilds
 Connected to: {len(bot.commands)} commands
@@ -423,7 +425,7 @@ Elapsed Startup Time: {endtime}
         name="",
         url="https://cdn.discordapp.com/attachments/935708113439436841/935778588173688913/88942100.png",
     )
-    embed.set_footer(text="V.1.2.5")
+    embed.set_footer(text="V.1.2.9")
     embed.set_timestamp()
     embed.add_embed_field(
         name="Startup Stats",
