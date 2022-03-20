@@ -425,7 +425,7 @@ Elapsed Startup Time: {endtime}
         name="",
         url="https://cdn.discordapp.com/attachments/935708113439436841/935778588173688913/88942100.png",
     )
-    embed.set_footer(text="V.1.2.9")
+    embed.set_footer(text="V.1.29")
     embed.set_timestamp()
     embed.add_embed_field(
         name="Startup Stats",
