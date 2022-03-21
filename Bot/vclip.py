@@ -670,25 +670,25 @@ if __name__ == "__main__":
 
     print("done")
 
-init_frame = 0  # This is the frame where the video will start
-last_frame = i  # You can change i to the number of the last frame you want to generate. It will raise an error if that number of frames does not exist.
+    init_frame = 0  # This is the frame where the video will start
+    last_frame = i  # You can change i to the number of the last frame you want to generate. It will raise an error if that number of frames does not exist.
 
 
-min_fps = 10
-max_fps = 60
+    min_fps = 10
+    max_fps = 60
 
-total_frames = last_frame - init_frame
+    total_frames = last_frame - init_frame
 
-length = 15  # Desired time of the video in seconds
+    length = 15  # Desired time of the video in seconds
 
-frames = []
-tqdm.write("Generating video...")
-for i in range(init_frame, last_frame):  #
-    frames.append(Image.open("./steps/" + str(i) + ".png"))
-    size = (width, height)
+    frames = []
+    tqdm.write("Generating video...")
+    for i in range(init_frame, last_frame):  #
+        frames.append(Image.open("./steps/" + str(i) + ".png"))
+        size = (width, height)
 
-savepath = "./"
-imageio.mimsave(os.path.join(savepath, "movie.mp4"), frames)
-end = time.time() - start
-end = end / 60
-print(end)
+    savepath = "./"
+    imageio.mimsave(os.path.join(savepath, "movie.mp4"), frames)
+    end = time.time() - start
+    end = end / 60
+    print(end)
