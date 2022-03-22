@@ -17,7 +17,6 @@ import matplotlib.pyplot as plt
 from colorizers import *
 import sys
 from upscaler import upscale
-from GPTJ.Basic_api import SimpleCompletion
 import urllib.request
 import datetime
 import traceback
@@ -100,6 +99,7 @@ from torch.nn import functional as F
 from torchvision import transforms
 from torchvision.transforms import functional as TF
 from torch.cuda import get_device_properties
+import datetime as dt
 
 torch.backends.cudnn.benchmark = False
 
@@ -333,6 +333,12 @@ def resource_path(relative_path):
     return os.path.join(base_path, relative_path)
 
 
+def hms(seconds):
+    h = seconds // 3600
+    m = seconds % 3600 // 60
+    s = seconds % 3600 % 60
+    return "{:02d}:{:02d}:{:02d}".format(h, m, s)
+
 # Settings
 args = argparse.Namespace(
     config="./checkpoints/12xdqrwd-config",
@@ -432,12 +438,6 @@ async def on_ready():
     # print(f'Loaded cogs: {bot.cogs}')
     end = time.time() - startTime
     end = int(end)
-
-    def hms(seconds):
-        h = seconds // 3600
-        m = seconds % 3600 // 60
-        s = seconds % 3600 % 60
-        return "{:02d}:{:02d}:{:02d}".format(h, m, s)
 
     endtime = hms(end)
     print(f"Elapsed Startup Time: {endtime}")
@@ -1047,6 +1047,10 @@ async def imagine(ctx):
     torch.cuda.empty_cache()
     print("Command Loaded")
     async with ctx.channel.typing():
+        width = os.environ["width"]
+        height = os.environ["height"]
+        img = Image.new('RGB', (width, height), color = 'black')
+        img.save('progress.png')
         # definitions
         author = ctx.message.author.id
         input = ctx.message.content
@@ -1111,6 +1115,13 @@ async def imagine(ctx):
             + f"**_{prompt}_**"
             + f"```Estimated: {num}m{secs}s Generation Time\nUsing seed: {seed}```"
         )
+        message = await ctx.send(f"```    ```")
+
+        secret_channel = bot.get_channel(955787994286129172)  # where 12345 would be your secret channel id
+        file = discord.File(f"progress.png")
+        temp_image = await ctx.send("```    ```")
+
+        #image_message = await ctx.send(file = discord.File("progress.png"))
         genTime = time.time()
         os.environ["prompt"] = prompt
 
@@ -1346,7 +1357,7 @@ async def imagine(ctx):
                     "--save_every",
                     type=int,
                     help="Save image iterations",
-                    default=50,
+                    default=10,
                     dest="display_freq",
                 )
                 vq_parser.add_argument(
@@ -1531,7 +1542,6 @@ async def imagine(ctx):
                 info.add_text("comment", f"{args.prompts}")
                 TF.to_pil_image(out[0].cpu()).save(args.output, pnginfo=info)
 
-
             def ascend_txt(i):
                 #global i
                 out = synth(z)
@@ -1704,6 +1714,7 @@ async def imagine(ctx):
                 p = 1  # Phrase counter
                 smoother = 0  # Smoother counter
                 this_video_frame = 0  # for video styling
+                start_time = dt.datetime.today().timestamp()
 
                 with tqdm() as pbar:
                     while i < args.max_iterations:
@@ -1727,11 +1738,22 @@ async def imagine(ctx):
                                     ).float()
                                     pMs.append(Prompt(embed, weight, stop).to(device))
                                 p += 1
+                        percent = i / 400
+                        percent = percent * 100
+                        percent = int(percent)
+
+                        if i % args.display_freq == 0:
+                            temp_message = await secret_channel.send(file = discord.File("progress.png"))
+                            attachment = temp_message.attachments[0]
+                            #await image_message.edit(content=image_message)
+                            await message.edit(content=f"```{pbar} ({percent}%)```")
+                            await temp_image.edit(content=attachment.url)
                         train(i)
                         i += 1
                         pbar.update()
 
                 print("done")
+                await message.edit(content=f"``` done! ```")
 
             init_frame = 0  # This is the frame where the video will start
             last_frame = i  # You can change i to the number of the last frame you want to generate. It will raise an error if that number of frames does not exist.
@@ -1769,8 +1791,6 @@ async def imagine(ctx):
 
         new_prompt = "progress.png"
         #upscale("progress.png", "progress.png")
-        await ctx.channel.send(f"<@{author}>" + "```Your Generation Is Done```")
-        await ctx.channel.send(file=discord.File(new_prompt))
         ittime = time.time() - genTime
         print(f"Generation Time: {ittime}")
         elapsed = time.time() - genTime
@@ -1813,7 +1833,6 @@ async def imagine(ctx):
         print("fps: {}".format(final.fps))
         final.write_videofile(out_loc)
         await ctx.channel.send(file=discord.File(out_loc))
-        await ctx.channel.send(f"```Elapsed: {elapsed} | Generated at: {it}it/s```")
         # await bot.change_presence(activity=discord.Game(name=f"in a trash bin"))
 
         with open("averages.txt", "a+") as file_object:
