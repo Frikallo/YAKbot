@@ -10,6 +10,8 @@ from discord_webhook import DiscordWebhook, DiscordEmbed
 from time import localtime, strftime
 import argparse
 import socket
+from pyston import PystonClient, File
+import asyncio
 import PySimpleGUI as sg
 import presets
 import argparse
@@ -339,6 +341,7 @@ def hms(seconds):
     s = seconds % 3600 % 60
     return "{:02d}:{:02d}:{:02d}".format(h, m, s)
 
+
 # Settings
 args = argparse.Namespace(
     config="./checkpoints/12xdqrwd-config",
@@ -425,7 +428,7 @@ async def on_ready():
     )
     print("We have logged in as {0.user}".format(bot))
     print(f"Connected to: {len(bot.guilds)} guilds")
-    #for guild in bot.guilds:
+    # for guild in bot.guilds:
     #    print(f"{guild.name} ({guild.id})")
     print(f"Connected to: {len(bot.commands)} commands")
     BATbot = """██████╗░░█████╗░████████╗██████╗░░█████╗░████████╗
@@ -443,9 +446,7 @@ async def on_ready():
     print(f"Elapsed Startup Time: {endtime}")
     date = strftime("%a, %d %b %Y %H:%M:%S", localtime())
     print(date)
-    webhook = DiscordWebhook(
-        url=os.environ["webhook"],
-    )
+    webhook = DiscordWebhook(url=os.environ["webhook"],)
     output = f"""We have logged in as BATbot#7261
 Connected to: {len(bot.guilds)} guilds
 Connected to: {len(bot.commands)} commands
@@ -502,6 +503,7 @@ async def image(ctx):
         and ctx.content != ".faces"
         and ctx.content != ".esrgan"
         and ctx.content != ".colorize"
+        and ctx.content != ".imagine"
     ):
         if ctx.channel.id != channel_id:
             return
@@ -1047,10 +1049,21 @@ async def imagine(ctx):
     torch.cuda.empty_cache()
     print("Command Loaded")
     async with ctx.channel.typing():
+        if ctx.message.attachments:
+            link = ctx.message.attachments[0].url
+            filename = link.split("/")[-1]
+            r = requests.get(link, allow_redirects=True)
+            open(filename, "wb").write(r.content)
+            print(filename)
+            image_prompts2 = f"{filename}"
+        else:
+            image_prompts2 = None         
         width = os.environ["width"]
+        width = int(width)
         height = os.environ["height"]
-        img = Image.new('RGB', (width, height), color = 'black')
-        img.save('progress.png')
+        height = int(height)
+        img = Image.new("RGB", (width, height), color="black")
+        img.save("progress.png")
         # definitions
         author = ctx.message.author.id
         input = ctx.message.content
@@ -1117,11 +1130,13 @@ async def imagine(ctx):
         )
         message = await ctx.send(f"```    ```")
 
-        secret_channel = bot.get_channel(955787994286129172)  # where 12345 would be your secret channel id
+        secret_channel = bot.get_channel(
+            955787994286129172
+        )  # where 12345 would be your secret channel id
         file = discord.File(f"progress.png")
         temp_image = await ctx.send("```    ```")
 
-        #image_message = await ctx.send(file = discord.File("progress.png"))
+        # image_message = await ctx.send(file = discord.File("progress.png"))
         genTime = time.time()
         os.environ["prompt"] = prompt
 
@@ -1146,10 +1161,11 @@ async def imagine(ctx):
             prompt = os.environ["prompt"]
             model = os.environ["model"]
 
-
             def parse():
                 global all_phrases
-                vq_parser = argparse.ArgumentParser(description="Image generation using VQGAN+CLIP")
+                vq_parser = argparse.ArgumentParser(
+                    description="Image generation using VQGAN+CLIP"
+                )
 
                 vq_parser.add_argument(
                     "-aug",
@@ -1212,7 +1228,12 @@ async def imagine(ctx):
                     dest="cut_pow",
                 )
                 vq_parser.add_argument(
-                    "-cuts", "--num_cuts", type=int, help="Number of cuts", default=32, dest="cutn"
+                    "-cuts",
+                    "--num_cuts",
+                    type=int,
+                    help="Number of cuts",
+                    default=32,
+                    dest="cutn",
                 )
                 vq_parser.add_argument(
                     "-d",
@@ -1338,7 +1359,12 @@ async def imagine(ctx):
                     dest="optimiser",
                 )
                 vq_parser.add_argument(
-                    "-p", "--prompts", type=str, help="Text prompts", default=prompt, dest="prompts"
+                    "-p",
+                    "--prompts",
+                    type=str,
+                    help="Text prompts",
+                    default=prompt,
+                    dest="prompts",
                 )
                 vq_parser.add_argument(
                     "-s",
@@ -1432,7 +1458,8 @@ async def imagine(ctx):
                 )
 
                 args = vq_parser.parse_args()
-
+                if image_prompts2 is not None:
+                    args.image_prompts = image_prompts2
                 if not args.prompts and not args.image_prompts:
                     raise Exception("You must supply a text or image prompt")
 
@@ -1441,7 +1468,9 @@ async def imagine(ctx):
                 # Split text prompts using the pipe character (weights are split later)
                 if args.prompts:
                     # For stories, there will be many phrases
-                    story_phrases = [phrase.strip() for phrase in args.prompts.split("^")]
+                    story_phrases = [
+                        phrase.strip() for phrase in args.prompts.split("^")
+                    ]
 
                     # Make a list of all phrases
                     all_phrases = []
@@ -1459,7 +1488,9 @@ async def imagine(ctx):
                     args.image_prompts = [image.strip() for image in args.image_prompts]
 
                 if args.make_video and args.make_zoom_video:
-                    print("Warning: Make video and make zoom video are mutually exclusive.")
+                    print(
+                        "Warning: Make video and make zoom video are mutually exclusive."
+                    )
                     args.make_video = False
 
                 # Make video steps directory
@@ -1469,7 +1500,6 @@ async def imagine(ctx):
                         os.mkdir("steps")
 
                 return args
-
 
             class Prompt(nn.Module):
                 def __init__(self, embed, weight=1.0, stop=float("-inf")):
@@ -1481,20 +1511,25 @@ async def imagine(ctx):
                 def forward(self, input):
                     input_normed = F.normalize(input.unsqueeze(1), dim=2)
                     embed_normed = F.normalize(self.embed.unsqueeze(0), dim=2)
-                    dists = input_normed.sub(embed_normed).norm(dim=2).div(2).arcsin().pow(2).mul(2)
+                    dists = (
+                        input_normed.sub(embed_normed)
+                        .norm(dim=2)
+                        .div(2)
+                        .arcsin()
+                        .pow(2)
+                        .mul(2)
+                    )
                     dists = dists * self.weight.sign()
                     return (
                         self.weight.abs()
                         * replace_grad(dists, torch.maximum(dists, self.stop)).mean()
                     )
 
-
             # NR: Split prompts and weights
             def split_prompt(prompt):
                 vals = prompt.rsplit(":", 2)
                 vals = vals + ["", "1", "-inf"][len(vals) :]
                 return vals[0], float(vals[1]), float(vals[2])
-
 
             def load_vqgan_model(config_path, checkpoint_path):
                 global gumbel
@@ -1509,8 +1544,13 @@ async def imagine(ctx):
                     model.eval().requires_grad_(False)
                     model.init_from_ckpt(checkpoint_path)
                     gumbel = True
-                elif config.model.target == "taming.models.cond_transformer.Net2NetTransformer":
-                    parent_model = cond_transformer.Net2NetTransformer(**config.model.params)
+                elif (
+                    config.model.target
+                    == "taming.models.cond_transformer.Net2NetTransformer"
+                ):
+                    parent_model = cond_transformer.Net2NetTransformer(
+                        **config.model.params
+                    )
                     parent_model.eval().requires_grad_(False)
                     parent_model.init_from_ckpt(checkpoint_path)
                     model = parent_model.first_stage_model
@@ -1519,31 +1559,31 @@ async def imagine(ctx):
                 del model.loss
                 return model
 
-
             # Vector quantize
             def synth(z):
                 if gumbel:
-                    z_q = vector_quantize(z.movedim(1, 3), model.quantize.embed.weight).movedim(
-                        3, 1
-                    )
+                    z_q = vector_quantize(
+                        z.movedim(1, 3), model.quantize.embed.weight
+                    ).movedim(3, 1)
                 else:
-                    z_q = vector_quantize(z.movedim(1, 3), model.quantize.embedding.weight).movedim(
-                        3, 1
-                    )
+                    z_q = vector_quantize(
+                        z.movedim(1, 3), model.quantize.embedding.weight
+                    ).movedim(3, 1)
                 return clamp_with_grad(model.decode(z_q).add(1).div(2), 0, 1)
-
 
             @torch.inference_mode()
             def checkin(i, losses):
                 losses_str = ", ".join(f"{loss.item():g}" for loss in losses)
-                tqdm.write(f"i: {i}, loss: {sum(losses).item():g}, losses: {losses_str}")
+                tqdm.write(
+                    f"i: {i}, loss: {sum(losses).item():g}, losses: {losses_str}"
+                )
                 out = synth(z)
                 info = PngImagePlugin.PngInfo()
                 info.add_text("comment", f"{args.prompts}")
                 TF.to_pil_image(out[0].cpu()).save(args.output, pnginfo=info)
 
             def ascend_txt(i):
-                #global i
+                # global i
                 out = synth(z)
                 iii = perceptor.encode_image(normalize(make_cutouts(out))).float()
 
@@ -1562,13 +1602,17 @@ async def imagine(ctx):
 
                 if args.make_video:
                     img = np.array(
-                        out.mul(255).clamp(0, 255)[0].cpu().detach().numpy().astype(np.uint8)
+                        out.mul(255)
+                        .clamp(0, 255)[0]
+                        .cpu()
+                        .detach()
+                        .numpy()
+                        .astype(np.uint8)
                     )[:, :, :]
                     img = np.transpose(img, (1, 2, 0))
                     imageio.imwrite("./steps/" + str(i) + ".png", np.array(img))
 
                 return result  # return loss
-
 
             def train(i):
                 opt.zero_grad(set_to_none=True)
@@ -1585,17 +1629,25 @@ async def imagine(ctx):
                 with torch.inference_mode():
                     z.copy_(z.maximum(z_min).minimum(z_max))
 
-
             if __name__ == "__main__":
 
                 args = parse()
 
                 # Do it
                 device = torch.device(args.cuda_device)
-                model = load_vqgan_model(args.vqgan_config, args.vqgan_checkpoint).to(device)
-                jit = True if version.parse(torch.__version__) < version.parse("1.8.0") else False
+                model = load_vqgan_model(args.vqgan_config, args.vqgan_checkpoint).to(
+                    device
+                )
+                jit = (
+                    True
+                    if version.parse(torch.__version__) < version.parse("1.8.0")
+                    else False
+                )
                 perceptor = (
-                    clip.load(args.clip_model, jit=jit)[0].eval().requires_grad_(False).to(device)
+                    clip.load(args.clip_model, jit=jit)[0]
+                    .eval()
+                    .requires_grad_(False)
+                    .to(device)
                 )
 
                 cut_size = perceptor.visual.input_resolution
@@ -1615,13 +1667,21 @@ async def imagine(ctx):
                 if gumbel:
                     e_dim = 256
                     n_toks = model.quantize.n_embed
-                    z_min = model.quantize.embed.weight.min(dim=0).values[None, :, None, None]
-                    z_max = model.quantize.embed.weight.max(dim=0).values[None, :, None, None]
+                    z_min = model.quantize.embed.weight.min(dim=0).values[
+                        None, :, None, None
+                    ]
+                    z_max = model.quantize.embed.weight.max(dim=0).values[
+                        None, :, None, None
+                    ]
                 else:
                     e_dim = model.quantize.e_dim
                     n_toks = model.quantize.n_e
-                    z_min = model.quantize.embedding.weight.min(dim=0).values[None, :, None, None]
-                    z_max = model.quantize.embedding.weight.max(dim=0).values[None, :, None, None]
+                    z_min = model.quantize.embedding.weight.min(dim=0).values[
+                        None, :, None, None
+                    ]
+                    z_max = model.quantize.embedding.weight.max(dim=0).values[
+                        None, :, None, None
+                    ]
 
                 if args.init_image:
                     if "http" in args.init_image:
@@ -1669,7 +1729,9 @@ async def imagine(ctx):
                 if args.prompts:
                     for prompt in args.prompts:
                         txt, weight, stop = split_prompt(prompt)
-                        embed = perceptor.encode_text(clip.tokenize(txt).to(device)).float()
+                        embed = perceptor.encode_text(
+                            clip.tokenize(txt).to(device)
+                        ).float()
                         pMs.append(Prompt(embed, weight, stop).to(device))
 
                 for prompt in args.image_prompts:
@@ -1681,9 +1743,13 @@ async def imagine(ctx):
                     embed = perceptor.encode_image(normalize(batch)).float()
                     pMs.append(Prompt(embed, weight, stop).to(device))
 
-                for seed, weight in zip(args.noise_prompt_seeds, args.noise_prompt_weights):
+                for seed, weight in zip(
+                    args.noise_prompt_seeds, args.noise_prompt_weights
+                ):
                     gen = torch.Generator().manual_seed(seed)
-                    embed = torch.empty([1, perceptor.visual.output_dim]).normal_(generator=gen)
+                    embed = torch.empty([1, perceptor.visual.output_dim]).normal_(
+                        generator=gen
+                    )
                     pMs.append(Prompt(embed, weight).to(device))
 
                 # Set the optimiser
@@ -1743,9 +1809,11 @@ async def imagine(ctx):
                         percent = int(percent)
 
                         if i % args.display_freq == 0:
-                            temp_message = await secret_channel.send(file = discord.File("progress.png"))
+                            temp_message = await secret_channel.send(
+                                file=discord.File("progress.png")
+                            )
                             attachment = temp_message.attachments[0]
-                            #await image_message.edit(content=image_message)
+                            # await image_message.edit(content=image_message)
                             await message.edit(content=f"```{pbar} ({percent}%)```")
                             await temp_image.edit(content=attachment.url)
                         train(i)
@@ -1757,7 +1825,6 @@ async def imagine(ctx):
 
             init_frame = 0  # This is the frame where the video will start
             last_frame = i  # You can change i to the number of the last frame you want to generate. It will raise an error if that number of frames does not exist.
-
 
             min_fps = 10
             max_fps = 60
@@ -1790,7 +1857,6 @@ async def imagine(ctx):
         print("Generation Complete")
 
         new_prompt = "progress.png"
-        #upscale("progress.png", "progress.png")
         ittime = time.time() - genTime
         print(f"Generation Time: {ittime}")
         elapsed = time.time() - genTime
@@ -1832,7 +1898,6 @@ async def imagine(ctx):
         final = clip2.fx(vfx.speedx, 5)
         print("fps: {}".format(final.fps))
         final.write_videofile(out_loc)
-        await ctx.channel.send(file=discord.File(out_loc))
         # await bot.change_presence(activity=discord.Game(name=f"in a trash bin"))
 
         with open("averages.txt", "a+") as file_object:
@@ -1847,13 +1912,18 @@ async def imagine(ctx):
             orders = [float(item) for item in orders]
 
         torch.cuda.empty_cache()
+        temp_message2 = await secret_channel.send(file=discord.File(out_loc))
+        attachment2 = temp_message2.attachments[0]
+        upscale("progress.png", "progress.png")
+        temp_message3 = await secret_channel.send(file=discord.File("progress.png"))
+        attachment3 = temp_message3.attachments[0]
+        await temp_image.edit(content=f"{attachment3.url}\n{attachment2.url}")
+
 
         # delete output
         directory = os.getcwd()
         my_dir = directory
         for fname in os.listdir(my_dir):
-            if fname.endswith(".png"):
-                os.remove(os.path.join(my_dir, fname))
             if fname.endswith(".mp4"):
                 os.remove(os.path.join(my_dir, fname))
 
