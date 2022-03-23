@@ -1057,7 +1057,7 @@ async def imagine(ctx):
             print(filename)
             image_prompts2 = f"{filename}"
         else:
-            image_prompts2 = None         
+            image_prompts2 = None
         width = os.environ["width"]
         width = int(width)
         height = os.environ["height"]
@@ -1918,7 +1918,6 @@ async def imagine(ctx):
         temp_message3 = await secret_channel.send(file=discord.File("progress.png"))
         attachment3 = temp_message3.attachments[0]
         await temp_image.edit(content=f"{attachment3.url}\n{attachment2.url}")
-
 
         # delete output
         directory = os.getcwd()
