@@ -431,13 +431,13 @@ async def on_ready():
     # for guild in bot.guilds:
     #    print(f"{guild.name} ({guild.id})")
     print(f"Connected to: {len(bot.commands)} commands")
-    BATbot = """██████╗░░█████╗░████████╗██████╗░░█████╗░████████╗
-██╔══██╗██╔══██╗╚══██╔══╝██╔══██╗██╔══██╗╚══██╔══╝
-██████╦╝███████║░░░██║░░░██████╦╝██║░░██║░░░██║░░░
-██╔══██╗██╔══██║░░░██║░░░██╔══██╗██║░░██║░░░██║░░░
-██████╦╝██║░░██║░░░██║░░░██████╦╝╚█████╔╝░░░██║░░░
-╚═════╝░╚═╝░░╚═╝░░░╚═╝░░░╚═════╝░░╚════╝░░░░╚═╝░░░"""
-    print(BATbot)
+    YAKbot = """██╗░░░██╗░█████╗░██╗░░██╗██████╗░░█████╗░████████╗
+╚██╗░██╔╝██╔══██╗██║░██╔╝██╔══██╗██╔══██╗╚══██╔══╝
+░╚████╔╝░███████║█████═╝░██████╦╝██║░░██║░░░██║░░░
+░░╚██╔╝░░██╔══██║██╔═██╗░██╔══██╗██║░░██║░░░██║░░░
+░░░██║░░░██║░░██║██║░╚██╗██████╦╝╚█████╔╝░░░██║░░░
+░░░╚═╝░░░╚═╝░░╚═╝╚═╝░░╚═╝╚═════╝░░╚════╝░░░░╚═╝░░░"""
+    print(YAKbot)
     # print(f'Loaded cogs: {bot.cogs}')
     end = time.time() - startTime
     end = int(end)
@@ -447,15 +447,16 @@ async def on_ready():
     date = strftime("%a, %d %b %Y %H:%M:%S", localtime())
     print(date)
     webhook = DiscordWebhook(url=os.environ["webhook"],)
-    output = f"""We have logged in as BATbot#7261
+    output = f"""We have logged in as YAKbot#7261
 Connected to: {len(bot.guilds)} guilds
 Connected to: {len(bot.commands)} commands
 
-____________________________       _____ 
-___  __ )__    |__  __/__  /_________  /_
-__  __  |_  /| |_  /  __  __ \  __ \  __/
-_  /_/ /_  ___ |  /   _  /_/ / /_/ / /_  
-/_____/ /_/  |_/_/    /_.___/\____/\__/  
+__  _____    __ __ __          __ 
+\ \/ /   |  / //_// /_  ____  / /_
+ \  / /| | / ,<  / __ \/ __ \/ __/
+ / / ___ |/ /| |/ /_/ / /_/ / /_  
+/_/_/  |_/_/ |_/_.___/\____/\__/  
+                                  
                                          
 Elapsed Startup Time: {endtime}
 {date}"""
@@ -2012,8 +2013,8 @@ async def facehq(ctx):
     if ctx.channel.id != channel_id:
         return
     async with ctx.channel.typing():
-        await ctx.channel.send("BAtbot Model Updating...")
-        await ctx.channel.send("Updated! BATbot Model: `vqgan_faceshq`")
+        await ctx.channel.send("YAKbot Model Updating...")
+        await ctx.channel.send("Updated! YAKbot Model: `vqgan_faceshq`")
         os.environ["model"] = "vqgan_faceshq"
         os.environ["height"] = "412"
         os.environ["width"] = "412"
@@ -2025,8 +2026,8 @@ async def wikiart(ctx):
     if ctx.channel.id != channel_id:
         return
     async with ctx.channel.typing():
-        await ctx.channel.send("BAtbot Model Updating...")
-        await ctx.channel.send("Updated! BATbot Model: `wikiart_16384`")
+        await ctx.channel.send("YAKbot Model Updating...")
+        await ctx.channel.send("Updated! YAKbot Model: `wikiart_16384`")
         os.environ["model"] = "wikiart_16384"
         os.environ["height"] = "288"
         os.environ["width"] = "512"
@@ -2038,8 +2039,8 @@ async def default(ctx):
     if ctx.channel.id != channel_id:
         return
     async with ctx.channel.typing():
-        await ctx.channel.send("BAtbot Model Updating...")
-        await ctx.channel.send("Updated! BATbot Model: `vqgan_imagenet_f16_16384`")
+        await ctx.channel.send("YAKbot Model Updating...")
+        await ctx.channel.send("Updated! YAKbot Model: `vqgan_imagenet_f16_16384`")
         os.environ["model"] = "vqgan_imagenet_f16_16384"
         os.environ["height"] = "412"
         os.environ["width"] = "412"
@@ -2051,8 +2052,8 @@ async def d1024(ctx):
     if ctx.channel.id != channel_id:
         return
     async with ctx.channel.typing():
-        await ctx.channel.send("BAtbot Model Updating...")
-        await ctx.channel.send("Updated! BATbot Model: `vqgan_imagenet_f16_16384`")
+        await ctx.channel.send("YAKbot Model Updating...")
+        await ctx.channel.send("Updated! YAKbot Model: `vqgan_imagenet_f16_16384`")
         os.environ["model"] = "vqgan_imagenet_f16_1024"
         os.environ["height"] = "412"
         os.environ["width"] = "412"
@@ -2132,8 +2133,8 @@ async def help(ctx):
     print("Command Loaded")
     async with ctx.channel.typing():
         embed = discord.Embed(
-            title="BATbot Help",
-            description=f"`.rembg [Attached Image]`\n**removes background from attatched image**\n\n`.esrgan [Attatchment]`\n**BATbot will use a pretrained ESRGAN upscaler to upscale you images resolution by up to 4 times**\n\n`.status`\n**sends embed message with all relevent device stats for BATbot**\n\n`.imagine [Prompt]`\n**uses CLIP+VQGAN open generation to create an original image from your prompt**\n\n`.facehq, .wikiart, .default, .d1024`\n**Changes BATbots VQGAN+CLIP model to one trained solely on faces, art or default configuration**\n\n`.square, .landscape, .portrait`\n**BATbot will update his size configurations for generations to your specified orientation**\n\n`.seed [Desired Seed]`\n**Changes BATbots seed for all open generation (if 0 will set to random)**\n\n`.faces [Attatchment]`\n**BATbot will look through your photo and try to find any recognizable faces**\n\n`.colorize [Attatchment]`\n**BATbot will turn your black and white attatchment into a colorized version**\n\n`.outline [Prompt]`\n**BATbot will contact a local GPT3 model that will synthasize and look for essays on your prompt while outputting an outline/list of ideas/facts about your prompt to help kickstart your projects**\n\n__Any Attatchments Sent In This Channel Will Be Identified And Captioned By BATbot (To Prevent Captioning Include --nc In Your Message)__",
+            title="YAKbot Help",
+            description=f"`.rembg [Attached Image]`\n**removes background from attatched image**\n\n`.esrgan [Attatchment]`\n**YAKbot will use a pretrained ESRGAN upscaler to upscale you images resolution by up to 4 times**\n\n`.status`\n**sends embed message with all relevent device stats for YAKbot**\n\n`.imagine [Prompt]`\n**uses CLIP+VQGAN open generation to create an original image from your prompt**\n\n`.facehq, .wikiart, .default, .d1024`\n**Changes YAKbots VQGAN+CLIP model to one trained solely on faces, art or default configuration**\n\n`.square, .landscape, .portrait`\n**YAKbot will update his size configurations for generations to your specified orientation**\n\n`.seed [Desired Seed]`\n**Changes YAKbots seed for all open generation (if 0 will set to random)**\n\n`.faces [Attatchment]`\n**YAKbot will look through your photo and try to find any recognizable faces**\n\n`.colorize [Attatchment]`\n**YAKbot will turn your black and white attatchment into a colorized version**\n\n`.outline [Prompt]`\n**YAKbot will contact a local GPT3 model that will synthasize and look for essays on your prompt while outputting an outline/list of ideas/facts about your prompt to help kickstart your projects**\n\n__Any Attatchments Sent In This Channel Will Be Identified And Captioned By YAKbot (To Prevent Captioning Include --nc In Your Message)__",
             color=0x7289DA,
         )
         await ctx.channel.send(embed=embed)
@@ -2166,7 +2167,7 @@ async def status(ctx):
                 f"There are currently `{available}` devices available for generation"
             )
             Used = "(In Use)"
-        status = f'Using device: {device}\n{name} `{Used}`\n\n{available}\n\nBATbot is currently running on `{os.environ["model"]}`'
+        status = f'Using device: {device}\n{name} `{Used}`\n\n{available}\n\nYAKbot is currently running on `{os.environ["model"]}`'
 
         embed = discord.Embed(
             title="Device Status", description=status, color=0x7289DA
@@ -2206,8 +2207,8 @@ async def square(ctx):
     if ctx.channel.id != channel_id:
         return
     async with ctx.channel.typing():
-        await ctx.channel.send("BAtbot Size Updating...")
-        await ctx.channel.send("Updated! BATbot Size Config: `square`")
+        await ctx.channel.send("YAKbot Size Updating...")
+        await ctx.channel.send("Updated! YAKbot Size Config: `square`")
         os.environ["height"] = "412"
         os.environ["width"] = "412"
 
@@ -2217,8 +2218,8 @@ async def portrait(ctx):
     if ctx.channel.id != channel_id:
         return
     async with ctx.channel.typing():
-        await ctx.channel.send("BAtbot Size Updating...")
-        await ctx.channel.send("Updated! BATbot Size Config: `portrait`")
+        await ctx.channel.send("YAKbot Size Updating...")
+        await ctx.channel.send("Updated! YAKbot Size Config: `portrait`")
         os.environ["height"] = "512"
         os.environ["width"] = "288"
 
@@ -2228,8 +2229,8 @@ async def landscape(ctx):
     if ctx.channel.id != channel_id:
         return
     async with ctx.channel.typing():
-        await ctx.channel.send("BAtbot Size Updating...")
-        await ctx.channel.send("Updated! BATbot Size Config: `landscape`")
+        await ctx.channel.send("YAKbot Size Updating...")
+        await ctx.channel.send("Updated! YAKbot Size Config: `landscape`")
         os.environ["height"] = "288"
         os.environ["width"] = "512"
 
