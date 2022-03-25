@@ -1,40 +1,40 @@
 <h2 align="center">
-  <img src="https://cdn.discordapp.com/attachments/882342184924348478/923980750615904296/image-modified.png" height='200px' width='200px'>
+  <img src="https://cdn.discordapp.com/attachments/882342184924348478/956735304105066517/1648173184_Photograph_Portrait_Yak_staring_into_the_camera_by_Studio_Ghibli_-hq-modified.png" height='250px' width='250px'>
 </h2>
 
-<h1 align="center">BATbot🦇</h1>
+<h1 align="center">YAKbot🐂</h1>
 <h4 align="center">A complex, multipurpose AI Discord bot.</h4>
 
 <h1 align="center">
   <img src="https://img.shields.io/badge/stage-development-yellow.svg" />
-  <img src="https://img.shields.io/lgtm/alerts/g/Frikallo/BATbot.svg?logo=lgtm&logoWidth=18)">
-  <img src="https://img.shields.io/codeclimate/maintainability-percentage/Frikallo/BATbot?logo=codeclimate&color=pine">
-  <img src="https://img.shields.io/codeclimate/maintainability/Frikallo/BATbot?label=code%20quality&logo=codeclimate&color=pine">
-  <img src="https://github.com/frikallo/batbot/actions/workflows/main.yml/badge.svg">
+  <img src="https://img.shields.io/lgtm/alerts/g/Frikallo/YAKbot.svg?logo=lgtm&logoWidth=18)">
+  <img src="https://img.shields.io/codeclimate/maintainability-percentage/Frikallo/YAKbot?logo=codeclimate&color=pine">
+  <img src="https://img.shields.io/codeclimate/maintainability/Frikallo/YAKbot?label=code%20quality&logo=codeclimate&color=pine">
+  <img src="https://github.com/frikallo/yakbot/actions/workflows/main.yml/badge.svg">
 </h1>
 
 ## Info
-[[Info]](https://github.com/Frikallo/BATbot#info) [[Environment]](https://github.com/Frikallo/BATbot#environment) [[Setup & Install]](https://github.com/Frikallo/BATbot#setup-and-installation) [[Citations]](https://github.com/Frikallo/BATbot#other-repos)
+[[Info]](https://github.com/Frikallo/YAKbot#info) [[Environment]](https://github.com/Frikallo/YAKbot#environment) [[Setup & Install]](https://github.com/Frikallo/YAKbot#setup-and-installation) [[Citations]](https://github.com/Frikallo/YAKbot#other-repos)
 
-BATbot is a collection of AI models based on image generation, analysis, and processing; all wrapped into one Discord Bot. BATbot's out-of-the-box commands range from image generation with VQGAN+CLIP or guided diffusion to image analysis and captioning with personality.
+YAKbot is a collection of AI models based on image generation, analysis, and processing; all wrapped into one Discord Bot. YAKbot's out-of-the-box commands range from image generation with VQGAN+CLIP or guided diffusion to image analysis and captioning with personality.
 
-A full list of BATbots commands and uses can be found either in discord with the ```.help``` command, or right here:
+A full list of YAKbots commands and uses can be found either in discord with the ```.help``` command, or right here:
 
 |Command Syntax|Help|Examples|
 |---|---|---
-|`.rembg [Attatchment]`|**removes background from attached image**|[Example](https://github.com/Frikallo/BATbot/tree/main/Bot/Examples/.rembg)
-|`.esrgan [Attatchment]`|**BATbot will use a pre-trained ESRGAN upscaler to upscale the resolution of your image up to 4 times**|[Example](https://github.com/Frikallo/BATbot/tree/main/Bot/Examples/.esrgan)
-|`.status`|**sends embed message with all relevant device stats for BATbot**|[Example](https://github.com/Frikallo/BATbot/tree/main/Bot/Examples/.status)
-|`.imagine [Prompt]`|**uses CLIP+VQGAN open generation to create an original image from your prompt**|[Example](https://github.com/Frikallo/BATbot/tree/main/Bot/Examples/.imagine)
-|`.facehq, .wikiart, .default, .d1024`|**Changes BATbots VQGAN+CLIP model to one trained solely on faces, art or default configuration**|[Example](https://github.com/Frikallo/BATbot/tree/main/Bot/Examples/.facehq%2C%20.wikiart%2C%20.default%2C%20.d1024)
-|`.square, .landscape, .portrait`|**BATbot will update his size configurations for generations to your specified orientation**|[Example](https://github.com/Frikallo/BATbot/tree/main/Bot/Examples/.square%2C%20.landscape%2C%20.portrait)
-|`.seed [Desired Seed]`|**Changes BATbots seed for all open generation (if 0 will set to random)**|[Example](https://github.com/Frikallo/BATbot/tree/main/Bot/Examples/.seed)
-|`.faces [Attatchment]`|**BATbot will look through your photo and try to find any recognizable faces**|[Example](https://github.com/Frikallo/BATbot/tree/main/Bot/Examples/.faces)
-|`.colorize [Attatchment]`|**BATbot will turn your black and white attatchment into a colorized version**|[Example](https://github.com/Frikallo/BATbot/tree/main/Bot/Examples/.colorize)
-|`.outline [Prompt]`|**BATbot will contact a local GPT3 model that will synthasize and look for essays on your prompt while outputting an outline/list of ideas/facts about your prompt to help kickstart your projects**|[Example](https://github.com/Frikallo/BATbot/tree/main/Bot/Examples/.outline)
-|`[Attatchment]`|**BATbot will first decide if your attatchment is neutral, negative or positive and then based on that will try to caption your image with both text, and emoji**|[Example](https://github.com/Frikallo/BATbot/tree/main/Bot/Examples/CLIPCaption)
+|`.rembg [Attatchment]`|**removes background from attached image**|[Example](https://github.com/Frikallo/YAKbot/tree/main/Bot/Examples/.rembg)
+|`.esrgan [Attatchment]`|**YAKbot will use a pre-trained ESRGAN upscaler to upscale the resolution of your image up to 4 times**|[Example](https://github.com/Frikallo/YAKbot/tree/main/Bot/Examples/.esrgan)
+|`.status`|**sends embed message with all relevant device stats for YAKbot**|[Example](https://github.com/Frikallo/YAKbot/tree/main/Bot/Examples/.status)
+|`.imagine [Prompt]`|**uses CLIP+VQGAN open generation to create an original image from your prompt**|[Example](https://github.com/Frikallo/YAKbot/tree/main/Bot/Examples/.imagine)
+|`.facehq, .wikiart, .default, .d1024`|**Changes YAKbots VQGAN+CLIP model to one trained solely on faces, art or default configuration**|[Example](https://github.com/Frikallo/YAKbot/tree/main/Bot/Examples/.facehq%2C%20.wikiart%2C%20.default%2C%20.d1024)
+|`.square, .landscape, .portrait`|**YAKbot will update his size configurations for generations to your specified orientation**|[Example](https://github.com/Frikallo/YAKbot/tree/main/Bot/Examples/.square%2C%20.landscape%2C%20.portrait)
+|`.seed [Desired Seed]`|**Changes YAKbots seed for all open generation (if 0 will set to random)**|[Example](https://github.com/Frikallo/YAKbot/tree/main/Bot/Examples/.seed)
+|`.faces [Attatchment]`|**YAKbot will look through your photo and try to find any recognizable faces**|[Example](https://github.com/Frikallo/YAKbot/tree/main/Bot/Examples/.faces)
+|`.colorize [Attatchment]`|**YAKbot will turn your black and white attatchment into a colorized version**|[Example](https://github.com/Frikallo/YAKbot/tree/main/Bot/Examples/.colorize)
+|`.outline [Prompt]`|**YAKbot will contact a local GPT3 model that will synthasize and look for essays on your prompt while outputting an outline/list of ideas/facts about your prompt to help kickstart your projects**|[Example](https://github.com/Frikallo/YAKbot/tree/main/Bot/Examples/.outline)
+|`[Attatchment]`|**YAKbot will first decide if your attatchment is neutral, negative or positive and then based on that will try to caption your image with both text, and emoji**|[Example](https://github.com/Frikallo/YAKbot/tree/main/Bot/Examples/CLIPCaption)
 
-To see examples of all the different commands click here: [Examples](https://github.com/Frikallo/BATbot/tree/main/Bot/Examples)
+To see examples of all the different commands click here: [Examples](https://github.com/Frikallo/YAKbot/tree/main/Bot/Examples)
 
 
 ## Environment
@@ -84,11 +84,11 @@ $ mkdir unigrams
 $ mkdir bigrams
 $ mkdir artstyles
 $ mkdir emotions
-$ unzip ./model.zip -d checkpoints #make sure the unzipped "model" Folder goes in ./BATbot/Bot/checkpoints 
-$ unzip ./unigrams.zip -d unigrams #make sure the unzipped "unigrams" Folder goes in ./BATbot/Bot/unigrams 
-$ unzip ./bigrams.zip -d bigrams #make sure the unzipped "bigrams" Folder goes in ./BATbot/Bot/bigrams 
-$ unzip ./artstyles.zip -d artstyles #make sure the unzipped "artstyles" Folder goes in ./BATbot/Bot/artstyles 
-$ unzip ./emotions.zip -d emotions #make sure the unzipped "emotions" Folder goes in ./BATbot/Bot/emotions 
+$ unzip ./model.zip -d checkpoints #make sure the unzipped "model" Folder goes in ./YAKbot/Bot/checkpoints 
+$ unzip ./unigrams.zip -d unigrams #make sure the unzipped "unigrams" Folder goes in ./YAKbot/Bot/unigrams 
+$ unzip ./bigrams.zip -d bigrams #make sure the unzipped "bigrams" Folder goes in ./YAKbot/Bot/bigrams 
+$ unzip ./artstyles.zip -d artstyles #make sure the unzipped "artstyles" Folder goes in ./YAKbot/Bot/artstyles 
+$ unzip ./emotions.zip -d emotions #make sure the unzipped "emotions" Folder goes in ./YAKbot/Bot/emotions 
 ```
 </details>
 
@@ -105,7 +105,7 @@ $ pip install kornia
 $ pip install imageio-ffmpeg   
 $ pip install einops          
 $ mkdir steps
-#place all of the following model files in ./BATbot/Bot
+#place all of the following model files in ./YAKbot/Bot
 $ curl -L -o vqgan_imagenet_f16_1024.yaml -C - 'http://mirror.io.community/blob/vqgan/vqgan_imagenet_f16_1024.yaml' #ImageNet 1024
 $ curl -L -o vqgan_imagenet_f16_1024.ckpt -C - 'http://mirror.io.community/blob/vqgan/vqgan_imagenet_f16_1024.ckpt'  #ImageNet 1024
 $ curl -L -o vqgan_imagenet_f16_16384.yaml -C - 'https://heibox.uni-heidelberg.de/d/a7530b09fed84f80a887/files/?p=%2Fconfigs%2Fmodel.yaml&dl=1' #ImageNet 16384
@@ -121,11 +121,11 @@ $ curl -L -o wikiart_16384.ckpt -C - 'http://mirror.io.community/blob/vqgan/wiki
 
 Once all are installed just run:
 ```
-$ git clone https://github.com/Frikallo/BATbot.git
-$ cd BATbot 
+$ git clone https://github.com/Frikallo/YAKbot.git
+$ cd YAKbot 
 $ pip install -r requirements.txt
 ```
-Before BATbot can start make sure you have your bot token set.
+Before YAKbot can start make sure you have your bot token set.
 ```python
 #The end of your bot.py file should look something like this.
 bot.run('qTIzNTA4NjMhUJI3NzgzJAAy.YcOCbw.GMYbjBWdiIWBPFrm_IMlUTlMGjM') #Your Token Here
@@ -137,7 +137,7 @@ $ python3 bot.py
 ```
 * Enjoy!
 
-**Note: I will not provide support for self-hosting. If you are unable to self-host BATbot by yourself, just join [my discord server](https://discord.gg/KyU9tFN7gy) where BATbot runs 24/7.**
+**Note: I will not provide support for self-hosting. If you are unable to self-host YAKbot by yourself, just join [my discord server](https://discord.gg/KyU9tFN7gy) where YAKbot runs 24/7.**
 
 A successful startup will look like this:
 <details>
@@ -149,6 +149,26 @@ A successful startup will look like this:
   </h1>
 </details>
 
+## .env Setup
+
+If self hosting, make sure you have a .env file within the ./Bot directory. Your evironment file should look somthing like this:
+```bash
+"YAKbot/Bot/.env"
+prompt = '--'
+seed = '42'
+infile = '--'
+model = 'vqgan_imagenet_f16_16384' #Model checkpoint file for .imagine
+width = '412' #Width in pixels for .imagine
+height = '412' #Height in pixels for .imagine
+max_iterations = '400' #Max iterations for .imagine
+bot_token = '--' #Discord bot token, get yours at https://discord.com/developers/applications
+input_image = '--'
+CB1 = 'True'
+CB2 = 'True'
+CB3 = 'True'
+webhook = '--' #Discord webhook url for startup info
+OPENAI_KEY = '--' #OpenAI API token for GPT3 generation commands
+```
 
 ## Other repos
 
