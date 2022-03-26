@@ -154,7 +154,8 @@ else:
 
 lowerBoundNote = 21
 resolution = 0.25
-MAIN_COLOR = 0x459FFF  # light blue kinda
+discord_white = discord.Color.from_rgb(255, 255, 255)
+MAIN_COLOR = discord_white  # light blue kinda
 
 use_gpu = False
 save_prefix = "saved"
@@ -303,7 +304,7 @@ def caption_image(path, args, net, preprocess, context):
 
 
 def success_embed(title, description):
-    return Embed(title=title, description=description, color=0x7289da)
+    return Embed(title=title, description=description, color=discord_white)
 
 
 class dotdict(dict):
@@ -2135,7 +2136,7 @@ async def help(ctx):
         embed = discord.Embed(
             title="YAKbot Help",
             description=f"`.rembg [Attached Image]`\n**removes background from attatched image**\n\n`.esrgan [Attatchment]`\n**YAKbot will use a pretrained ESRGAN upscaler to upscale you images resolution by up to 4 times**\n\n`.status`\n**sends embed message with all relevent device stats for YAKbot**\n\n`.imagine [Prompt]`\n**uses CLIP+VQGAN open generation to create an original image from your prompt**\n\n`.facehq, .wikiart, .default, .d1024`\n**Changes YAKbots VQGAN+CLIP model to one trained solely on faces, art or default configuration**\n\n`.square, .landscape, .portrait`\n**YAKbot will update his size configurations for generations to your specified orientation**\n\n`.seed [Desired Seed]`\n**Changes YAKbots seed for all open generation (if 0 will set to random)**\n\n`.faces [Attatchment]`\n**YAKbot will look through your photo and try to find any recognizable faces**\n\n`.colorize [Attatchment]`\n**YAKbot will turn your black and white attatchment into a colorized version**\n\n`.outline [Prompt]`\n**YAKbot will contact a local GPT3 model that will synthasize and look for essays on your prompt while outputting an outline/list of ideas/facts about your prompt to help kickstart your projects**\n\n__Any Attatchments Sent In This Channel Will Be Identified And Captioned By YAKbot (To Prevent Captioning Include --nc In Your Message)__",
-            color=0x7289da,
+            color=discord_white,
         )
         await ctx.channel.send(embed=embed)
     torch.cuda.empty_cache()
@@ -2170,7 +2171,7 @@ async def status(ctx):
         status = f'Using device: {device}\n{name} `{Used}`\n\n{available}\n\nYAKbot is currently running on `{os.environ["model"]}`'
 
         embed = discord.Embed(
-            title="Device Status", description=status, color=0x7289da
+            title="Device Status", description=status, color=discord_white
         )  # ,color=Hex code
 
         print(status)
@@ -2322,7 +2323,7 @@ async def outline(ctx):
         embed = discord.Embed(
             title=f"Research outline for {question}",
             description=response.choices[0].text,
-            color=0x7289da,
+            color=discord_white,
         )
         await ctx.channel.send(embed=embed)
 
