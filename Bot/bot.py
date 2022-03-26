@@ -447,7 +447,9 @@ async def on_ready():
     print(f"Elapsed Startup Time: {endtime}")
     date = strftime("%a, %d %b %Y %H:%M:%S", localtime())
     print(date)
-    webhook = DiscordWebhook(url=os.environ["webhook"],)
+    webhook = DiscordWebhook(
+        url=os.environ["webhook"],
+    )
     output = f"""We have logged in as YAKbot#7261
 Connected to: {len(bot.guilds)} guilds
 Connected to: {len(bot.commands)} commands
@@ -1148,7 +1150,7 @@ async def imagine(ctx):
             if not torch.cuda.is_available():
                 default_image_size = 412  # no GPU found
             elif (
-                get_device_properties(0).total_memory <= 2 ** 33
+                get_device_properties(0).total_memory <= 2**33
             ):  # 2 ** 33 = 8,589,934,592 bytes = 8 GB
                 default_image_size = 318  # <8GB VRAM
 
