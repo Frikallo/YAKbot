@@ -213,6 +213,9 @@ For upscaling images, try <https://github.com/xinntao/Real-ESRGAN>
 
 [colab-notebook3]: <https://colab.research.google.com/drive/1ZAus_gn2RhTZWzOWUpPERNC0Q8OhZRTZ>
 [colab-badge]: <https://colab.research.google.com/assets/colab-badge.svg>
+
+**This project was HEAVILY influenced and inspired by [EleutherAI](https://eleuther.ai)'s discord bot (BATbot)**
+
 ## License
 ```
 MIT License
