@@ -33,6 +33,7 @@ import statcord
 from discord import FFmpegPCMAudio
 import subprocess
 import torch
+from PIL import ImageDraw, ImageFont
 from win32com.client import GetObject
 from torch._C import wait
 import torch.nn as nn
@@ -54,6 +55,7 @@ from io import BytesIO
 import pandas as pd
 import json
 import gc
+gc.enable()
 import psutil
 
 import clip
@@ -92,12 +94,11 @@ from urllib.request import urlopen
 from tqdm import tqdm
 
 from omegaconf import OmegaConf
-
+sys.path.append("././taming_transformers")
 from taming.models import cond_transformer, vqgan
 
 import torch
 from torch import nn, optim
-from torch.nn import functional as F
 from torchvision import transforms
 from torchvision.transforms import functional as TF
 from torch.cuda import get_device_properties
@@ -150,10 +151,6 @@ import warnings
 
 warnings.filterwarnings("ignore")
 
-# For Later Tinkering
-# import vclip
-# from vclip import vclip as vc
-
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 CB1 = os.environ.get("CB1")
 CB2 = os.environ.get("CB2")
@@ -162,20 +159,20 @@ Indices_value = "False"
 CLIP = "False"
 openai.api_key = os.environ.get("OPENAI_KEY")
 
-device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+device = torch.device("cpu")
 
-answer = input("Load CLIP? (y/n) ")
-if answer == "y":
-    CLIP = "True"
-    print("Loading Models...")
-    model2, preprocess2 = clip.load("ViT-B/32", device=device)
-    text2 = clip.tokenize(["negative", "neutral", "positive"]).to(device)
-    print("Using device:", device)
-    load_categories = "emojis"
-    load(load_categories)
-    print("Clip loaded.")
-else:
-    print("Suppressing Clip Models")
+gc.collect()
+torch.cuda.empty_cache()
+CLIP = "True"
+print("Loading Models...")
+model2, preprocess2 = clip.load("ViT-B/32", device=device)
+#text2 = clip.tokenize(["negative", "neutral", "positive"]).to(device)
+print("Using device:", device)
+load_categories = "emojis"
+load(load_categories)
+print("Clip loaded.")
+gc.collect()
+torch.cuda.empty_cache()
 
 lowerBoundNote = 21
 resolution = 0.25
@@ -260,6 +257,8 @@ def load_model_from_config(config, ckpt, verbose=False):
 
     model = model.half().cuda()
     model.eval()
+    gc.collect()
+    torch.cuda.empty_cache()
     return model
 
 
@@ -323,13 +322,13 @@ def show(imgs):
     fix, axs = plt.subplots(ncols=len(imgs), squeeze=False)
     for i, img in enumerate(imgs):
         img = img.detach()
-        img = F.to_pil_image(img)
+        img = (img)
         axs[0, i].imshow(np.asarray(img))
         axs[0, i].set(xticklabels=[], yticklabels=[], xticks=[], yticks=[])
 
 
 def display_grid(imgs):
-    reshaped = [F.to_tensor(x) for x in imgs]
+    reshaped = [TF.to_tensor(x) for x in imgs]
     show(make_grid(reshaped))
 
 
@@ -397,7 +396,7 @@ def caption_image(path, args, net, preprocess, context):
     print(f"Personality: {context[0]}\n")
     for c in captions[: args.display]:
         print(c)
-    display_grid([img])
+    #display_grid([img])
     return captions
 
 
@@ -441,93 +440,13 @@ def hms(seconds):
     return "{:02d}:{:02d}:{:02d}".format(h, m, s)
 
 
-def run(opt):
-
-    if opt.plms:
-        opt.ddim_eta = 0
-        sampler = PLMSSampler(model)
-    else:
-        sampler = DDIMSampler(model)
-
-    os.makedirs(opt.outdir, exist_ok=True)
-    outpath = opt.outdir
-
-    prompt = opt.prompt
-
-    sample_path = os.path.join(outpath, "samples")
-    os.makedirs(sample_path, exist_ok=True)
-    base_count = len(os.listdir(sample_path))
-
-    all_samples = list()
-    all_samples_images = list()
-    with torch.no_grad():
-        with torch.cuda.amp.autocast():
-            with model.ema_scope():
-                uc = None
-                if opt.scale > 0:
-                    uc = model.get_learned_conditioning(opt.n_samples * [""])
-                for n in range(opt.n_iter):
-                    c = model.get_learned_conditioning(opt.n_samples * [prompt])
-                    shape = [4, opt.H // 8, opt.W // 8]
-                    samples_ddim, _ = sampler.sample(
-                        S=opt.ddim_steps,
-                        conditioning=c,
-                        batch_size=opt.n_samples,
-                        shape=shape,
-                        verbose=False,
-                        unconditional_guidance_scale=opt.scale,
-                        unconditional_conditioning=uc,
-                        eta=opt.ddim_eta,
-                    )
-
-                    x_samples_ddim = model.decode_first_stage(samples_ddim)
-                    x_samples_ddim = torch.clamp(
-                        (x_samples_ddim + 1.0) / 2.0, min=0.0, max=1.0
-                    )
-
-                    for x_sample in x_samples_ddim:
-                        torch.cuda.empty_cache()
-                        gc.collect()
-                        x_sample = 255.0 * rearrange(
-                            x_sample.cpu().numpy(), "c h w -> h w c"
-                        )
-                        image_vector = Image.fromarray(x_sample.astype(np.uint8))
-                        image_preprocess = preprocess(image_vector).unsqueeze(0)
-                        with torch.no_grad():
-                            image_features = clip_model.encode_image(image_preprocess)
-                        image_features /= image_features.norm(dim=-1, keepdim=True)
-                        query = image_features.cpu().detach().numpy().astype("float32")
-                        unsafe = is_unsafe(safety_model, query, 0.5)
-                        if not unsafe:
-                            all_samples_images.append(image_vector)
-                        else:
-                            return (
-                                None,
-                                None,
-                                "Sorry, potential NSFW content was detected on your outputs by our NSFW detection model. Try again with different prompts. If you feel your prompt was not supposed to give NSFW outputs, this may be due to a bias in the model. Read more about biases in the Biases Acknowledgment section below.",
-                            )
-                        # Image.fromarray(x_sample.astype(np.uint8)).save(os.path.join(sample_path, f"{base_count:04}.png"))
-                        base_count += 1
-                    all_samples.append(x_samples_ddim)
-
-    # additionally, save as grid
-    grid = torch.stack(all_samples, 0)
-    grid = rearrange(grid, "n b c h w -> (n b) c h w")
-    grid = make_grid(grid, nrow=opt.n_samples)
-    # to image
-    grid = 255.0 * rearrange(grid, "c h w -> h w c").cpu().numpy()
-
-    Image.fromarray(grid.astype(np.uint8)).save(os.path.join(outpath, f"out.png"))
-    return (Image.fromarray(grid.astype(np.uint8)), all_samples_images, None)
-
-
 answer = input("Load Latent Diffusion Models? (y/n) ")
 if answer == "y":
     config = OmegaConf.load(
         "latent-diffusion/configs/latent-diffusion/txt2img-1p4B-eval.yaml"
     )
     model = load_model_from_config(config, f"model/txt2img_f8_large.ckpt")
-    device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     model = model.to(device)
     # NSFW CLIP Filter
     safety_model = load_safety_model("ViT-B/32")
@@ -694,83 +613,82 @@ async def image(ctx):
         return
     if (
         ctx.attachments
-        and ctx.content != ".rembg"
-        and ctx.content != ".faces"
-        and ctx.content != ".esrgan"
-        and ctx.content != ".colorize"
-        and ctx.content != ".imagine"
+#        and ctx.content != ".rembg"
+#        and ctx.content != ".faces"
+#        and ctx.content != ".esrgan"
+#        and ctx.content != ".colorize"
+#        and ctx.content != ".imagine"
     ):
         if ctx.channel.id != channel_id:
             return
         gc.collect()
         torch.cuda.empty_cache()
-        async with ctx.channel.typing():
-            await asyncio.sleep(0.1)
-            # Download Image
-            link = ctx.attachments[0].url
-            filename = link.split("/")[-1]
-            r = requests.get(link, allow_redirects=True)
-            open(filename, "wb").write(r.content)
-            print(filename)
+        await asyncio.sleep(0.1)
+        # Download Image
+        link = ctx.attachments[0].url
+        filename = link.split("/")[-1]
+        r = requests.get(link, allow_redirects=True)
+        open(filename, "wb").write(r.content)
+        print(filename)
 
-            # Caption+Emoji
-            file_ = filename
-            print("classifying")
-            image2 = preprocess2(Image.open(file_)).unsqueeze(0).to(device)
-            try:
-                reaction = classify(file_)
-                reaction = str(reaction)
-                print(reaction)
-                emoji = f"{reaction}"
-                emoji = emoji.encode("unicode-escape").decode("ASCII")
-                with open("reactables.txt", "a+") as file_object:
-                    file_object.write(emoji)
-                with open("reactables.txt") as f:
-                    first_line = f.readline()
-                os.remove("reactables.txt")
-                first_line = first_line[:-2]
-                first_line = (
-                    first_line.encode("ascii")
-                    .decode("unicode-escape")
-                    .encode("utf-16", "surrogatepass")
-                    .decode("utf-16")
-                )
-                first_line = f"{first_line}"
-                os.remove(filename)
-                print(ctx.attachments[0].url)
-                img = ctx.attachments[0].url
-
-                with torch.no_grad():
-                    image_features = model2.encode_image(image2)
-                    text_features = model2.encode_text(text2)
-
-                    logits_per_image, logits_per_text = model2(image2, text2)
-                    probs = logits_per_image.softmax(dim=-1).cpu().numpy()
-
-                Neg = []
-                Neu = []
-                Pos = []
-
-                length = len(probs)
-                middle_index = length // 3
-                listA = probs[middle_index]
-                Neg.append(listA[0])
-                Neu.append(listA[1])
-                Pos.append(listA[2])
-
-                strings_Neg = [str(integer) for integer in Neg]
-                Neg = "".join(strings_Neg)
-                Neg = float(Neg)
-
-                strings_Neu = [str(integer) for integer in Neu]
-                Neu = "".join(strings_Neu)
-                Neu = float(Neu)
-
-                strings_Pos = [str(integer) for integer in Pos]
-                Pos = "".join(strings_Pos)
-                Pos = float(Pos)
-
-                Neg_Captions = [
+        # Caption+Emoji
+        file_ = filename
+        print("classifying")
+        image2 = preprocess2(Image.open(file_)).unsqueeze(0).to(device)
+        reaction = classify(file_)
+        reaction = str(reaction)
+        print(reaction)
+        emoji = f"{reaction}"
+        emoji = emoji.encode("unicode-escape").decode("ASCII")
+        with open("reactables.txt", "a+") as file_object:
+            file_object.write(emoji)
+        with open("reactables.txt") as f:
+            first_line = f.readline()
+        os.remove("reactables.txt")
+        first_line = first_line[:-2]
+        first_line = (
+            first_line.encode("ascii")
+            .decode("unicode-escape")
+            .encode("utf-16", "surrogatepass")
+            .decode("utf-16")
+        )
+        first_line = f"{first_line}"
+        await ctx.add_reaction(first_line)
+        os.remove(filename)
+#            print(ctx.attachments[0].url)
+#            img = ctx.attachments[0].url
+#
+#            with torch.no_grad():
+#                image_features = model2.encode_image(image2)
+#                text_features = model2.encode_text(text2)
+#
+#                logits_per_image, logits_per_text = model2(image2, text2)
+#                probs = logits_per_image.softmax(dim=-1).cpu().numpy()
+#
+#            Neg = []
+#            Neu = []
+#            Pos = []
+#
+#            length = len(probs)
+#            middle_index = length // 3
+#            listA = probs[middle_index]
+#            Neg.append(listA[0])
+#            Neu.append(listA[1])
+#            Pos.append(listA[2])
+#
+#            strings_Neg = [str(integer) for integer in Neg]
+#            Neg = "".join(strings_Neg)
+#            Neg = float(Neg)
+#
+#            strings_Neu = [str(integer) for integer in Neu]
+#            Neu = "".join(strings_Neu)
+#            Neu = float(Neu)
+#
+#            strings_Pos = [str(integer) for integer in Pos]
+#            Pos = "".join(strings_Pos)
+#            Pos = float(Pos)
+#
+        Neg_Captions = [
                     "dread",
                     "hurt",
                     "suffering",
@@ -939,7 +857,7 @@ async def image(ctx):
                     "woe",
                     "wrath",
                 ]
-                Neu_Captions = [
+        Neu_Captions = [
                     "arrogant",
                     "assertive",
                     "astonished",
@@ -1053,7 +971,7 @@ async def image(ctx):
                     "suspense",
                     "tension",
                 ]
-                Pos_Captions = [
+        Pos_Captions = [
                     "Ridiculous",
                     "caring",
                     "melancholy",
@@ -1185,53 +1103,43 @@ async def image(ctx):
                     "tolerance",
                     "worthy",
                 ]
+#
+#            simple_Captions1 = ["negative"]
+#            simple_Captions2 = ["neutral"]
+#            simple_Captions3 = ["positive"]
 
-                simple_Captions1 = ["negative"]
-                simple_Captions2 = ["neutral"]
-                simple_Captions3 = ["positive"]
-
-                if Neg > Neu and Neg > Pos:
-                    print("Negative")
-                    caption_person = random.choice(Neg_Captions)
-                    simple_person = random.choice(simple_Captions1)
-                elif Neu > Neg and Neu > Pos:
-                    print("Neutral")
-                    caption_person = random.choice(Neu_Captions)
-                    simple_person = random.choice(simple_Captions2)
-                elif Pos > Neg and Pos > Neu:
-                    print("Positive")
-                    caption_person = random.choice(Pos_Captions)
-                    simple_person = random.choice(simple_Captions3)
-
-                context_simple = simple_person
-                context = caption_person
-                try:
-                    captions = caption_image(
-                        img, args, net, preprocess, context=context
-                    )
-                except Exception as e:
-                    print(e)
-                    print("Error with captioning")
-                    embed2 = discord.Embed(
-                        title=f"Caption error",
-                        description=f"{e}",
-                        color=discord.Color.red(),
-                    )
-                    await ctx.send(embed=embed2)
-                for c in captions[: args.display]:
-                    sendable = f"`{context}` {c}"
-                    await ctx.reply(sendable, mention_author=False)
-                    await ctx.add_reaction(first_line)
-            except Exception as e:
-                print(e)
-                print("error")
-                embed = discord.Embed(
-                    title=f"Caption error",
-                    description=f"{e}",
-                    color=discord.Color.red(),
-                )
-                await ctx.send(embed=embed)
-            torch.cuda.empty_cache()
+#            if Neg > Neu and Neg > Pos:
+#                print("Negative")
+#                caption_person = random.choice(Neg_Captions)
+#                simple_person = random.choice(simple_Captions1)
+#            elif Neu > Neg and Neu > Pos:
+#                print("Neutral")
+#                caption_person = random.choice(Neu_Captions)
+#                simple_person = random.choice(simple_Captions2)
+#            elif Pos > Neg and Pos > Neu:
+#                print("Positive")
+#                caption_person = random.choice(Pos_Captions)
+#                simple_person = random.choice(simple_Captions3)
+#
+#            context_simple = simple_person
+#            context = caption_person
+#            captions = caption_image(
+#                img, args, net, preprocess, context=context
+#            )
+#            for c in captions[: args.display]:
+#                sendable = f"`{context}` {c}"
+#                await ctx.reply(sendable, mention_author=False)
+#            except Exception as e:
+#                print(e)
+#                print("error")
+#                embed = discord.Embed(
+#                    title=f"Caption error",
+#                    description=f"{e}",
+#                   color=discord.Color.red(),
+#                )
+#                await ctx.channel.send(embed=embed)
+        torch.cuda.empty_cache()
+        gc.collect()
     else:
         return
 
@@ -1318,18 +1226,14 @@ async def imagine(ctx):
             secs = num_elapsed - 60
         secs = int(secs)
         time.sleep(3)
-        await ctx.channel.send(
-            "```Imagining... ```"
-            + f"**_{prompt}_**"
-            + f"```Estimated: {num}m{secs}s Generation Time\nUsing seed: {seed}```"
-        )
-        message = await ctx.send(f"```    ```")
+        temp_image = await ctx.send("ㅤㅤ")
+        await ctx.channel.send(f"_{prompt}_")
+        message = await ctx.send(f"ㅤㅤ")
 
         secret_channel = bot.get_channel(
             955787994286129172
         )  # where 12345 would be your secret channel id
         file = discord.File(f"progress.png")
-        temp_image = await ctx.send("```    ```")
 
         # image_message = await ctx.send(file = discord.File("progress.png"))
         genTime = time.time()
@@ -2009,14 +1913,14 @@ async def imagine(ctx):
                             )
                             attachment = temp_message.attachments[0]
                             # await image_message.edit(content=image_message)
-                            await message.edit(content=f"```{pbar} ({percent}%)```")
+                            await message.edit(content=f"`{pbar} ({percent}%)`")
                             await temp_image.edit(content=attachment.url)
                         train(i)
                         i += 1
                         pbar.update()
 
                 print("done")
-                await message.edit(content=f"``` done! ```")
+                #await message.edit(content=f"``` done! ```")
 
             init_frame = 0  # This is the frame where the video will start
             last_frame = i  # You can change i to the number of the last frame you want to generate. It will raise an error if that number of frames does not exist.
@@ -2037,7 +1941,8 @@ async def imagine(ctx):
             savepath = "./"
             imageio.mimsave(os.path.join(savepath, "movie.mp4"), frames)
             end = time.time() - start
-            end = end / 60
+            end = int(end)
+            end = hms(end)
             print(end)
 
         except Exception as e:
@@ -2056,32 +1961,6 @@ async def imagine(ctx):
         print(f"Generation Time: {ittime}")
         elapsed = time.time() - genTime
         math_elapsed = time.time() - genTime
-        secs = 1
-        if elapsed > 420:
-            elapsed = 7
-            secs = math_elapsed - 420
-        if elapsed > 360:
-            elapsed = 6
-            secs = math_elapsed - 360
-        if elapsed > 300:
-            elapsed = 5
-            secs = math_elapsed - 300
-        if elapsed > 240:
-            elapsed = 4
-            secs = math_elapsed - 240
-        if elapsed > 180:
-            elapsed = 3
-            secs = math_elapsed - 180
-        if elapsed > 120:
-            elapsed = 2
-            secs = math_elapsed - 120
-        if elapsed > 60:
-            elapsed = 1
-            secs = math_elapsed - 60
-        print(f"Elapsed Time: {elapsed}")
-        elapsed = str(elapsed)
-        secs = int(secs)
-        elapsed = f"{elapsed}m{secs}s"
         it = iterations / ittime
         it = "{:.2f}".format(it)
         it = str(it)
@@ -2112,7 +1991,8 @@ async def imagine(ctx):
         upscale("progress.png", "progress.png")
         temp_message3 = await secret_channel.send(file=discord.File("progress.png"))
         attachment3 = temp_message3.attachments[0]
-        await temp_image.edit(content=f"{attachment3.url}\n{attachment2.url}")
+        await temp_image.edit(content=attachment3.url)
+        await message.edit(content=f"`done! Elapsed: {end}`\n{attachment2.url}")
 
         # delete output
         directory = os.getcwd()
@@ -2521,15 +2401,94 @@ async def outline(ctx):
         await ctx.channel.send(embed=embed)
 
 
-@bot.command()
+@bot.command(aliases=['ld'])
 async def latentdiffusion(ctx):
     available_gpus = 0
     if ctx.channel.id != channel_id:
         return
     print("Command Loaded")
     async with ctx.channel.typing():
+        async def run(opt):
+            torch.cuda.empty_cache()
+            gc.collect()
+            if opt.plms:
+                opt.ddim_eta = 0
+                sampler = PLMSSampler(model)
+            else:
+                sampler = DDIMSampler(model)
+
+            os.makedirs(opt.outdir, exist_ok=True)
+            outpath = opt.outdir
+
+            prompt = opt.prompt
+
+            sample_path = os.path.join(outpath, "samples")
+            os.makedirs(sample_path, exist_ok=True)
+            base_count = len(os.listdir(sample_path))
+
+            all_samples = list()
+            all_samples_images = list()
+            with torch.no_grad():
+                with torch.cuda.amp.autocast():
+                    with model.ema_scope():
+                        uc = None
+                        if opt.scale > 0:
+                            uc = model.get_learned_conditioning(opt.n_samples * [""])
+                        for n in range(opt.n_iter):
+                            c = model.get_learned_conditioning(opt.n_samples * [prompt])
+                            shape = [4, opt.H // 8, opt.W // 8]
+                            samples_ddim, _ = sampler.sample(
+                                S=opt.ddim_steps,
+                                conditioning=c,
+                                batch_size=opt.n_samples,
+                                shape=shape,
+                                verbose=False,
+                                unconditional_guidance_scale=opt.scale,
+                                unconditional_conditioning=uc,
+                                eta=opt.ddim_eta,
+                            )
+
+                            x_samples_ddim = model.decode_first_stage(samples_ddim)
+                            x_samples_ddim = torch.clamp(
+                                (x_samples_ddim + 1.0) / 2.0, min=0.0, max=1.0
+                            )
+
+                            for x_sample in x_samples_ddim:
+                                torch.cuda.empty_cache()
+                                gc.collect()
+                                x_sample = 255.0 * rearrange(
+                                    x_sample.cpu().numpy(), "c h w -> h w c"
+                                )
+                                image_vector = Image.fromarray(x_sample.astype(np.uint8))
+                                image_preprocess = preprocess(image_vector).unsqueeze(0)
+                                with torch.no_grad():
+                                    image_features = clip_model.encode_image(image_preprocess)
+                                image_features /= image_features.norm(dim=-1, keepdim=True)
+                                query = image_features.cpu().detach().numpy().astype("float32")
+                                unsafe = is_unsafe(safety_model, query, 0.5)
+                                all_samples_images.append(image_vector)
+                                # Image.fromarray(x_sample.astype(np.uint8)).save(os.path.join(sample_path, f"{base_count:04}.png"))
+                                base_count += 1
+                                gc.collect()
+                                torch.cuda.empty_cache()
+                            all_samples.append(x_samples_ddim)
+
+            # additionally, save as grid
+            grid = torch.stack(all_samples, 0)
+            grid = rearrange(grid, "n b c h w -> (n b) c h w")
+            grid = make_grid(grid, nrow=opt.n_samples)
+            # to image
+            grid = 255.0 * rearrange(grid, "c h w -> h w c").cpu().numpy()
+            if not unsafe:
+                Image.fromarray(grid.astype(np.uint8)).save(os.path.join(outpath, f"out.png"))
+            else:
+                Image.fromarray(grid.astype(np.uint8)).save(os.path.join(outpath, f"SPOILER_out.png"))
+            return (Image.fromarray(grid.astype(np.uint8)), all_samples_images, None)
         input = ctx.message.content
-        input = str(input[17 : len(input)])
+        if ctx.message.content.startswith(".latentdiffusion"):
+            input = str(input[17 : len(input)])
+        else:
+            input = str(input[4 : len(input)])
         Prompt = input
         Steps = 50
         ETA = 0
@@ -2558,7 +2517,7 @@ async def latentdiffusion(ctx):
         )
         start = time.time()
         try:
-            run(args)
+            await run(args)
         except Exception as e:
             print(e)
             print("Error")
@@ -2571,17 +2530,48 @@ async def latentdiffusion(ctx):
         end = time.time() - start
         end = int(end)
         channel2 = bot.get_channel(955787994286129172)
-        image = await channel2.send(file=discord.File("./out/out.png"))
+        try:
+            NSFW = False
+            image = await channel2.send(file=discord.File("./out/out.png"))
+        except FileNotFoundError as e:
+            NSFW = True
+            print("NSFW Detected")
+            image = await channel2.send(file=discord.File("./out/SPOILER_out.png"))
         image = image.attachments[0].url
         await message.edit(
             content=f"_{input}_\n`Uploading...`\n```python\nddim_steps={args.ddim_steps}\nddim_eta={args.ddim_eta}\nn_iter={args.n_iter}\nn_samples={args.n_samples}\nwidth={args.W}\nheight={args.H}\nscale={args.scale}\nplms={args.plms}\n```"
         )
         time.sleep(1)
-        await im_mes.edit(content=image)
-        await message.edit(
-            content=f"_{input}_\n`Completed in {end} seconds.`\n```python\nddim_steps={args.ddim_steps}\nddim_eta={args.ddim_eta}\nn_iter={args.n_iter}\nn_samples={args.n_samples}\nwidth={args.W}\nheight={args.H}\nscale={args.scale}\nplms={args.plms}\n```"
-        )
+        if NSFW == False:
+            await im_mes.edit(content=image)
+            await message.edit(
+                content=f"_{input}_\n`Completed in {end} seconds.`\n```python\nddim_steps={args.ddim_steps}\nddim_eta={args.ddim_eta}\nn_iter={args.n_iter}\nn_samples={args.n_samples}\nwidth={args.W}\nheight={args.H}\nscale={args.scale}\nplms={args.plms}\n```"
+            )
+        else:
+            embed = discord.Embed(
+                title=f"NSFW warning",
+                description=f"potential NSFW content was detected on these outputs by our NSFW detection model. your output can still be viewed here: {image}",
+                color=discord.Color.red(),
+            )
+            await message.delete()
+            await im_mes.delete()
+            await ctx.send(embed=embed)
+        try:
+            os.remove("./out/out.png")
+        except FileNotFoundError:
+            pass
+        try:
+            os.remove("./out/SPOILER_out.png")
+        except FileNotFoundError:
+            pass
+    gc.collect()
+    torch.cuda.empty_cache()
     available_gpus = 1
+
+
+@bot.command()
+async def dalle(ctx):
+    await ctx.send("coming soon...")
 
 
 @bot.event
@@ -2709,6 +2699,7 @@ async def on_command_error(ctx, error):
 
 @bot.event
 async def on_command(ctx):
+    available_gpus = torch.cuda.device_count()
     if available_gpus == 0:
         await ctx.reply("Im Busy!")
     api.command_run(ctx)
