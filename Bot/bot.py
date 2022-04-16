@@ -1,5 +1,6 @@
 import time
 from termcolor import colored
+
 print(colored("Starting...", "green"))
 from clip.clip import available_models
 from multiprocessing import Process
@@ -56,6 +57,7 @@ from io import BytesIO
 import pandas as pd
 import json
 import gc
+
 gc.enable()
 import psutil
 
@@ -95,6 +97,7 @@ from urllib.request import urlopen
 from tqdm import tqdm
 
 from omegaconf import OmegaConf
+
 sys.path.append("././taming_transformers")
 from taming.models import cond_transformer, vqgan
 
@@ -168,7 +171,7 @@ if anwser == "y":
     CLIP = "True"
     print(colored("Loading Models...", "yellow"))
     model2, preprocess2 = clip.load("ViT-B/32", device=device)
-    #text2 = clip.tokenize(["negative", "neutral", "positive"]).to(device)
+    # text2 = clip.tokenize(["negative", "neutral", "positive"]).to(device)
     print("Using device:", device)
     load_categories = "emojis"
     load(load_categories)
@@ -326,7 +329,7 @@ def show(imgs):
     fix, axs = plt.subplots(ncols=len(imgs), squeeze=False)
     for i, img in enumerate(imgs):
         img = img.detach()
-        img = (img)
+        img = img
         axs[0, i].imshow(np.asarray(img))
         axs[0, i].set(xticklabels=[], yticklabels=[], xticks=[], yticks=[])
 
@@ -400,7 +403,7 @@ def caption_image(path, args, net, preprocess, context):
     print(f"Personality: {context[0]}\n")
     for c in captions[: args.display]:
         print(c)
-    #display_grid([img])
+    # display_grid([img])
     return captions
 
 
@@ -617,11 +620,11 @@ async def image(ctx):
         return
     if (
         ctx.attachments
-#        and ctx.content != ".rembg"
-#        and ctx.content != ".faces"
-#        and ctx.content != ".esrgan"
-#        and ctx.content != ".colorize"
-#        and ctx.content != ".imagine"
+        #        and ctx.content != ".rembg"
+        #        and ctx.content != ".faces"
+        #        and ctx.content != ".esrgan"
+        #        and ctx.content != ".colorize"
+        #        and ctx.content != ".imagine"
     ):
         if ctx.channel.id != channel_id:
             return
@@ -659,489 +662,489 @@ async def image(ctx):
         first_line = f"{first_line}"
         await ctx.add_reaction(first_line)
         os.remove(filename)
-#            print(ctx.attachments[0].url)
-#            img = ctx.attachments[0].url
-#
-#            with torch.no_grad():
-#                image_features = model2.encode_image(image2)
-#                text_features = model2.encode_text(text2)
-#
-#                logits_per_image, logits_per_text = model2(image2, text2)
-#                probs = logits_per_image.softmax(dim=-1).cpu().numpy()
-#
-#            Neg = []
-#            Neu = []
-#            Pos = []
-#
-#            length = len(probs)
-#            middle_index = length // 3
-#            listA = probs[middle_index]
-#            Neg.append(listA[0])
-#            Neu.append(listA[1])
-#            Pos.append(listA[2])
-#
-#            strings_Neg = [str(integer) for integer in Neg]
-#            Neg = "".join(strings_Neg)
-#            Neg = float(Neg)
-#
-#            strings_Neu = [str(integer) for integer in Neu]
-#            Neu = "".join(strings_Neu)
-#            Neu = float(Neu)
-#
-#            strings_Pos = [str(integer) for integer in Pos]
-#            Pos = "".join(strings_Pos)
-#            Pos = float(Pos)
-#
+        #            print(ctx.attachments[0].url)
+        #            img = ctx.attachments[0].url
+        #
+        #            with torch.no_grad():
+        #                image_features = model2.encode_image(image2)
+        #                text_features = model2.encode_text(text2)
+        #
+        #                logits_per_image, logits_per_text = model2(image2, text2)
+        #                probs = logits_per_image.softmax(dim=-1).cpu().numpy()
+        #
+        #            Neg = []
+        #            Neu = []
+        #            Pos = []
+        #
+        #            length = len(probs)
+        #            middle_index = length // 3
+        #            listA = probs[middle_index]
+        #            Neg.append(listA[0])
+        #            Neu.append(listA[1])
+        #            Pos.append(listA[2])
+        #
+        #            strings_Neg = [str(integer) for integer in Neg]
+        #            Neg = "".join(strings_Neg)
+        #            Neg = float(Neg)
+        #
+        #            strings_Neu = [str(integer) for integer in Neu]
+        #            Neu = "".join(strings_Neu)
+        #            Neu = float(Neu)
+        #
+        #            strings_Pos = [str(integer) for integer in Pos]
+        #            Pos = "".join(strings_Pos)
+        #            Pos = float(Pos)
+        #
         Neg_Captions = [
-                    "dread",
-                    "hurt",
-                    "suffering",
-                    "afraid",
-                    "aggressive",
-                    "alarmed",
-                    "annoyed",
-                    "anxious",
-                    "bitter",
-                    "brooding",
-                    "claustrophobic",
-                    "cowardly",
-                    "demoralized",
-                    "depressed",
-                    "disheartened",
-                    "disoriented",
-                    "dispirited",
-                    "disturbed",
-                    "frustrated",
-                    "gloomy",
-                    "helpless",
-                    "hopeless",
-                    "horrified",
-                    "impatient",
-                    "indignant",
-                    "infuriated",
-                    "irritated",
-                    "lonely",
-                    "mad",
-                    "miserable",
-                    "mortified",
-                    "nasty",
-                    "nauseated",
-                    "negative",
-                    "nervous",
-                    "offended",
-                    "panicked",
-                    "paranoid",
-                    "possessive",
-                    "powerless",
-                    "rash",
-                    "rejected",
-                    "scared",
-                    "shocked",
-                    "smug",
-                    "stressed",
-                    "stubborn",
-                    "stuck",
-                    "suspicious",
-                    "troubled",
-                    "unhappy",
-                    "unsettled",
-                    "unsure",
-                    "upset",
-                    "vengeful",
-                    "vicious",
-                    "vulnerable",
-                    "weak",
-                    "worried",
-                    "bad",
-                    "bitter",
-                    "cold",
-                    "crazydead",
-                    "dry",
-                    "fat",
-                    "hollow",
-                    "old",
-                    "plain",
-                    "poor",
-                    "shy",
-                    "sore",
-                    "sour",
-                    "wrong",
-                    "dark",
-                    "shadow",
-                    "anger",
-                    "anxiousness",
-                    "cruelty",
-                    "cynic",
-                    "denial",
-                    "depression",
-                    "despair",
-                    "disgust",
-                    "emptiness",
-                    "fear",
-                    "gray",
-                    "grief",
-                    "hate",
-                    "hostile",
-                    "hurt",
-                    "indignation",
-                    "insanity",
-                    "irritability",
-                    "jealousy",
-                    "longing",
-                    "lust",
-                    "mourning",
-                    "needy",
-                    "pain",
-                    "paranoia",
-                    "pity",
-                    "possessive",
-                    "pride",
-                    "rage",
-                    "remorse",
-                    "resentment",
-                    "resignation",
-                    "sadness",
-                    "scorn",
-                    "sensitive",
-                    "shame",
-                    "sorrow",
-                    "tense",
-                    "uncertainty",
-                    "uneasiness",
-                    "upset",
-                    "agitation",
-                    "agony",
-                    "alarm",
-                    "alienation",
-                    "anguish",
-                    "apathy",
-                    "aversion",
-                    "brooding",
-                    "confusion",
-                    "cynicism",
-                    "dejection",
-                    "disappointment",
-                    "disbelief",
-                    "discomfort",
-                    "discontentment",
-                    "displeasure",
-                    "distraction",
-                    "distress",
-                    "doubt",
-                    "dread",
-                    "embarrassment",
-                    "expectancy",
-                    "fright",
-                    "fury",
-                    "glumness",
-                    "greed",
-                    "grumpiness",
-                    "guilt",
-                    "hatred",
-                    "homesickness",
-                    "humiliation",
-                    "insecurity",
-                    "loathing",
-                    "miserliness",
-                    "negative",
-                    "neglect",
-                    "outrage",
-                    "paranoid",
-                    "pessimism",
-                    "rash",
-                    "regret",
-                    "restlessness",
-                    "self-pity",
-                    "spite",
-                    "suffering",
-                    "sullenness",
-                    "suspense",
-                    "tension",
-                    "terror",
-                    "woe",
-                    "wrath",
-                ]
+            "dread",
+            "hurt",
+            "suffering",
+            "afraid",
+            "aggressive",
+            "alarmed",
+            "annoyed",
+            "anxious",
+            "bitter",
+            "brooding",
+            "claustrophobic",
+            "cowardly",
+            "demoralized",
+            "depressed",
+            "disheartened",
+            "disoriented",
+            "dispirited",
+            "disturbed",
+            "frustrated",
+            "gloomy",
+            "helpless",
+            "hopeless",
+            "horrified",
+            "impatient",
+            "indignant",
+            "infuriated",
+            "irritated",
+            "lonely",
+            "mad",
+            "miserable",
+            "mortified",
+            "nasty",
+            "nauseated",
+            "negative",
+            "nervous",
+            "offended",
+            "panicked",
+            "paranoid",
+            "possessive",
+            "powerless",
+            "rash",
+            "rejected",
+            "scared",
+            "shocked",
+            "smug",
+            "stressed",
+            "stubborn",
+            "stuck",
+            "suspicious",
+            "troubled",
+            "unhappy",
+            "unsettled",
+            "unsure",
+            "upset",
+            "vengeful",
+            "vicious",
+            "vulnerable",
+            "weak",
+            "worried",
+            "bad",
+            "bitter",
+            "cold",
+            "crazydead",
+            "dry",
+            "fat",
+            "hollow",
+            "old",
+            "plain",
+            "poor",
+            "shy",
+            "sore",
+            "sour",
+            "wrong",
+            "dark",
+            "shadow",
+            "anger",
+            "anxiousness",
+            "cruelty",
+            "cynic",
+            "denial",
+            "depression",
+            "despair",
+            "disgust",
+            "emptiness",
+            "fear",
+            "gray",
+            "grief",
+            "hate",
+            "hostile",
+            "hurt",
+            "indignation",
+            "insanity",
+            "irritability",
+            "jealousy",
+            "longing",
+            "lust",
+            "mourning",
+            "needy",
+            "pain",
+            "paranoia",
+            "pity",
+            "possessive",
+            "pride",
+            "rage",
+            "remorse",
+            "resentment",
+            "resignation",
+            "sadness",
+            "scorn",
+            "sensitive",
+            "shame",
+            "sorrow",
+            "tense",
+            "uncertainty",
+            "uneasiness",
+            "upset",
+            "agitation",
+            "agony",
+            "alarm",
+            "alienation",
+            "anguish",
+            "apathy",
+            "aversion",
+            "brooding",
+            "confusion",
+            "cynicism",
+            "dejection",
+            "disappointment",
+            "disbelief",
+            "discomfort",
+            "discontentment",
+            "displeasure",
+            "distraction",
+            "distress",
+            "doubt",
+            "dread",
+            "embarrassment",
+            "expectancy",
+            "fright",
+            "fury",
+            "glumness",
+            "greed",
+            "grumpiness",
+            "guilt",
+            "hatred",
+            "homesickness",
+            "humiliation",
+            "insecurity",
+            "loathing",
+            "miserliness",
+            "negative",
+            "neglect",
+            "outrage",
+            "paranoid",
+            "pessimism",
+            "rash",
+            "regret",
+            "restlessness",
+            "self-pity",
+            "spite",
+            "suffering",
+            "sullenness",
+            "suspense",
+            "tension",
+            "terror",
+            "woe",
+            "wrath",
+        ]
         Neu_Captions = [
-                    "arrogant",
-                    "assertive",
-                    "astonished",
-                    "baffled",
-                    "bewildered",
-                    "bored",
-                    "brazen",
-                    "cheeky",
-                    "coercive",
-                    "content",
-                    "dazed",
-                    "determined",
-                    "discombobulated",
-                    "disgruntled",
-                    "dominant",
-                    "dumbstruck",
-                    "exasperated",
-                    "flakey",
-                    "hospitable",
-                    "insightful",
-                    "isolated",
-                    "lazy",
-                    "loopy",
-                    "moody",
-                    "mystified",
-                    "numb",
-                    "obstinate",
-                    "perplexed",
-                    "persevering",
-                    "pleased",
-                    "puzzled",
-                    "rattled",
-                    "reluctant",
-                    "ruthless",
-                    "self-conscious",
-                    "submissive",
-                    "tired",
-                    "unnerved",
-                    "alert",
-                    "beige",
-                    "clear",
-                    "elderly",
-                    "few",
-                    "giant",
-                    "granite",
-                    "petite",
-                    "quiet",
-                    "shallow",
-                    "sharp",
-                    "solid",
-                    "square",
-                    "swift",
-                    "wet",
-                    "wild",
-                    "pale",
-                    "flamboyant",
-                    "neutral",
-                    "animosity",
-                    "anticipation",
-                    "camaraderie",
-                    "cautious",
-                    "content",
-                    "poem",
-                    "down",
-                    "envy",
-                    "expectation",
-                    "infatuation",
-                    "interest",
-                    "irritability",
-                    "longing",
-                    "lust",
-                    "mean",
-                    "mercy",
-                    "mildness",
-                    "perturbation",
-                    "pity",
-                    "resignation",
-                    "sensitive",
-                    "tense",
-                    "uncertainty",
-                    "uneasiness",
-                    "yearning",
-                    "ambivalence",
-                    "apathy",
-                    "apprehension",
-                    "attentiveness",
-                    "aversion",
-                    "baffled",
-                    "confusion",
-                    "curiosity",
-                    "dismay",
-                    "distraction",
-                    "dominant",
-                    "epiphany",
-                    "expectancy",
-                    "fascination",
-                    "hope",
-                    "humility",
-                    "hysteria",
-                    "idleness",
-                    "indifference",
-                    "jubilation",
-                    "melancholy",
-                    "modesty",
-                    "patience",
-                    "restlessness",
-                    "revulsion",
-                    "self-pity",
-                    "sentimentality",
-                    "serenity",
-                    "suspense",
-                    "tension",
-                ]
+            "arrogant",
+            "assertive",
+            "astonished",
+            "baffled",
+            "bewildered",
+            "bored",
+            "brazen",
+            "cheeky",
+            "coercive",
+            "content",
+            "dazed",
+            "determined",
+            "discombobulated",
+            "disgruntled",
+            "dominant",
+            "dumbstruck",
+            "exasperated",
+            "flakey",
+            "hospitable",
+            "insightful",
+            "isolated",
+            "lazy",
+            "loopy",
+            "moody",
+            "mystified",
+            "numb",
+            "obstinate",
+            "perplexed",
+            "persevering",
+            "pleased",
+            "puzzled",
+            "rattled",
+            "reluctant",
+            "ruthless",
+            "self-conscious",
+            "submissive",
+            "tired",
+            "unnerved",
+            "alert",
+            "beige",
+            "clear",
+            "elderly",
+            "few",
+            "giant",
+            "granite",
+            "petite",
+            "quiet",
+            "shallow",
+            "sharp",
+            "solid",
+            "square",
+            "swift",
+            "wet",
+            "wild",
+            "pale",
+            "flamboyant",
+            "neutral",
+            "animosity",
+            "anticipation",
+            "camaraderie",
+            "cautious",
+            "content",
+            "poem",
+            "down",
+            "envy",
+            "expectation",
+            "infatuation",
+            "interest",
+            "irritability",
+            "longing",
+            "lust",
+            "mean",
+            "mercy",
+            "mildness",
+            "perturbation",
+            "pity",
+            "resignation",
+            "sensitive",
+            "tense",
+            "uncertainty",
+            "uneasiness",
+            "yearning",
+            "ambivalence",
+            "apathy",
+            "apprehension",
+            "attentiveness",
+            "aversion",
+            "baffled",
+            "confusion",
+            "curiosity",
+            "dismay",
+            "distraction",
+            "dominant",
+            "epiphany",
+            "expectancy",
+            "fascination",
+            "hope",
+            "humility",
+            "hysteria",
+            "idleness",
+            "indifference",
+            "jubilation",
+            "melancholy",
+            "modesty",
+            "patience",
+            "restlessness",
+            "revulsion",
+            "self-pity",
+            "sentimentality",
+            "serenity",
+            "suspense",
+            "tension",
+        ]
         Pos_Captions = [
-                    "Ridiculous",
-                    "caring",
-                    "melancholy",
-                    "calm",
-                    "carefree",
-                    "careless",
-                    "comfortable",
-                    "confident",
-                    "delighted",
-                    "driven",
-                    "enchanted",
-                    "enlightened",
-                    "focused",
-                    "kind",
-                    "nostalgic",
-                    "optimistic",
-                    "positive",
-                    "relaxed",
-                    "relieved",
-                    "self-confident",
-                    "self-respecting",
-                    "shameless",
-                    "thrilled",
-                    "triumphant",
-                    "worthy",
-                    "better",
-                    "cool",
-                    "fancy",
-                    "good",
-                    "light",
-                    "modern",
-                    "rich",
-                    "safe",
-                    "superior",
-                    "sweet",
-                    "tan",
-                    "whispering",
-                    "wise",
-                    "nice",
-                    "young",
-                    "delicious",
-                    "sweet",
-                    "bold",
-                    "sunny",
-                    "flaming",
-                    "gay",
-                    "sparkling",
-                    "shining",
-                    "glitter",
-                    "glowing",
-                    "well",
-                    "showing",
-                    "bright",
-                    "acceptance",
-                    "adoration",
-                    "affection",
-                    "attraction",
-                    "intellectual",
-                    "spiritual",
-                    "bliss",
-                    "bubbly",
-                    "calm",
-                    "contempt",
-                    "desire",
-                    "eager",
-                    "enlightened",
-                    "exuberance",
-                    "fulfillment",
-                    "hopeful",
-                    "peace",
-                    "innocent",
-                    "interest",
-                    "joy",
-                    "kind",
-                    "longing",
-                    "love",
-                    "lust",
-                    "melancholic",
-                    "mercy",
-                    "passion",
-                    "pleasure",
-                    "pride",
-                    "relief",
-                    "sensitive",
-                    "sincerity",
-                    "trust",
-                    "yearning",
-                    "admiration",
-                    "amazement",
-                    "ambivalence",
-                    "amusement",
-                    "attentiveness",
-                    "baffled",
-                    "sweetness",
-                    "awe",
-                    "caring",
-                    "charity",
-                    "cheerfulness",
-                    "courage",
-                    "curiosity",
-                    "eagerness",
-                    "ecstasy",
-                    "empathy",
-                    "enjoyment",
-                    "enthusiasm",
-                    "epiphany",
-                    "euphoria",
-                    "excitement",
-                    "fascination",
-                    "fondness",
-                    "friendliness",
-                    "glee",
-                    "gratitude",
-                    "happiness",
-                    "hope",
-                    "humility",
-                    "liking",
-                    "melancholy",
-                    "modesty",
-                    "patience",
-                    "politeness",
-                    "positive",
-                    "satisfaction",
-                    "sentimentality",
-                    "surprise",
-                    "sympathy",
-                    "tenderness",
-                    "thankfulness",
-                    "tolerance",
-                    "worthy",
-                ]
-#
-#            simple_Captions1 = ["negative"]
-#            simple_Captions2 = ["neutral"]
-#            simple_Captions3 = ["positive"]
+            "Ridiculous",
+            "caring",
+            "melancholy",
+            "calm",
+            "carefree",
+            "careless",
+            "comfortable",
+            "confident",
+            "delighted",
+            "driven",
+            "enchanted",
+            "enlightened",
+            "focused",
+            "kind",
+            "nostalgic",
+            "optimistic",
+            "positive",
+            "relaxed",
+            "relieved",
+            "self-confident",
+            "self-respecting",
+            "shameless",
+            "thrilled",
+            "triumphant",
+            "worthy",
+            "better",
+            "cool",
+            "fancy",
+            "good",
+            "light",
+            "modern",
+            "rich",
+            "safe",
+            "superior",
+            "sweet",
+            "tan",
+            "whispering",
+            "wise",
+            "nice",
+            "young",
+            "delicious",
+            "sweet",
+            "bold",
+            "sunny",
+            "flaming",
+            "gay",
+            "sparkling",
+            "shining",
+            "glitter",
+            "glowing",
+            "well",
+            "showing",
+            "bright",
+            "acceptance",
+            "adoration",
+            "affection",
+            "attraction",
+            "intellectual",
+            "spiritual",
+            "bliss",
+            "bubbly",
+            "calm",
+            "contempt",
+            "desire",
+            "eager",
+            "enlightened",
+            "exuberance",
+            "fulfillment",
+            "hopeful",
+            "peace",
+            "innocent",
+            "interest",
+            "joy",
+            "kind",
+            "longing",
+            "love",
+            "lust",
+            "melancholic",
+            "mercy",
+            "passion",
+            "pleasure",
+            "pride",
+            "relief",
+            "sensitive",
+            "sincerity",
+            "trust",
+            "yearning",
+            "admiration",
+            "amazement",
+            "ambivalence",
+            "amusement",
+            "attentiveness",
+            "baffled",
+            "sweetness",
+            "awe",
+            "caring",
+            "charity",
+            "cheerfulness",
+            "courage",
+            "curiosity",
+            "eagerness",
+            "ecstasy",
+            "empathy",
+            "enjoyment",
+            "enthusiasm",
+            "epiphany",
+            "euphoria",
+            "excitement",
+            "fascination",
+            "fondness",
+            "friendliness",
+            "glee",
+            "gratitude",
+            "happiness",
+            "hope",
+            "humility",
+            "liking",
+            "melancholy",
+            "modesty",
+            "patience",
+            "politeness",
+            "positive",
+            "satisfaction",
+            "sentimentality",
+            "surprise",
+            "sympathy",
+            "tenderness",
+            "thankfulness",
+            "tolerance",
+            "worthy",
+        ]
+        #
+        #            simple_Captions1 = ["negative"]
+        #            simple_Captions2 = ["neutral"]
+        #            simple_Captions3 = ["positive"]
 
-#            if Neg > Neu and Neg > Pos:
-#                print("Negative")
-#                caption_person = random.choice(Neg_Captions)
-#                simple_person = random.choice(simple_Captions1)
-#            elif Neu > Neg and Neu > Pos:
-#                print("Neutral")
-#                caption_person = random.choice(Neu_Captions)
-#                simple_person = random.choice(simple_Captions2)
-#            elif Pos > Neg and Pos > Neu:
-#                print("Positive")
-#                caption_person = random.choice(Pos_Captions)
-#                simple_person = random.choice(simple_Captions3)
-#
-#            context_simple = simple_person
-#            context = caption_person
-#            captions = caption_image(
-#                img, args, net, preprocess, context=context
-#            )
-#            for c in captions[: args.display]:
-#                sendable = f"`{context}` {c}"
-#                await ctx.reply(sendable, mention_author=False)
-#            except Exception as e:
-#                print(e)
-#                print("error")
-#                embed = discord.Embed(
-#                    title=f"Caption error",
-#                    description=f"{e}",
-#                   color=discord.Color.red(),
-#                )
-#                await ctx.channel.send(embed=embed)
+        #            if Neg > Neu and Neg > Pos:
+        #                print("Negative")
+        #                caption_person = random.choice(Neg_Captions)
+        #                simple_person = random.choice(simple_Captions1)
+        #            elif Neu > Neg and Neu > Pos:
+        #                print("Neutral")
+        #                caption_person = random.choice(Neu_Captions)
+        #                simple_person = random.choice(simple_Captions2)
+        #            elif Pos > Neg and Pos > Neu:
+        #                print("Positive")
+        #                caption_person = random.choice(Pos_Captions)
+        #                simple_person = random.choice(simple_Captions3)
+        #
+        #            context_simple = simple_person
+        #            context = caption_person
+        #            captions = caption_image(
+        #                img, args, net, preprocess, context=context
+        #            )
+        #            for c in captions[: args.display]:
+        #                sendable = f"`{context}` {c}"
+        #                await ctx.reply(sendable, mention_author=False)
+        #            except Exception as e:
+        #                print(e)
+        #                print("error")
+        #                embed = discord.Embed(
+        #                    title=f"Caption error",
+        #                    description=f"{e}",
+        #                   color=discord.Color.red(),
+        #                )
+        #                await ctx.channel.send(embed=embed)
         torch.cuda.empty_cache()
         gc.collect()
     else:
@@ -1924,7 +1927,7 @@ async def imagine(ctx):
                         pbar.update()
 
                 print("done")
-                #await message.edit(content=f"``` done! ```")
+                # await message.edit(content=f"``` done! ```")
 
             init_frame = 0  # This is the frame where the video will start
             last_frame = i  # You can change i to the number of the last frame you want to generate. It will raise an error if that number of frames does not exist.
@@ -2340,13 +2343,14 @@ async def outline(ctx):
         await ctx.channel.send(embed=embed)
 
 
-@bot.command(aliases=['ld'])
+@bot.command(aliases=["ld"])
 async def latentdiffusion(ctx):
     available_gpus = 0
     if ctx.channel.id != channel_id:
         return
     print("Command Loaded")
     async with ctx.channel.typing():
+
         async def run(opt):
             torch.cuda.empty_cache()
             gc.collect()
@@ -2398,12 +2402,23 @@ async def latentdiffusion(ctx):
                                 x_sample = 255.0 * rearrange(
                                     x_sample.cpu().numpy(), "c h w -> h w c"
                                 )
-                                image_vector = Image.fromarray(x_sample.astype(np.uint8))
+                                image_vector = Image.fromarray(
+                                    x_sample.astype(np.uint8)
+                                )
                                 image_preprocess = preprocess(image_vector).unsqueeze(0)
                                 with torch.no_grad():
-                                    image_features = clip_model.encode_image(image_preprocess)
-                                image_features /= image_features.norm(dim=-1, keepdim=True)
-                                query = image_features.cpu().detach().numpy().astype("float32")
+                                    image_features = clip_model.encode_image(
+                                        image_preprocess
+                                    )
+                                image_features /= image_features.norm(
+                                    dim=-1, keepdim=True
+                                )
+                                query = (
+                                    image_features.cpu()
+                                    .detach()
+                                    .numpy()
+                                    .astype("float32")
+                                )
                                 unsafe = is_unsafe(safety_model, query, 0.5)
                                 all_samples_images.append(image_vector)
                                 # Image.fromarray(x_sample.astype(np.uint8)).save(os.path.join(sample_path, f"{base_count:04}.png"))
@@ -2419,10 +2434,15 @@ async def latentdiffusion(ctx):
             # to image
             grid = 255.0 * rearrange(grid, "c h w -> h w c").cpu().numpy()
             if not unsafe:
-                Image.fromarray(grid.astype(np.uint8)).save(os.path.join(outpath, f"out.png"))
+                Image.fromarray(grid.astype(np.uint8)).save(
+                    os.path.join(outpath, f"out.png")
+                )
             else:
-                Image.fromarray(grid.astype(np.uint8)).save(os.path.join(outpath, f"SPOILER_out.png"))
+                Image.fromarray(grid.astype(np.uint8)).save(
+                    os.path.join(outpath, f"SPOILER_out.png")
+                )
             return (Image.fromarray(grid.astype(np.uint8)), all_samples_images, None)
+
         input = ctx.message.content
         if ctx.message.content.startswith(".latentdiffusion"):
             input = str(input[17 : len(input)])
