@@ -1,4 +1,6 @@
 import time
+from termcolor import colored
+print(colored("Starting...", "green"))
 from clip.clip import available_models
 from multiprocessing import Process
 
@@ -16,7 +18,6 @@ import PySimpleGUI as sg
 import presets
 import argparse
 import matplotlib.pyplot as plt
-from colorizers import *
 import sys
 from upscaler import upscale
 import urllib.request
@@ -159,20 +160,23 @@ Indices_value = "False"
 CLIP = "False"
 openai.api_key = os.environ.get("OPENAI_KEY")
 
-device = torch.device("cpu")
-
-gc.collect()
-torch.cuda.empty_cache()
-CLIP = "True"
-print("Loading Models...")
-model2, preprocess2 = clip.load("ViT-B/32", device=device)
-#text2 = clip.tokenize(["negative", "neutral", "positive"]).to(device)
-print("Using device:", device)
-load_categories = "emojis"
-load(load_categories)
-print("Clip loaded.")
-gc.collect()
-torch.cuda.empty_cache()
+anwser = input("Load CLIP Models? (y/n) ")
+if anwser == "y":
+    device = torch.device("cpu")
+    gc.collect()
+    torch.cuda.empty_cache()
+    CLIP = "True"
+    print(colored("Loading Models...", "yellow"))
+    model2, preprocess2 = clip.load("ViT-B/32", device=device)
+    #text2 = clip.tokenize(["negative", "neutral", "positive"]).to(device)
+    print("Using device:", device)
+    load_categories = "emojis"
+    load(load_categories)
+    print(colored("Done!", "green"))
+    gc.collect()
+    torch.cuda.empty_cache()
+else:
+    print(colored("Suppressed CLIP Models.", "red"))
 
 lowerBoundNote = 21
 resolution = 0.25
@@ -442,6 +446,7 @@ def hms(seconds):
 
 answer = input("Load Latent Diffusion Models? (y/n) ")
 if answer == "y":
+    print(colored("Loading Latent Diffusion Models...", "yellow"))
     config = OmegaConf.load(
         "latent-diffusion/configs/latent-diffusion/txt2img-1p4B-eval.yaml"
     )
@@ -453,8 +458,11 @@ if answer == "y":
     clip_model, _, preprocess = open_clip.create_model_and_transforms(
         "ViT-B-32", pretrained="openai"
     )
+    print(colored("Done!", "green"))
 else:
-    print("Suppressing Latent Diffusion")
+    print(colored("Suppressed Latent Diffusion Models.", "red"))
+
+
 # Settings
 args = argparse.Namespace(
     config="./checkpoints/12xdqrwd-config",
@@ -471,19 +479,12 @@ args = argparse.Namespace(
     device=device,
 )
 
-# load colorizers
-colorizer_eccv16 = eccv16(pretrained=True).eval()
-colorizer_siggraph17 = siggraph17(pretrained=True).eval()
-if use_gpu:
-    colorizer_eccv16.cuda()
-    colorizer_siggraph17.cuda()
-
 # Load indices
 answer = input("Load indices? (y/n) ")
 
 if answer == "y":
     Indices_value = "True"
-    print("Loading indices...")
+    print(colored("Loading indices...", "yellow"))
     indices = []
     indices_data = []
     index_dirs = args.index_dirs.split(",")
@@ -509,9 +510,9 @@ if answer == "y":
     net = retrofit.load_params(config).to(device)
     net.indices = indices
     net.indices_data = indices_data
-    print("Loaded indices.")
+    print(colored("Loaded indices.", "green"))
 else:
-    print("Not loading indices")
+    print(colored("Not loading indices.", "red"))
 
 # Bot
 bot = commands.Bot(command_prefix=".", help_command=None)
@@ -525,12 +526,15 @@ public_id = 920889454443524116
 answer = input("Use dev channel? (y/n) ")
 if answer == "y":
     channel_id = dev_id
+    print(colored(f"Using dev channel. ({channel_id})", "yellow"))
 else:
     id = input("Channel ID: ")
     if id == "n":
         public_id = 920889454443524116
+        print(colored(f"Using Default Public channel. ({public_id})", "yellow"))
     else:
         public_id = int(id)
+        print(colored(f"Using Custom channel. ({public_id})", "yellow"))
     channel_id = public_id
 
 
@@ -539,11 +543,11 @@ async def on_ready():
     await bot.change_presence(
         status=discord.Status.online, activity=discord.Game(name=f"in a trash bin")
     )
-    print("We have logged in as {0.user}".format(bot))
-    print(f"Connected to: {len(bot.guilds)} guilds")
+    print("INFO: We have logged in as {0.user}".format(bot))
+    print(f"INFO: Connected to: {len(bot.guilds)} guilds")
     # for guild in bot.guilds:
     #    print(f"{guild.name} ({guild.id})")
-    print(f"Connected to: {len(bot.commands)} commands")
+    print(f"INFO: Connected to: {len(bot.commands)} commands")
     YAKbot = """██╗░░░██╗░█████╗░██╗░░██╗██████╗░░█████╗░████████╗
 ╚██╗░██╔╝██╔══██╗██║░██╔╝██╔══██╗██╔══██╗╚══██╔══╝
 ░╚████╔╝░███████║█████═╝░██████╦╝██║░░██║░░░██║░░░
@@ -2208,7 +2212,7 @@ async def help(ctx):
     async with ctx.channel.typing():
         embed = discord.Embed(
             title="YAKbot Help",
-            description=f"`.rembg [Attached Image]`\n**removes background from attatched image**\n\n`.esrgan [Attatchment]`\n**YAKbot will use a pretrained ESRGAN upscaler to upscale you images resolution by up to 4 times**\n\n`.status`\n**sends embed message with all relevent device stats for YAKbot**\n\n`.imagine [Prompt]`\n**uses CLIP+VQGAN open generation to create an original image from your prompt**\n\n`.facehq, .wikiart, .default, .d1024`\n**Changes YAKbots VQGAN+CLIP model to one trained solely on faces, art or default configuration**\n\n`.square, .landscape, .portrait`\n**YAKbot will update his size configurations for generations to your specified orientation**\n\n`.seed [Desired Seed]`\n**Changes YAKbots seed for all open generation (if 0 will set to random)**\n\n`.faces [Attatchment]`\n**YAKbot will look through your photo and try to find any recognizable faces**\n\n`.colorize [Attatchment]`\n**YAKbot will turn your black and white attatchment into a colorized version**\n\n`.latentdiffusion [Prompt]`\n**This command is another Text2Image method like `.imaging` but uses a method called latent diffusion. innitiate this method by using the command.**\n\n`.outline [Prompt]`\n**YAKbot will contact a local GPT3 model that will synthasize and look for essays on your prompt while outputting an outline/list of ideas/facts about your prompt to help kickstart your projects**\n\n__Any Attatchments Sent In This Channel Will Be Identified And Captioned By YAKbot (To Prevent Captioning Include --nc In Your Message)__",
+            description=f"`.rembg [Attached Image]`\n**removes background from attatched image**\n\n`.esrgan [Attatchment]`\n**YAKbot will use a pretrained ESRGAN upscaler to upscale you images resolution by up to 4 times**\n\n`.status`\n**sends embed message with all relevent device stats for YAKbot**\n\n`.imagine [Prompt]`\n**uses CLIP+VQGAN open generation to create an original image from your prompt**\n\n`.facehq, .wikiart, .default, .d1024`\n**Changes YAKbots VQGAN+CLIP model to one trained solely on faces, art or default configuration**\n\n`.square, .landscape, .portrait`\n**YAKbot will update his size configurations for generations to your specified orientation**\n\n`.seed [Desired Seed]`\n**Changes YAKbots seed for all open generation (if 0 will set to random)**\n\n`.faces [Attatchment]`\n**YAKbot will look through your photo and try to find any recognizable faces**\n\n`.latentdiffusion [Prompt]`\n**This command is another Text2Image method like `.imaging` but uses a method called latent diffusion. innitiate this method by using the command.**\n\n`.outline [Prompt]`\n**YAKbot will contact a local GPT3 model that will synthasize and look for essays on your prompt while outputting an outline/list of ideas/facts about your prompt to help kickstart your projects**\n\n__Any Attatchments Sent In This Channel Will Be Identified And Captioned By YAKbot (To Prevent Captioning Include --nc In Your Message)__",
             color=discord_white,
         )
         await ctx.channel.send(embed=embed)
@@ -2307,71 +2311,6 @@ async def landscape(ctx):
         await ctx.channel.send("Updated! YAKbot Size Config: `landscape`")
         os.environ["height"] = "288"
         os.environ["width"] = "512"
-
-
-@bot.command()
-async def colorize(ctx):
-    await bot.change_presence(activity=discord.Game(name=f"Colorizing..."))
-    if ctx.message.attachments:
-        if ctx.channel.id != channel_id:
-            return
-        async with ctx.channel.typing():
-            link = ctx.message.attachments[0].url
-            filename = "teaser.jpg"
-            r = requests.get(link, allow_redirects=True)
-            open(filename, "wb").write(r.content)
-            print(filename)
-            img_path = filename
-            # default size to process images is 256x256
-            # grab L channel in both original ("orig") and resized ("rs") resolutions
-            img = load_img(img_path)
-            (tens_l_orig, tens_l_rs) = preprocess_img(img, HW=(256, 256))
-            if use_gpu:
-                tens_l_rs = tens_l_rs.cuda()
-
-            img_bw = postprocess_tens(
-                tens_l_orig, torch.cat((0 * tens_l_orig, 0 * tens_l_orig), dim=1)
-            )
-            out_img_eccv16 = postprocess_tens(
-                tens_l_orig, colorizer_eccv16(tens_l_rs).cpu()
-            )
-            out_img_siggraph17 = postprocess_tens(
-                tens_l_orig, colorizer_siggraph17(tens_l_rs).cpu()
-            )
-
-            plt.imsave("%s_eccv16.png" % save_prefix, out_img_eccv16)
-            plt.imsave("%s_siggraph17.png" % save_prefix, out_img_siggraph17)
-
-            plt.figure(figsize=(12, 8))
-            plt.subplot(2, 2, 1)
-            plt.imshow(img)
-            plt.title("Original")
-            plt.axis("off")
-
-            plt.subplot(2, 2, 2)
-            plt.imshow(img_bw)
-            plt.title("Input")
-            plt.axis("off")
-
-            plt.subplot(2, 2, 3)
-            plt.imshow(out_img_eccv16)
-            plt.title("Output (ECCV 16)")
-            plt.axis("off")
-
-            plt.subplot(2, 2, 4)
-            plt.imshow(out_img_siggraph17)
-            plt.title("Output (SIGGRAPH 17)")
-            plt.axis("off")
-            plt.savefig("out.png")
-            await ctx.reply(file=discord.File("out.png"), mention_author=False)
-            # delete output
-            directory = os.getcwd()
-            my_dir = directory
-            for fname in os.listdir(my_dir):
-                if fname.endswith(".png"):
-                    os.remove(os.path.join(my_dir, fname))
-            torch.cuda.empty_cache()
-            await bot.change_presence(activity=discord.Game(name=f"in a trash bin"))
 
 
 @bot.command()
