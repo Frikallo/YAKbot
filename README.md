@@ -145,7 +145,7 @@ A successful startup will look like this:
   <!-- have to be followed by an empty line! -->
 
   <h1 align="center">
-  <img src="https://cdn.discordapp.com/attachments/924037023315165254/930992116056858704/Screenshot_2022-01-12_170940.png">
+  <img src="https://cdn.discordapp.com/attachments/955787994286129172/965089662014201896/Screenshot_2022-04-16_201930.jpeg">
   </h1>
 </details>
 

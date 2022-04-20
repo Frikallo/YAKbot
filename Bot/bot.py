@@ -2,30 +2,22 @@ import time
 from termcolor import colored
 
 print(colored("Starting...", "green"))
-from clip.clip import available_models
-from multiprocessing import Process
 
 from sqlalchemy import true
 
 startTime = time.time()
-import threading
 from discord_webhook import DiscordWebhook, DiscordEmbed
 from time import localtime, strftime
 import argparse
 import socket
-from pyston import PystonClient, File
 import asyncio
-import PySimpleGUI as sg
-import presets
 import argparse
 import matplotlib.pyplot as plt
 import sys
 from upscaler import upscale
-import urllib.request
 import datetime
 import traceback
 from moviepy.editor import VideoFileClip
-from music21 import instrument, note, chord, stream
 import moviepy.video.fx.all as vfx
 from discord.ext import commands
 import face_recognition
@@ -33,40 +25,31 @@ from PIL import Image, ImageDraw
 from discord import Embed
 import statcord
 from discord import FFmpegPCMAudio
-import subprocess
 import torch
-from PIL import ImageDraw, ImageFont
-from win32com.client import GetObject
+from PIL import ImageDraw
 from torch._C import wait
 import torch.nn as nn
 from dotenv import load_dotenv, find_dotenv
 
 load_dotenv(find_dotenv())
-import pytorch_lightning as pl
 import matplotlib.pyplot as plt
 import torchvision.transforms.functional as F
 import discord
-from classify import load, classify, encode
+from classify import load, classify
 import os
 
 os.chdir("./Bot")
 print(os.getcwd())
-import random
 import asyncio
-from io import BytesIO
-import pandas as pd
 import json
 import gc
 
 gc.enable()
-import psutil
 
 import clip
 import glob
-from pytorch_lightning.callbacks import ModelCheckpoint
 
 import model
-import utils
 
 import faiss
 import requests
@@ -83,7 +66,6 @@ import io
 from PIL import ImageFile
 
 import openai
-import math
 
 from vqgan_clip.grad import *
 from vqgan_clip.helpers import *
@@ -102,7 +84,7 @@ sys.path.append("././taming_transformers")
 from taming.models import cond_transformer, vqgan
 
 import torch
-from torch import nn, optim
+from torch import nn
 from torchvision import transforms
 from torchvision.transforms import functional as TF
 from torch.cuda import get_device_properties
@@ -110,22 +92,15 @@ import datetime as dt
 
 torch.backends.cudnn.benchmark = False
 
-from torch_optimizer import DiffGrad, AdamP, RAdam
-
 import clip
-import kornia.augmentation as K
 import numpy as np
 import imageio
 
-from PIL import ImageFile, Image, PngImagePlugin, ImageChops
+from PIL import ImageFile, Image, PngImagePlugin
 
 ImageFile.LOAD_TRUNCATED_IMAGES = True
-
-from subprocess import Popen, PIPE
-import re
 from packaging import version
 
-from pydoc import describe
 import torch
 from omegaconf import OmegaConf
 import sys
@@ -136,18 +111,16 @@ sys.path.append("././latent-diffusion")
 from taming.models import vqgan
 from ldm.util import instantiate_from_config
 
-# @title Import stuff
+# Import stuff
 import argparse, os, sys, glob
 import numpy as np
 from PIL import Image
 from einops import rearrange
 from torchvision.utils import make_grid
-import transformers
 import gc
 from ldm.util import instantiate_from_config
 from ldm.models.diffusion.ddim import DDIMSampler
 from ldm.models.diffusion.plms import PLMSSampler
-from open_clip import tokenizer
 import open_clip
 
 # Supress warnings
@@ -446,7 +419,7 @@ def hms(seconds):
     s = seconds % 3600 % 60
     return "{:02d}:{:02d}:{:02d}".format(h, m, s)
 
-
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 answer = input("Load Latent Diffusion Models? (y/n) ")
 if answer == "y":
     print(colored("Loading Latent Diffusion Models...", "yellow"))
@@ -620,11 +593,11 @@ async def image(ctx):
         return
     if (
         ctx.attachments
-        #        and ctx.content != ".rembg"
-        #        and ctx.content != ".faces"
-        #        and ctx.content != ".esrgan"
-        #        and ctx.content != ".colorize"
-        #        and ctx.content != ".imagine"
+        and ctx.content != ".rembg"
+        and ctx.content != ".faces"
+        and ctx.content != ".esrgan"
+        and ctx.content != ".colorize"
+        and ctx.content != ".imagine"
     ):
         if ctx.channel.id != channel_id:
             return
@@ -646,21 +619,9 @@ async def image(ctx):
         reaction = str(reaction)
         print(reaction)
         emoji = f"{reaction}"
-        emoji = emoji.encode("unicode-escape").decode("ASCII")
-        with open("reactables.txt", "a+") as file_object:
-            file_object.write(emoji)
-        with open("reactables.txt") as f:
-            first_line = f.readline()
-        os.remove("reactables.txt")
-        first_line = first_line[:-2]
-        first_line = (
-            first_line.encode("ascii")
-            .decode("unicode-escape")
-            .encode("utf-16", "surrogatepass")
-            .decode("utf-16")
-        )
-        first_line = f"{first_line}"
-        await ctx.add_reaction(first_line)
+        emoji = emoji.strip()
+        emoji = f"{emoji}"
+        await ctx.add_reaction(emoji)
         os.remove(filename)
         #            print(ctx.attachments[0].url)
         #            img = ctx.attachments[0].url
@@ -2264,10 +2225,8 @@ async def kill(ctx):
     if ctx.channel.id != channel_id:
         return
     print("Command Loaded")
-    async with ctx.channel.typing():
-        await ctx.channel.send("```Exiting```")
-        await bot.logout()
-        sys.exit()
+    await ctx.channel.send("`Goodnight.`")
+    os._exit(0)
 
 
 @bot.command()
@@ -2530,6 +2489,40 @@ async def latentdiffusion(ctx):
 
 @bot.command()
 async def dalle(ctx):
+    await ctx.send("coming soon...")
+
+
+@bot.command(aliases=["q"])
+async def Q(ctx):
+    if ctx.channel.id != channel_id:
+        return
+    print("Command Loaded")
+    async with ctx.channel.typing():
+        input = ctx.message.content
+        question = str(input[3 : len(input)])
+        response = openai.Completion.create(
+          engine="text-davinci-002",
+          prompt=f"Q: Who is Batman?\nA: Batman is a fictional comic book character.\n\nQ: What is torsalplexity?\nA: ?\n\nQ: What is Devz9?\nA: ?\n\nQ: Who is George Lucas?\nA: George Lucas is American film director and producer famous for creating Star Wars.\n\nQ: What is the capital of California?\nA: Sacramento.\n\nQ: What orbits the Earth?\nA: The Moon.\n\nQ: Who is Fred Rickerson?\nA: ?\n\nQ: What is an atom?\nA: An atom is a tiny particle that makes up everything.\n\nQ: Who is Alvan Muntz?\nA: ?\n\nQ: What is Kozar-09?\nA: ?\n\nQ: How many moons does Mars have?\nA: Two, Phobos and Deimos.\n\nQ: {question}\nA:",
+          temperature=0,
+          max_tokens=60,
+          top_p=1.0,
+          frequency_penalty=0.0,
+          presence_penalty=0.0
+        )
+        print(response.choices[0].text)
+        answer = response.choices[0].text
+        if response.choices[0].text == "?":
+            answer = "YAKbot connot respond to your question. There is no factual response."
+        embed = discord.Embed(
+            title=f"Answer to \"{question}\"",
+            description=answer,
+            color=discord_white,
+        )
+        await ctx.channel.send(embed=embed)
+
+
+@bot.command()
+async def yak(ctx):
     await ctx.send("coming soon...")
 
 
